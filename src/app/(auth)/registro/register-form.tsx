@@ -39,19 +39,19 @@ export function RegisterForm() {
       </Field>
 
       <Field errors={state.fieldErrors?.phone}>
-        <Label>Telefono</Label>
+        <Label>Teléfono</Label>
         <Input name="phone" type="tel" autoComplete="tel" inputMode="tel" />
         <Hint>Lo usamos para avisarte si tu mascota necesita algo.</Hint>
       </Field>
 
       <Field errors={state.fieldErrors?.password}>
-        <Label>Contrasena</Label>
+        <Label>Contraseña</Label>
         <Input name="password" type="password" autoComplete="new-password" required />
-        <Hint>Minimo 8 caracteres.</Hint>
+        <Hint>Mínimo 8 caracteres.</Hint>
       </Field>
 
       <Field errors={state.fieldErrors?.confirmPassword}>
-        <Label>Confirmar contrasena</Label>
+        <Label>Confirmar contraseña</Label>
         <Input name="confirmPassword" type="password" autoComplete="new-password" required />
       </Field>
 

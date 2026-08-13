@@ -27,8 +27,8 @@ async function PetList() {
     return (
       <EmptyState
         icon={PawPrint}
-        title="Aun no registras ninguna mascota"
-        description="Con su ficha completa el equipo del club sabe como cuidarla: alimentacion, alergias y contactos de emergencia."
+        title="Aún no registras ninguna mascota"
+        description="Con su ficha completa el equipo del club sabe cómo cuidarla: alimentación, alergias y contactos de emergencia."
         action={
           <LinkButton size="sm" href="/mascotas/nueva">
             <Plus aria-hidden />
@@ -54,8 +54,9 @@ export default function MyPetsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow="Tu familia"
         title="Mis mascotas"
-        description="Su informacion, salud y vacunas."
+        description="Su información, salud y cuidados siempre actualizados."
         action={
           <LinkButton size="sm" href="/mascotas/nueva">
             <Plus aria-hidden />

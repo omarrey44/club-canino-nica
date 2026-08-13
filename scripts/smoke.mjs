@@ -69,8 +69,8 @@ await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/mascotas?q=Rocky', [
 await check('CLIENTE', 'camila@correo.com', '/inicio', [
   'Camila',
   'Rocky',
-  'Ultimas actualizaciones',
-  'Proxima reservacion',
+  'Últimas actualizaciones',
+  'Próxima reservación',
 ])
 
 const listado = await check('CLIENTE', 'camila@correo.com', '/mascotas', ['Rocky', 'Labrador'])

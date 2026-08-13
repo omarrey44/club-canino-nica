@@ -17,7 +17,12 @@ export default async function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Mi perfil" action={<LogoutButton />} />
+      <PageHeader
+        eyebrow="Tu cuenta"
+        title="Mi perfil"
+        description="Tus datos y accesos del Club Canino."
+        action={<LogoutButton />}
+      />
 
       <Card>
         <CardHeader>

@@ -1,4 +1,4 @@
-import { Camera, LogIn, LogOut, MapPin, Waypoints } from 'lucide-react'
+import { Camera, Clock3, LogIn, LogOut, MapPin, Waypoints } from 'lucide-react'
 import Image from 'next/image'
 
 import { Button, LinkButton } from '@/components/ui/button'
@@ -21,16 +21,16 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
   return (
     <section
       aria-labelledby="mascota-activa"
-      className="overflow-hidden rounded-card border border-line bg-surface shadow-card"
+      className="overflow-hidden rounded-[1.5rem] border border-line bg-surface shadow-raised"
     >
-      <div className="sm:flex">
-        <div className="relative aspect-[16/10] w-full bg-brand-50 sm:aspect-auto sm:w-56 sm:shrink-0">
+      <div className="sm:grid sm:grid-cols-[minmax(15rem,0.9fr)_minmax(0,1.25fr)]">
+        <div className="relative aspect-[16/10] w-full bg-brand-50 sm:aspect-auto sm:min-h-[24rem]">
           {stay.pet.photoUrl ? (
             <Image
               src={stay.pet.photoUrl}
               alt={`Foto de ${stay.pet.name}`}
               fill
-              sizes="(max-width: 640px) 100vw, 224px"
+              sizes="(max-width: 640px) 100vw, 380px"
               className="object-cover"
               priority
             />
@@ -41,10 +41,11 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
           )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-4 p-5">
-          <div className="space-y-2">
+        <div className="flex min-w-0 flex-col justify-center gap-5 p-5 sm:p-7">
+          <div className="space-y-2.5">
+            <p className="text-xs font-extrabold tracking-[0.14em] text-brand-600 uppercase">Ahora en el club</p>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 id="mascota-activa" className="text-xl font-semibold text-navy-800">
+              <h2 id="mascota-activa" className="text-3xl leading-none text-navy-900">
                 {stay.pet.name}
               </h2>
               <StatusBadge tone={stayStatusTones[stay.status]}>
@@ -52,54 +53,55 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               </StatusBadge>
             </div>
 
-            <p className="text-sm text-ink-muted">
+            <p className="leading-relaxed text-ink-muted">
               {isReady
                 ? `${stay.pet.name} termino su dia y te esta esperando.`
                 : `${stay.pet.name} esta disfrutando su ${stay.reservation.service.name.toLowerCase()}.`}
             </p>
           </div>
 
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+          <dl className="grid grid-cols-2 gap-3 text-sm">
             {stay.currentLocation && (
-              <div className="col-span-2 flex items-center gap-2">
-                <MapPin className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+              <div className="col-span-2 flex items-center gap-2 rounded-field bg-brand-50 px-3.5 py-3 text-brand-800">
+                <MapPin className="size-4 shrink-0 text-brand-600" aria-hidden />
                 <dt className="sr-only">Lugar</dt>
-                <dd className="font-medium text-ink">{stay.currentLocation}</dd>
+                <dd className="font-extrabold">{stay.currentLocation}</dd>
               </div>
             )}
 
-            <div className="flex items-center gap-2">
-              <LogIn className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3.5 py-3">
+              <LogIn className="size-4 shrink-0 text-navy-400" aria-hidden />
               <div>
-                <dt className="text-ink-muted">Entrada</dt>
-                <dd className="font-medium text-ink tabular-nums">
+                <dt className="text-xs font-bold text-ink-muted">Entrada</dt>
+                <dd className="font-extrabold text-navy-900 tabular-nums">
                   {formatTime(stay.checkInAt)}
                 </dd>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <LogOut className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3.5 py-3">
+              <LogOut className="size-4 shrink-0 text-navy-400" aria-hidden />
               <div>
-                <dt className="text-ink-muted">Salida estimada</dt>
-                <dd className="font-medium text-ink tabular-nums">
+                <dt className="text-xs font-bold text-ink-muted">Salida estimada</dt>
+                <dd className="font-extrabold text-navy-900 tabular-nums">
                   {formatTime(stay.expectedCheckOutAt)}
                 </dd>
               </div>
             </div>
           </dl>
 
-          <p className="text-sm text-ink-subtle">
-            Ultima actualizacion: {relativeTime(lastUpdate)}
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink-muted">
+            <Clock3 className="size-4 text-ink-subtle" aria-hidden />
+            Última actualización: {relativeTime(lastUpdate)}
           </p>
 
-          <div className="flex flex-wrap gap-2">
-            <LinkButton size="sm" href="/mi-mascota">
+          <div className="grid grid-cols-2 gap-2">
+            <LinkButton size="sm" href="/mi-mascota" className="px-3">
               <Waypoints aria-hidden />
               Ver actividad
             </LinkButton>
             {/* La camara llega en la Fase 6; el boton ya ocupa su lugar. */}
-            <Button size="sm" variant="outline" disabled>
+            <Button size="sm" variant="outline" disabled className="px-3">
               <Camera aria-hidden />
               Camara en vivo
             </Button>

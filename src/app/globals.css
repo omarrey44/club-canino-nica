@@ -11,38 +11,38 @@
 
 @theme {
   /* --- Marca -------------------------------------------------------------- */
-  --color-brand-50: #fff4e8;
-  --color-brand-100: #ffe3c4;
-  --color-brand-200: #ffc894;
-  --color-brand-300: #ffa855;
-  --color-brand-400: #ff9024;
-  --color-brand-500: #ff7a00;
-  --color-brand-600: #e06400;
-  --color-brand-700: #b84e00;
-  --color-brand-800: #8a3b00;
-  --color-brand-900: #5c2700;
+  --color-brand-50: #fff5eb;
+  --color-brand-100: #ffe6ce;
+  --color-brand-200: #ffc997;
+  --color-brand-300: #ffa65a;
+  --color-brand-400: #fb852b;
+  --color-brand-500: #f97316;
+  --color-brand-600: #e85b0b;
+  --color-brand-700: #c2410c;
+  --color-brand-800: #9a3412;
+  --color-brand-900: #7c2d12;
 
   /* --- Navy (jerarquia, panel administrativo) ----------------------------- */
-  --color-navy-50: #f0f4f8;
-  --color-navy-100: #d9e2ec;
-  --color-navy-200: #bcccdc;
-  --color-navy-300: #9fb3c8;
-  --color-navy-400: #627d98;
-  --color-navy-500: #486581;
-  --color-navy-600: #334e68;
-  --color-navy-700: #243b53;
-  --color-navy-800: #102a43;
-  --color-navy-900: #0a1d30;
+  --color-navy-50: #eff5f8;
+  --color-navy-100: #dce8ee;
+  --color-navy-200: #bed3de;
+  --color-navy-300: #93b4c5;
+  --color-navy-400: #658ca2;
+  --color-navy-500: #476d83;
+  --color-navy-600: #36576b;
+  --color-navy-700: #294557;
+  --color-navy-800: #17364d;
+  --color-navy-900: #0d2639;
 
   /* --- Superficies y texto ------------------------------------------------ */
   --color-surface: #ffffff;
-  --color-canvas: #f7f8fa;
-  --color-canvas-warm: #fff9f3;
-  --color-ink: #172b4d;
-  --color-ink-muted: #667085;
-  --color-ink-subtle: #98a2b3;
-  --color-line: #e7e9ee;
-  --color-line-strong: #d3d8e0;
+  --color-canvas: #f4f7f8;
+  --color-canvas-warm: #fffaf5;
+  --color-ink: #142d3f;
+  --color-ink-muted: #5e7180;
+  --color-ink-subtle: #8999a5;
+  --color-line: #e2e9ed;
+  --color-line-strong: #cbd7de;
 
   /* --- Semanticos --------------------------------------------------------- */
   --color-success: #27ae60;
@@ -55,20 +55,21 @@
   --color-info-soft: #eaf2fd;
 
   /* --- Tipografia --------------------------------------------------------- */
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-varela), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
 
   /* --- Radios ------------------------------------------------------------- */
-  --radius-card: 1rem;
-  --radius-field: 0.625rem;
+  --radius-card: 1.25rem;
+  --radius-field: 0.875rem;
   --radius-pill: 999px;
 
   /* --- Sombras: discretas, nunca elevaciones dramaticas -------------------- */
-  --shadow-card: 0 1px 2px rgb(16 42 67 / 0.04), 0 1px 3px rgb(16 42 67 / 0.06);
-  --shadow-raised: 0 4px 12px rgb(16 42 67 / 0.08);
-  --shadow-overlay: 0 16px 40px rgb(16 42 67 / 0.16);
+  --shadow-card: 0 1px 2px rgb(13 38 57 / 0.04), 0 6px 18px rgb(13 38 57 / 0.045);
+  --shadow-raised: 0 12px 30px rgb(13 38 57 / 0.1);
+  --shadow-overlay: 0 24px 64px rgb(13 38 57 / 0.18);
 }
 
 @layer base {
@@ -80,6 +81,8 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
     /* La PWA se instala a pantalla completa: respetar notch y barra inferior. */
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -93,14 +96,25 @@
 
   h1,
   h2,
-  h3,
-  h4 {
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
     text-wrap: balance;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.025em;
   }
 
   p {
     text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-brand-200);
+    color: var(--color-navy-900);
+  }
+
+  button:not(:disabled),
+  a {
+    cursor: pointer;
   }
 
   /* Respetar preferencia del sistema por movimiento reducido. */
@@ -117,6 +131,10 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
   /* Area tactil minima de 44px sin inflar el tamano visual del control. */
   .touch-target::after {
     content: '';

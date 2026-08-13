@@ -15,13 +15,13 @@ export function PetCard({ pet }: { pet: PetListItem }) {
   return (
     <Link
       href={`/mascotas/${pet.id}`}
-      className="flex items-center gap-4 rounded-card border border-line bg-surface p-4 shadow-card transition-colors hover:border-line-strong"
+      className="group flex items-center gap-4 rounded-card border border-line bg-surface p-4 shadow-card transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-raised sm:p-5"
     >
       <PetAvatar name={pet.name} photoUrl={pet.photoUrl} size="lg" />
 
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="font-semibold text-ink">{pet.name}</p>
+          <p className="font-extrabold text-navy-900">{pet.name}</p>
           {pet.currentStay && <StatusBadge tone="success">En el club</StatusBadge>}
         </div>
 
@@ -35,7 +35,9 @@ export function PetCard({ pet }: { pet: PetListItem }) {
         )}
       </div>
 
-      <ChevronRight className="size-5 shrink-0 text-ink-subtle" aria-hidden />
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-canvas text-ink-subtle transition-colors group-hover:bg-brand-50 group-hover:text-brand-600">
+        <ChevronRight className="size-5" aria-hidden />
+      </span>
     </Link>
   )
 }

@@ -10,8 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/inicio',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#FFF9F3',
-    theme_color: '#FF7A00',
+    background_color: '#FFFAF5',
+    theme_color: '#F97316',
     lang: 'es-NI',
     // Icono provisional en SVG. Reemplazar por PNG 192/512 y maskable cuando
     // exista el logotipo definitivo de la marca.

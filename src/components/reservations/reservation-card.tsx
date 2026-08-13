@@ -28,19 +28,19 @@ function formatRange(startAt: Date, endAt: Date): string {
 
 export function ReservationCard({ reservation }: { reservation: ReservationCardData }) {
   return (
-    <article className="rounded-card border border-line bg-surface p-4 shadow-card">
-      <div className="flex items-start gap-3">
+    <article className="rounded-card border border-line bg-surface p-4 shadow-card sm:p-5">
+      <div className="flex items-start gap-3.5">
         <PetAvatar name={reservation.pet.name} photoUrl={reservation.pet.photoUrl} />
 
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="font-semibold text-ink">{reservation.pet.name}</p>
+            <p className="font-extrabold text-navy-900">{reservation.pet.name}</p>
             <StatusBadge tone={reservationStatusTones[reservation.status]}>
               {reservationStatusLabels[reservation.status]}
             </StatusBadge>
           </div>
 
-          <p className="text-sm text-ink-muted">{reservation.service.name}</p>
+          <p className="text-sm font-semibold text-ink-muted">{reservation.service.name}</p>
 
           <p className="flex items-center gap-1.5 text-sm text-ink-muted">
             <CalendarDays className="size-3.5 shrink-0" aria-hidden />
@@ -48,8 +48,8 @@ export function ReservationCard({ reservation }: { reservation: ReservationCardD
           </p>
         </div>
 
-        <div className="shrink-0 text-right">
-          <p className="font-semibold text-ink tabular-nums">
+        <div className="shrink-0 rounded-field bg-canvas-warm px-3 py-2 text-right">
+          <p className="font-extrabold text-navy-900 tabular-nums">
             {formatCurrency(String(reservation.total))}
           </p>
           <p className="text-2xs text-ink-subtle">{reservation.code}</p>

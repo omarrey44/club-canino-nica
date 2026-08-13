@@ -1,18 +1,25 @@
 import type { Metadata, Viewport } from 'next'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Nunito_Sans, Varela_Round } from 'next/font/google'
 
 import { business } from '@/config/business'
 import './globals.css'
 
-const jakarta = Plus_Jakarta_Sans({
+const nunito = Nunito_Sans({
   subsets: ['latin'],
-  variable: '--font-jakarta',
+  variable: '--font-nunito',
+  display: 'swap',
+})
+
+const varela = Varela_Round({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-varela',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
   title: {
-    default: `${business.name} — Guarderia canina`,
+    default: `${business.name} — Guardería canina`,
     template: `%s · ${business.shortName}`,
   },
   description: business.tagline,
@@ -24,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#FF7A00',
+  themeColor: '#F97316',
   width: 'device-width',
   initialScale: 1,
   // Sin maximumScale: bloquear el zoom rompe la accesibilidad en movil.
@@ -33,8 +40,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={jakarta.variable}>
-      <body className="antialiased">{children}</body>
+    <html lang="es" className={`${nunito.variable} ${varela.variable}`}>
+      <body className="antialiased">
+        <a
+          href="#main-content"
+          className="fixed top-3 left-3 z-[100] -translate-y-20 rounded-field bg-navy-900 px-4 py-3 text-sm font-bold text-white shadow-overlay transition-transform focus:translate-y-0"
+        >
+          Saltar al contenido
+        </a>
+        {children}
+      </body>
     </html>
   )
 }

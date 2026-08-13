@@ -19,19 +19,24 @@ export default async function LoginPage({
   const { redirectTo, error } = await searchParams
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1.5">
-        <h1 className="text-2xl font-semibold text-navy-800">Hola de nuevo</h1>
-        <p className="text-ink-muted">Entra para ver como esta tu mascota.</p>
+    <div className="space-y-7">
+      <div className="space-y-2">
+        <p className="text-xs font-extrabold tracking-[0.15em] text-brand-600 uppercase">
+          Bienvenido de vuelta
+        </p>
+        <h1 className="text-3xl leading-tight text-navy-900 sm:text-[2rem]">Qué gusto verte</h1>
+        <p className="leading-relaxed text-ink-muted">
+          Entra para ver cómo está tu mascota y lo que ha hecho hoy.
+        </p>
       </div>
 
       {error && linkErrors[error] && <Alert tone="warning">{linkErrors[error]}</Alert>}
 
       <LoginForm redirectTo={redirectTo} />
 
-      <p className="text-center text-sm text-ink-muted">
-        Primera vez aqui?{' '}
-        <Link href="/registro" className="font-semibold text-brand-600 hover:underline">
+      <p className="border-t border-line pt-5 text-center text-sm text-ink-muted">
+        ¿Primera vez aquí?{' '}
+        <Link href="/registro" className="font-bold text-brand-700 underline-offset-4 hover:underline">
           Crear cuenta
         </Link>
       </p>
