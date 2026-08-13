@@ -78,8 +78,37 @@ Prisma). Nunca se sube al repositorio. La plantilla completa esta en
 
 Donde encontrar los valores en Supabase:
 
-- `DATABASE_URL` / `DIRECT_URL` → **Project settings › Database › Connection string**
+- `DATABASE_URL` / `DIRECT_URL` → boton **Connect** › pestana **Session pooler**
 - Claves → **Project settings › API keys**
+
+### Dos trampas de la cadena de conexion
+
+**1. Codifica los caracteres especiales de la contrasena.**
+
+| Caracter | Poner |
+|---|---|
+| `$` | `%24` |
+| `#` | `%23` |
+| `@` | `%40` |
+| `/` | `%2F` |
+| `?` | `%3F` |
+| `&` | `%26` |
+
+El `$` es el que mas engana. Next.js carga `.env` con `@next/env`, que **expande
+variables al estilo shell**: un `$` literal en la contrasena desaparece antes de
+llegar a Prisma. El sintoma es `P1000 Authentication failed` en la app aunque la
+misma URL funcione en un script suelto, porque `dotenv` a secas no expande.
+Codificado como `%24` funciona en los dos.
+
+Un `#` sin codificar da un error distinto, `P1013 invalid port number`: en una
+URL el `#` inicia el fragmento y parte el string.
+
+**2. Usa el pooler, no la conexion directa.**
+
+`db.<ref>.supabase.co` solo tiene registro IPv6. Si tu red no tiene salida IPv6
+veras `P1001 Can't reach database server`. La solucion es el pooler
+(`aws-N-REGION.pooler.supabase.com`), donde el usuario pasa a ser
+`postgres.<ref>` en lugar de `postgres`.
 
 ---
 
@@ -141,6 +170,28 @@ npm run build        # genera cliente Prisma + build de produccion
 npm run start        # servir el build
 npm run typecheck    # tsc --noEmit
 npm run lint         # eslint
+npm run smoke        # prueba de humo contra el dev server (ver abajo)
+```
+
+### Prueba de humo
+
+Con `npm run dev` corriendo en otra terminal:
+
+```bash
+npm run smoke
+```
+
+Inicia sesion de verdad contra Supabase, arma la cookie que espera
+`@supabase/ssr` y pide las rutas privadas. Verifica la cadena completa —
+proxy, sesion, Prisma y render — sin abrir un navegador. Tambien comprueba que
+un cliente no pueda entrar al panel administrativo.
+
+Salida esperada con los datos demo cargados:
+
+```
+ADMIN   GET /admin -> 200          KPIs en orden: 1 1 0 0 1 1
+CLIENTE GET /inicio -> 200
+CLIENTE -> /admin  307 /inicio  (bloqueado, correcto)
 ```
 
 ---
