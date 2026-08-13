@@ -64,5 +64,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|brand|.*\\.(?:svg|png|jpg|jpeg|webp|mp4)$).*)'],
+  // El manifest y los iconos deben servirse sin sesion: el navegador los pide
+  // antes de instalar la PWA, y una redireccion al login rompe la instalacion.
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|brand|manifest.webmanifest|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|webp|avif|ico|webmanifest|mp4)$).*)',
+  ],
 }
