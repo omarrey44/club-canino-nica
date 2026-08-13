@@ -1,36 +1,226 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Club Canino Nica
 
-## Getting Started
+Plataforma web/PWA para una guarderia canina. Los propietarios ven que hace su
+mascota durante el dia; el personal opera el club desde un panel pensado para
+usarse de pie, con el celular en la mano.
 
-First, run the development server:
+> **Estado: Fase 1 completada.** Arquitectura, base de datos, autenticacion con
+> roles, design system y layouts. El resto del producto se construye por fases
+> (ver [Roadmap](#roadmap)).
+
+---
+
+## Que hay hoy
+
+| Area | Estado |
+|---|---|
+| Esquema de datos completo (19 modelos) | Listo |
+| Autenticacion: login, registro, recuperar y restablecer contrasena | Listo |
+| Roles y guardas de acceso (CLIENT / EMPLOYEE / ADMIN / VETERINARIAN / SUPER_ADMIN) | Listo |
+| Design system y componentes base | Listo |
+| Shell del portal del cliente (nav inferior movil + sidebar escritorio) | Listo |
+| Shell del panel administrativo (10 secciones navegables) | Listo |
+| KPIs reales del dia en el dashboard administrativo | Listo |
+| Seed con un dia completo de demostracion | Listo |
+| PWA instalable (manifest, theme, standalone) | Listo |
+| Mascotas, reservaciones, estancias, camaras, pagos, notificaciones | Por fases |
+
+---
+
+## Stack
+
+- **Next.js 16** (App Router, Turbopack, Server Actions) + **React 19**
+- **TypeScript** estricto
+- **Tailwind CSS v4** con tokens de diseno en `src/app/globals.css`
+- **Prisma 7** sobre **PostgreSQL** (Supabase), via driver adapter `@prisma/adapter-pg`
+- **Supabase Auth** para sesiones y correos de recuperacion
+- **Zod** para validacion de entrada en servidor
+- **Lucide** para iconografia
+
+---
+
+## Instalacion
 
 ```bash
+npm install
+cp .env.example .env      # rellenar valores (ver abajo)
+npm run db:migrate        # crea las tablas
+npm run db:seed           # carga los datos demo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Requisitos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 20.9 o superior (probado en 24.x)
+- Un proyecto de Supabase (plan free sirve)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Variables de entorno
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Todo vive en un unico archivo `.env` (lo leen tanto Next.js como la CLI de
+Prisma). Nunca se sube al repositorio. La plantilla completa esta en
+`.env.example`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Para que sirve |
+|---|---|
+| `DATABASE_URL` | Conexion de la app en runtime. Usar el **pooler** de Supabase (puerto 6543). |
+| `DIRECT_URL` | Conexion directa (puerto 5432). Solo la usan `prisma migrate` y el seed. |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clave publicable. Puede llegar al navegador. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave de servicio. **Solo servidor.** Se usa en el seed y en altas administrativas. |
+| `STORAGE_PROVIDER` | `supabase` o `cloudinary`. |
+| `CAMERA_PROVIDER` | `demo`, `hls` o `webrtc`. |
+| `PAYMENT_PROVIDER` | `demo` o `stripe`. |
+| `SEED_DEMO_PASSWORD` | Contrasena de las cuentas demo. |
 
-## Deploy on Vercel
+Donde encontrar los valores en Supabase:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `DATABASE_URL` / `DIRECT_URL` → **Project settings › Database › Connection string**
+- Claves → **Project settings › API keys**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Base de datos
+
+Hay dos caminos, y producen el mismo esquema:
+
+**A) Pegar el SQL en Supabase** — ver [`supabase/README.md`](supabase/README.md).
+Ejecutar `supabase/01_schema.sql` y luego `supabase/02_datos_base.sql` en el SQL
+Editor, y despues marcar la migracion como aplicada:
+
+```bash
+npx prisma migrate resolve --applied 0_init
+```
+
+**B) Dejar que Prisma lo haga** con `npm run db:migrate`.
+
+En ambos casos, el dia completo de demostracion (usuarios, Rocky, estancia
+activa, fotos y reportes) lo carga `npm run db:seed`, porque las cuentas deben
+crearse en Supabase Auth y eso no se puede hacer por SQL.
+
+```bash
+npm run db:migrate     # crear/aplicar migraciones en desarrollo
+npm run db:deploy      # aplicar migraciones en produccion
+npm run db:seed        # datos demo (idempotente)
+npm run db:studio      # explorador visual
+npm run db:reset       # BORRA todo y vuelve a migrar + sembrar
+```
+
+Las URLs de conexion viven en `prisma.config.ts`, no en `schema.prisma`
+(Prisma 7 movio la configuracion de datasource fuera del schema).
+
+El modelo de datos y sus relaciones estan documentados en
+[`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
+
+---
+
+## Cuentas demo
+
+Se crean con `npm run db:seed`. La contrasena sale de `SEED_DEMO_PASSWORD`.
+
+| Rol | Correo | Que puede ver |
+|---|---|---|
+| Cliente | `camila@correo.com` | Portal del cliente, con Rocky en estancia activa |
+| Colaborador | `cuidador@clubcaninonica.com` | Panel administrativo |
+| Administrador | `admin@clubcaninonica.com` | Panel administrativo + configuracion |
+
+El seed deja a **Rocky** (labrador de Camila) dentro del club con actividades del
+dia, fotos, historial de estancias anteriores, una reservacion futura y
+notificaciones sin leer.
+
+---
+
+## Comandos
+
+```bash
+npm run dev          # servidor de desarrollo
+npm run build        # genera cliente Prisma + build de produccion
+npm run start        # servir el build
+npm run typecheck    # tsc --noEmit
+npm run lint         # eslint
+```
+
+---
+
+## Integraciones externas
+
+Las tres integraciones que aun no tienen credenciales reales estan disenadas
+detras de una interfaz propia, con un modo **DEMO** funcional. Cambiar de
+proveedor no debe tocar componentes de UI.
+
+### Almacenamiento (`StorageProvider`)
+
+`uploadPetPhoto`, `uploadActivityPhoto`, `uploadVaccinationDocument`, `deleteFile`.
+Preparado para Supabase Storage y Cloudinary. Las filas guardan `storageKey`
+(ruta en el proveedor), no una URL absoluta, para poder migrar sin reescribir datos.
+
+### Camaras (`CameraProvider`)
+
+`validateCameraAccess`, `getStreamAccess`, `createTemporaryStreamAccess`.
+
+Reglas de seguridad que el modulo respeta:
+
+- Ninguna credencial de camara llega al navegador.
+- El acceso se valida en el servidor siguiendo la cadena
+  **usuario → mascota → estancia → camara autorizada** (`CameraAccess`).
+- Al cerrar la estancia el propietario pierde el acceso.
+- Sin proveedor real, se sirve un video de muestra **etiquetado como DEMO**.
+
+### Pagos (`PaymentProvider`)
+
+`createCheckout`, `verifyPayment`, `refundPayment`, `getPaymentStatus`.
+Stripe en modo sandbox. La plataforma guarda solo estado y referencia opaca del
+proveedor: **ningun dato de tarjeta se almacena ni pasa por la aplicacion**.
+
+---
+
+## Datos pendientes de definir
+
+Estos valores son **DEMO** y estan centralizados en
+[`src/config/business.ts`](src/config/business.ts). No son datos oficiales del
+negocio y deben confirmarse antes de mostrar la plataforma a clientes reales:
+
+- precios de los servicios
+- horarios de operacion
+- direccion, telefono y correo
+- impuestos y politica de cancelacion
+- cupo maximo de mascotas
+- veterinaria asociada
+- marca y modelo de camaras
+
+El panel administrativo los muestra con una advertencia visible en
+**Configuracion**.
+
+---
+
+## Roadmap
+
+| Fase | Contenido | Estado |
+|---|---|---|
+| 1 | Arquitectura, base de datos, auth, roles, design system, layouts | Completada |
+| 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Siguiente |
+| 3 | Servicios, flujo de reservacion, administracion de reservaciones | |
+| 4 | Check-in, estancias, actividades, timeline | |
+| 5 | Fotografias, reportes diarios, historial | |
+| 6 | Camaras, permisos, player demo | |
+| 7 | Pagos con Stripe sandbox | |
+| 8 | Notificaciones | |
+| 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | |
+
+---
+
+## Convenciones del codigo
+
+- Los **estados** son enums de Postgres. Nunca escribir un estado como string
+  suelto: usar `src/lib/constants/labels.ts` para traducirlos.
+- Los **precios** salen de la tabla `services`, nunca del codigo.
+- El **nombre del negocio** sale de `src/config/business.ts`, nunca escrito a
+  mano en un componente. Esto permite convertir la plataforma en producto para
+  otras guarderias.
+- Toda **Server Action** verifica sesion y permisos por su cuenta. El
+  `proxy.ts` es una primera barrera, no la unica.
+- Ninguna vista queda en blanco: `loading`, `empty` y `error` siempre tienen
+  tratamiento.

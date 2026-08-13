@@ -1,0 +1,676 @@
+// Club Canino Nica — esquema de datos
+//
+// Convenciones:
+// - `Organization` es la raiz de tenant. Hoy existe una sola fila (Club Canino Nica),
+//   pero toda entidad de negocio cuelga de ella para permitir multi-tenant sin migracion destructiva.
+// - La autenticacion la administra Supabase Auth (`auth.users`). `User.authUserId` es el puente.
+//   Prisma nunca escribe en el esquema `auth`.
+// - Los estados viven como enums de Postgres para que la base sea la fuente de verdad,
+//   no strings dispersos en el codigo.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Las URLs de conexion viven en prisma.config.ts (Prisma 7+), no aqui.
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Role {
+  CLIENT
+  EMPLOYEE
+  ADMIN
+  VETERINARIAN
+  SUPER_ADMIN
+}
+
+enum PetSex {
+  MALE
+  FEMALE
+}
+
+enum PetSize {
+  SMALL
+  MEDIUM
+  LARGE
+  GIANT
+}
+
+enum ServiceKind {
+  DAYCARE
+  BOARDING
+  ADDON
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  IN_PROGRESS
+  READY_FOR_PICKUP
+  COMPLETED
+  CANCELLED
+}
+
+enum StayStatus {
+  ACTIVE
+  READY_FOR_PICKUP
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+  FAILED
+}
+
+enum ActivityType {
+  CHECK_IN
+  FOOD
+  WATER
+  PLAY
+  WALK
+  REST
+  PHOTO
+  MEDICATION
+  GROOMING
+  NOTE
+  CHECK_OUT
+}
+
+enum NotificationType {
+  RESERVATION_CONFIRMED
+  PAYMENT_CONFIRMED
+  CHECK_IN
+  NEW_ACTIVITY
+  NEW_PHOTO
+  NEW_REPORT
+  READY_FOR_PICKUP
+  RESERVATION_REMINDER
+  VACCINATION_DUE
+}
+
+enum FoodIntake {
+  ALL
+  MOST
+  HALF
+  LITTLE
+  NONE
+}
+
+enum WaterIntake {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum EnergyLevel {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum Mood {
+  HAPPY
+  CALM
+  TIRED
+  NERVOUS
+}
+
+enum CameraStatus {
+  ONLINE
+  OFFLINE
+  MAINTENANCE
+}
+
+enum StreamProtocol {
+  HLS
+  WEBRTC
+  MJPEG
+  DEMO
+}
+
+// ---------------------------------------------------------------------------
+// Tenant e identidad
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  timezone  String   @default("America/Managua")
+  currency  String   @default("NIO")
+  /// Branding y datos de contacto editables sin desplegar codigo.
+  /// Ver src/config/business.ts para los valores por defecto DEMO.
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  pets          Pet[]
+  services      Service[]
+  cameras       Camera[]
+  reservations  Reservation[]
+  auditLogs     AuditLog[]
+  notifications Notification[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String @id @default(cuid())
+  organizationId String
+
+  /// UUID de `auth.users` en Supabase. Unico puente con el proveedor de identidad.
+  authUserId String @unique @db.Uuid
+
+  email     String   @unique
+  fullName  String
+  phone     String?
+  avatarUrl String?
+  role      Role     @default(CLIENT)
+  isActive  Boolean  @default(true)
+  lastSeenAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization      Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employeeProfile   EmployeeProfile?
+  pets              Pet[]              @relation("PetOwner")
+  reservations      Reservation[]      @relation("ReservationClient")
+  notifications     Notification[]
+  recordedActivities PetActivity[]     @relation("ActivityRecordedBy")
+  uploadedPhotos    PetPhoto[]         @relation("PhotoUploadedBy")
+  authoredReports   DailyReport[]      @relation("ReportAuthor")
+  checkedInStays    Stay[]             @relation("StayCheckedInBy")
+  checkedOutStays   Stay[]             @relation("StayCheckedOutBy")
+  auditLogs         AuditLog[]
+
+  @@index([organizationId, role])
+  @@map("users")
+}
+
+/// Datos que solo aplican a personal interno. Separado de `User` para no
+/// contaminar el perfil del cliente con columnas nulas.
+model EmployeeProfile {
+  id       String  @id @default(cuid())
+  userId   String  @unique
+  position String
+  isOnDuty Boolean @default(false)
+  hiredAt  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("employee_profiles")
+}
+
+// ---------------------------------------------------------------------------
+// Mascotas
+// ---------------------------------------------------------------------------
+
+model Pet {
+  id             String @id @default(cuid())
+  organizationId String
+  ownerId        String
+
+  name        String
+  breed       String?
+  sex         PetSex
+  size        PetSize   @default(MEDIUM)
+  birthDate   DateTime? @db.Date
+  weightKg    Decimal?  @db.Decimal(5, 2)
+  colorMarks  String?
+  temperament String?
+  photoUrl    String?
+  isActive    Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization      Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner             User               @relation("PetOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  medicalInfo       PetMedicalInfo?
+  vaccinations      PetVaccination[]
+  emergencyContacts EmergencyContact[]
+  reservations      Reservation[]
+  stays             Stay[]
+  activities        PetActivity[]
+  photos            PetPhoto[]
+  notifications     Notification[]
+
+  @@index([organizationId, isActive])
+  @@index([ownerId])
+  @@map("pets")
+}
+
+/// Informacion administrativa de salud. NO es un expediente clinico ni sustituye
+/// criterio veterinario: el personal solo la consulta durante la estancia.
+model PetMedicalInfo {
+  id    String @id @default(cuid())
+  petId String @unique
+
+  allergies         String?
+  medications       String?
+  medicalConditions String?
+  dietNotes         String?
+  feedingSchedule   String?
+  isSterilized      Boolean @default(false)
+
+  vetName    String?
+  vetPhone   String?
+  vetClinic  String?
+  specialNotes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pet Pet @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@map("pet_medical_info")
+}
+
+model PetVaccination {
+  id    String @id @default(cuid())
+  petId String
+
+  name        String
+  appliedAt   DateTime  @db.Date
+  expiresAt   DateTime? @db.Date
+  documentUrl String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pet Pet @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  /// Consulta caliente: "vacunas por vencer" ordena por fecha dentro de una mascota.
+  @@index([petId, expiresAt])
+  @@map("pet_vaccinations")
+}
+
+model EmergencyContact {
+  id    String @id @default(cuid())
+  petId String
+
+  name         String
+  relationship String?
+  phone        String
+  isPrimary    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  pet Pet @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@index([petId])
+  @@map("emergency_contacts")
+}
+
+// ---------------------------------------------------------------------------
+// Catalogo de servicios
+// ---------------------------------------------------------------------------
+
+model Service {
+  id             String @id @default(cuid())
+  organizationId String
+
+  slug        String
+  name        String
+  description String?
+  kind        ServiceKind
+  /// Precio base en la moneda de la organizacion. Nunca hardcodear en UI.
+  basePrice   Decimal     @db.Decimal(10, 2)
+  /// Unidad de cobro: DAY para guarderia/hospedaje, UNIT para adicionales.
+  priceUnit   String      @default("DAY")
+  durationMinutes Int?
+  /// Cupo maximo simultaneo. null = sin limite configurado todavia.
+  dailyCapacity   Int?
+  isActive        Boolean @default(true)
+  sortOrder       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+  extras       ReservationExtra[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId, isActive])
+  @@map("services")
+}
+
+// ---------------------------------------------------------------------------
+// Reservaciones y estancias
+// ---------------------------------------------------------------------------
+
+model Reservation {
+  id             String @id @default(cuid())
+  organizationId String
+  clientId       String
+  petId          String
+  serviceId      String
+
+  /// Codigo corto legible para buscar en recepcion (ej. CCN-4821).
+  code String @unique
+
+  startAt DateTime
+  endAt   DateTime
+
+  status ReservationStatus @default(PENDING)
+
+  subtotal Decimal @db.Decimal(10, 2)
+  taxes    Decimal @default(0) @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(10, 2)
+  currency String  @default("NIO")
+
+  clientNotes String?
+  staffNotes  String?
+
+  cancelledAt     DateTime?
+  cancellationReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       User               @relation("ReservationClient", fields: [clientId], references: [id], onDelete: Restrict)
+  pet          Pet                @relation(fields: [petId], references: [id], onDelete: Restrict)
+  service      Service            @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  extras       ReservationExtra[]
+  payment      Payment?
+  stay         Stay?
+
+  /// Consultas del panel: agenda del dia y filtros por estado.
+  @@index([organizationId, startAt])
+  @@index([organizationId, status])
+  @@index([clientId, startAt])
+  @@index([petId, startAt])
+  @@map("reservations")
+}
+
+model ReservationExtra {
+  id            String @id @default(cuid())
+  reservationId String
+  serviceId     String
+
+  quantity  Int     @default(1)
+  /// Precio congelado al momento de reservar: cambiar el catalogo no debe
+  /// alterar reservaciones ya cotizadas.
+  unitPrice Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  service     Service     @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@index([reservationId])
+  @@map("reservation_extras")
+}
+
+/// Se crea en el check-in. Es el contenedor de todo lo que ocurre durante el dia:
+/// actividades, fotos, reportes y accesos temporales a camara.
+model Stay {
+  id            String @id @default(cuid())
+  reservationId String @unique
+  petId         String
+
+  status StayStatus @default(ACTIVE)
+
+  checkInAt       DateTime  @default(now())
+  expectedCheckOutAt DateTime
+  checkOutAt      DateTime?
+
+  checkedInById  String?
+  checkedOutById String?
+
+  /// Area donde se encuentra la mascota ahora mismo (ej. "Area de juegos").
+  currentLocation String?
+  checkInNotes    String?
+  checkOutNotes   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservation   Reservation    @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  pet           Pet            @relation(fields: [petId], references: [id], onDelete: Restrict)
+  checkedInBy   User?          @relation("StayCheckedInBy", fields: [checkedInById], references: [id], onDelete: SetNull)
+  checkedOutBy  User?          @relation("StayCheckedOutBy", fields: [checkedOutById], references: [id], onDelete: SetNull)
+  activities    PetActivity[]
+  photos        PetPhoto[]
+  reports       DailyReport[]
+  cameraAccess  CameraAccess[]
+
+  @@index([petId, checkInAt])
+  @@index([status, checkInAt])
+  @@map("stays")
+}
+
+// ---------------------------------------------------------------------------
+// Actividad diaria
+// ---------------------------------------------------------------------------
+
+model PetActivity {
+  id     String @id @default(cuid())
+  stayId String
+  petId  String
+
+  type        ActivityType
+  occurredAt  DateTime     @default(now())
+  description String?
+  photoUrl    String?
+
+  /// El personal puede registrar notas internas que el propietario no ve.
+  isVisibleToOwner Boolean @default(true)
+
+  recordedById String?
+
+  createdAt DateTime @default(now())
+
+  stay       Stay  @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  pet        Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
+  recordedBy User? @relation("ActivityRecordedBy", fields: [recordedById], references: [id], onDelete: SetNull)
+
+  /// El timeline lee siempre por estancia ordenado por hora.
+  @@index([stayId, occurredAt])
+  @@index([petId, occurredAt])
+  @@map("pet_activities")
+}
+
+model PetPhoto {
+  id     String @id @default(cuid())
+  stayId String
+  petId  String
+
+  /// Ruta en el proveedor de storage, no URL absoluta: permite cambiar de
+  /// proveedor sin reescribir filas.
+  storageKey String
+  url        String
+  caption    String?
+  takenAt    DateTime @default(now())
+  isFeatured Boolean  @default(false)
+
+  uploadedById String?
+
+  createdAt DateTime @default(now())
+
+  stay       Stay  @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  pet        Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
+  uploadedBy User? @relation("PhotoUploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([stayId, takenAt])
+  @@index([petId, takenAt])
+  @@map("pet_photos")
+}
+
+model DailyReport {
+  id     String @id @default(cuid())
+  stayId String
+
+  /// Un hospedaje de varios dias genera un reporte por dia.
+  reportDate DateTime @db.Date
+
+  foodIntake  FoodIntake
+  waterIntake WaterIntake
+  energy      EnergyLevel
+  mood        Mood
+
+  walkCount     Int @default(0)
+  restMinutes   Int @default(0)
+
+  activitiesSummary String?
+  caregiverNotes    String?
+
+  authorId    String?
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stay   Stay  @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  author User? @relation("ReportAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@unique([stayId, reportDate])
+  @@index([publishedAt])
+  @@map("daily_reports")
+}
+
+// ---------------------------------------------------------------------------
+// Camaras
+// ---------------------------------------------------------------------------
+
+/// Nunca guarda credenciales del proveedor. `providerRef` es un identificador
+/// opaco que el adaptador de streaming resuelve en el servidor.
+model Camera {
+  id             String @id @default(cuid())
+  organizationId String
+
+  name        String
+  area        String
+  description String?
+
+  provider    String         @default("demo")
+  providerRef String
+  protocol    StreamProtocol @default(DEMO)
+  status      CameraStatus   @default(OFFLINE)
+  isActive    Boolean        @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  access       CameraAccess[]
+
+  @@index([organizationId, isActive])
+  @@map("cameras")
+}
+
+/// Autorizacion temporal: relaciona una estancia concreta con una camara.
+/// Al cerrar la estancia (o pasar `expiresAt`) el propietario pierde acceso.
+model CameraAccess {
+  id       String @id @default(cuid())
+  cameraId String
+  stayId   String
+
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime?
+  revokedAt DateTime?
+
+  camera Camera @relation(fields: [cameraId], references: [id], onDelete: Cascade)
+  stay   Stay   @relation(fields: [stayId], references: [id], onDelete: Cascade)
+
+  @@unique([cameraId, stayId])
+  @@index([stayId])
+  @@map("camera_access")
+}
+
+// ---------------------------------------------------------------------------
+// Pagos
+// ---------------------------------------------------------------------------
+
+/// Sin datos de tarjeta. Solo el estado y la referencia opaca del proveedor.
+model Payment {
+  id            String @id @default(cuid())
+  reservationId String @unique
+
+  provider   String        @default("stripe")
+  providerRef String?
+  status     PaymentStatus @default(PENDING)
+
+  amount   Decimal @db.Decimal(10, 2)
+  currency String  @default("NIO")
+
+  paidAt     DateTime?
+  refundedAt DateTime?
+  failureReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([providerRef])
+  @@map("payments")
+}
+
+// ---------------------------------------------------------------------------
+// Notificaciones y auditoria
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id             String @id @default(cuid())
+  organizationId String
+  userId         String
+  petId          String?
+
+  type    NotificationType
+  title   String
+  body    String
+  /// Ruta interna a la que lleva el toque en la notificacion.
+  linkUrl String?
+
+  readAt DateTime?
+  /// Se llena cuando exista push real; hoy queda null (solo in-app).
+  sentAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pet          Pet?         @relation(fields: [petId], references: [id], onDelete: SetNull)
+
+  /// La campanita cuenta no leidas del usuario.
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id             String @id @default(cuid())
+  organizationId String
+  actorId        String?
+
+  action     String
+  entityType String
+  entityId   String
+  /// Solo el delta relevante, nunca payloads completos con datos sensibles.
+  changes    Json?
+
+  createdAt DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor        User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
