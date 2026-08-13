@@ -275,10 +275,14 @@ pasar a `date-fns-tz`; el resto del codigo no cambia.
 
 ## 8. Que se dejo fuera a proposito
 
-- **RLS de Supabase.** El acceso se controla en la capa de aplicacion, donde
-  vive la logica de negocio (relacion propietario → mascota → estancia). Agregar
-  RLS duplicaria esa logica en SQL con riesgo de divergencia. Se puede anadir
-  despues como defensa en profundidad si la base se expone a clientes directos.
+- **Politicas de RLS.** Las tablas tienen RLS **activo pero sin politicas**
+  (`supabase/03_rls.sql`), lo que cierra por completo la API publica de Supabase.
+  No se escribieron politicas porque duplicarian en SQL la logica de negocio
+  (propietario → mascota → estancia → camara) con riesgo de divergencia, y hoy
+  nadie consulta la base desde el navegador. Prisma sigue leyendo porque se
+  conecta como dueno de las tablas y no se uso `FORCE ROW LEVEL SECURITY`.
+  Si algun dia se expone PostgREST o Realtime a clientes, ahi si hacen falta
+  politicas.
 - **Sucursales, membresias, cupones, facturacion, chat, QR.** El modelo no los
   impide, pero construirlos hoy seria adivinar requisitos.
 - **Offline avanzado en la PWA.** El manifest y la experiencia standalone estan;
