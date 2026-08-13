@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
 import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -57,6 +58,27 @@ export function Button({
       {loading ? <span className="sr-only">{loadingLabel}</span> : null}
       {children}
     </button>
+  )
+}
+
+/**
+ * Enlace con apariencia de boton.
+ *
+ * Existe en vez de un `asChild`: un enlace debe seguir siendo `<a>` para que
+ * el teclado, el clic con rueda y "abrir en pestana nueva" funcionen. Un
+ * `<button>` que navega rompe las tres cosas.
+ */
+// Generico sobre la ruta para no perder la validacion de `typedRoutes`: sin el
+// parametro, TypeScript colapsa el href a `unknown` y rechaza rutas dinamicas.
+export function LinkButton<T extends string>({
+  className,
+  variant,
+  size,
+  block,
+  ...props
+}: ComponentProps<typeof Link<T>> & VariantProps<typeof buttonVariants>) {
+  return (
+    <Link className={cn(buttonVariants({ variant, size, block }), className)} {...props} />
   )
 }
 

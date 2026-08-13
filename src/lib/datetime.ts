@@ -44,6 +44,20 @@ export function formatDateTime(date: Date): string {
   return `${formatDate(date)}, ${formatTime(date)}`
 }
 
+/** "Hace 4 minutos", para la ultima actualizacion de la mascota. */
+export function relativeTime(date: Date, now: Date = new Date()): string {
+  const seconds = Math.round((now.getTime() - date.getTime()) / 1000)
+
+  if (seconds < 60) return 'Hace un momento'
+  const minutes = Math.round(seconds / 60)
+  if (minutes < 60) return `Hace ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`
+  const hours = Math.round(minutes / 60)
+  if (hours < 24) return `Hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`
+  const days = Math.round(hours / 24)
+  if (days < 7) return `Hace ${days} ${days === 1 ? 'dia' : 'dias'}`
+  return formatDate(date)
+}
+
 /**
  * Nicaragua no observa horario de verano, asi que America/Managua es UTC-6 todo
  * el ano y un desfase fijo basta para calcular los limites del dia operativo.

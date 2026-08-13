@@ -93,6 +93,27 @@ export const activityTypeLabels: Record<ActivityType, string> = {
   CHECK_OUT: 'Salida',
 }
 
+/**
+ * Icono de cada actividad en el timeline.
+ *
+ * Se usan emoji a proposito y solo aqui: el propietario escanea la columna de
+ * un vistazo y un simbolo se reconoce mas rapido que un icono monocromo. En el
+ * resto del producto no se usan emoji.
+ */
+export const activityTypeIcons: Record<ActivityType, string> = {
+  CHECK_IN: '✅',
+  FOOD: '🍖',
+  WATER: '💧',
+  PLAY: '🐕',
+  WALK: '🦮',
+  REST: '😴',
+  PHOTO: '📸',
+  MEDICATION: '💊',
+  GROOMING: '🛁',
+  NOTE: '📋',
+  CHECK_OUT: '👋',
+}
+
 export const petSexLabels: Record<PetSex, string> = {
   MALE: 'Macho',
   FEMALE: 'Hembra',

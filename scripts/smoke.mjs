@@ -36,11 +36,15 @@ async function sessionCookie(email) {
   return parts.join('; ')
 }
 
-async function check(label, email, path, needles) {
+async function get(email, path) {
   const cookie = await sessionCookie(email)
-  const res = await fetch(`${BASE}${path}`, { headers: { cookie }, redirect: 'manual' })
+  return fetch(`${BASE}${path}`, { headers: { cookie }, redirect: 'manual' })
+}
+
+async function check(label, email, path, needles) {
+  const res = await get(email, path)
   console.log(`\n${label}  GET ${path} -> ${res.status} ${res.headers.get('location') ?? ''}`)
-  if (res.status !== 200) return
+  if (res.status !== 200) return ''
 
   const html = await res.text()
   for (const n of needles) console.log(`   ${html.includes(n) ? 'OK   ' : 'FALTA'} "${n}"`)
@@ -48,6 +52,7 @@ async function check(label, email, path, needles) {
   // Los KPI se rinden con Suspense: el valor llega en un trozo posterior.
   const kpis = [...html.matchAll(/tabular-nums[^>]*>(\d+)</g)].map((m) => m[1])
   if (kpis.length) console.log(`   KPIs en orden: ${kpis.join(' ')}`)
+  return html
 }
 
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin', [
@@ -55,14 +60,52 @@ await check('ADMIN ', 'admin@clubcaninonica.com', '/admin', [
   'Reportes pendientes',
 ])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/configuracion', ['America/Managua', 'DEMO'])
-await check('CLIENTE', 'camila@correo.com', '/inicio', ['Camila'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/mascotas?q=Rocky', [
+  'Rocky',
+  'Camila Ruiz',
+])
+
+// --- Portal del cliente -----------------------------------------------------
+await check('CLIENTE', 'camila@correo.com', '/inicio', [
+  'Camila',
+  'Rocky',
+  'Ultimas actualizaciones',
+  'Proxima reservacion',
+])
+
+const listado = await check('CLIENTE', 'camila@correo.com', '/mascotas', ['Rocky', 'Labrador'])
+await check('CLIENTE', 'camila@correo.com', '/mascotas/nueva', ['Registrar mascota', 'Alergias'])
+
+const petId = listado.match(/\/mascotas\/([a-z0-9]{20,})"/)?.[1]
+if (petId) {
+  await check('CLIENTE', 'camila@correo.com', `/mascotas/${petId}`, [
+    'Rocky',
+    'Vacunas',
+    'Rabia',
+    'Veterinario',
+    'Andres Ruiz',
+  ])
+  await check('CLIENTE', 'camila@correo.com', `/mascotas/${petId}/editar`, ['Editar a Rocky'])
+} else {
+  console.log('\n   FALTA no se pudo extraer el id de la mascota del listado')
+}
+
 await check('CLIENTE', 'camila@correo.com', '/perfil', ['camila@correo.com', 'Cliente'])
 
-// Un cliente no debe poder entrar al panel.
-const cookie = await sessionCookie('camila@correo.com')
-const denied = await fetch(`${BASE}/admin`, { headers: { cookie }, redirect: 'manual' })
+// --- Permisos ---------------------------------------------------------------
+console.log('\n--- permisos ---')
+
+const denied = await get('camila@correo.com', '/admin')
 console.log(
-  `\nCLIENTE -> /admin  ${denied.status} ${denied.headers.get('location') ?? ''}  ${
+  `CLIENTE -> /admin              ${denied.status} ${denied.headers.get('location') ?? ''}  ${
     denied.status === 307 ? '(bloqueado, correcto)' : '(REVISAR)'
+  }`
+)
+
+// Un id que no pertenece al usuario debe dar 404, nunca datos de otro.
+const foreign = await get('camila@correo.com', '/mascotas/clnoexistenoexiste0000')
+console.log(
+  `CLIENTE -> mascota inexistente ${foreign.status}  ${
+    foreign.status === 404 ? '(404, correcto)' : '(REVISAR)'
   }`
 )

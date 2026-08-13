@@ -23,7 +23,11 @@ usarse de pie, con el celular en la mano.
 | KPIs reales del dia en el dashboard administrativo | Listo |
 | Seed con un dia completo de demostracion | Listo |
 | PWA instalable (manifest, theme, standalone) | Listo |
-| Mascotas, reservaciones, estancias, camaras, pagos, notificaciones | Por fases |
+| Dashboard del cliente con la mascota en estancia, timeline y proxima reserva | Listo |
+| Mascotas: alta, edicion, ficha completa y foto de perfil | Listo |
+| Vacunas con aviso de vencimiento y comprobante | Listo |
+| Listado de mascotas del panel, con busqueda y filtros | Listo |
+| Reservaciones, estancias, camaras, pagos, notificaciones | Por fases |
 
 ---
 
@@ -204,9 +208,23 @@ proveedor no debe tocar componentes de UI.
 
 ### Almacenamiento (`StorageProvider`)
 
-`uploadPetPhoto`, `uploadActivityPhoto`, `uploadVaccinationDocument`, `deleteFile`.
-Preparado para Supabase Storage y Cloudinary. Las filas guardan `storageKey`
-(ruta en el proveedor), no una URL absoluta, para poder migrar sin reescribir datos.
+`uploadPetPhoto`, `uploadActivityPhoto`, `uploadVaccinationDocument`, `deleteFile`
+en `src/server/providers/storage.ts`. Preparado para Supabase Storage y
+Cloudinary. Las filas guardan `storageKey` (ruta en el proveedor), no solo una
+URL absoluta, para poder migrar sin reescribir datos.
+
+Crear el bucket una vez por proyecto:
+
+```bash
+npm run storage:init
+```
+
+El bucket es **publico** a proposito: las rutas llevan un UUID, asi que una URL
+no se adivina, pero tampoco se protege por sesion. Es un compromiso consciente
+para el MVP (fotos de mascotas, no documentos sensibles) que mantiene simple
+`next/image` y su cache. Para pasarlo a privado basta cambiar `public` en
+`scripts/init-storage.mjs` y devolver URLs firmadas desde el proveedor; el
+resto de la aplicacion no cambia.
 
 ### Camaras (`CameraProvider`)
 
@@ -252,8 +270,8 @@ El panel administrativo los muestra con una advertencia visible en
 | Fase | Contenido | Estado |
 |---|---|---|
 | 1 | Arquitectura, base de datos, auth, roles, design system, layouts | Completada |
-| 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Siguiente |
-| 3 | Servicios, flujo de reservacion, administracion de reservaciones | |
+| 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Completada |
+| 3 | Servicios, flujo de reservacion, administracion de reservaciones | Siguiente |
 | 4 | Check-in, estancias, actividades, timeline | |
 | 5 | Fotografias, reportes diarios, historial | |
 | 6 | Camaras, permisos, player demo | |
