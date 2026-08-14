@@ -38,7 +38,7 @@ export default async function LoginPage({
       <LoginForm redirectTo={redirectTo} />
 
       <div className="space-y-2">
-        <div className="flex items-center gap-4" aria-hidden>
+        <div className="flex items-center gap-4" data-decorative-divider aria-hidden>
           <span className="h-px flex-1 bg-brand-100" />
           <PawPrint className="size-5 fill-brand-100 text-brand-100" />
           <span className="h-px flex-1 bg-brand-100" />

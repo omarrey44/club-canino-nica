@@ -95,9 +95,42 @@ const contextos = {
 }
 
 const hallazgos = []
+const alturas = []
+
+/**
+ * Pantallas que tienen que caber sin desplazarse en una ventana de portatil
+ * real (1440x700, ya descontada la barra del navegador). No es un gusto: son
+ * de un solo proposito, se usan a diario y el boton no puede quedar debajo del
+ * pliegue.
+ *
+ * `/registro` queda fuera a proposito: son cinco campos y desplazarse un poco
+ * en un formulario de alta es normal y esperado. Se sigue midiendo, pero como
+ * informacion, no como fallo.
+ */
+const DEBEN_CABER = new Set(['/login', '/recuperar', '/restablecer'])
 
 for (const { path, quien } of RUTAS) {
   const page = await contextos[quien].newPage()
+
+  // Alto de pagina en una ventana de escritorio realista.
+  await page.setViewportSize({ width: 1440, height: 700 })
+  try {
+    await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle', timeout: 45000 })
+    const extra = await page.evaluate(
+      () => document.documentElement.scrollHeight - window.innerHeight
+    )
+    alturas.push({ path, extra })
+    if (extra > 0 && DEBEN_CABER.has(path)) {
+      hallazgos.push({
+        tipo: 'no-cabe',
+        path,
+        width: 1440,
+        detalle: `${extra}px de mas en una ventana de 1440x700`,
+      })
+    }
+  } catch {
+    /* la carga se reporta abajo, en el bucle de anchos */
+  }
 
   for (const width of anchos) {
     await page.setViewportSize({ width, height: 900 })
@@ -200,6 +233,17 @@ for (const { path, quien } of RUTAS) {
 await browser.close()
 
 // --- Reporte ------------------------------------------------------------------
+
+const largas = alturas.filter((a) => a.extra > 0).sort((a, b) => b.extra - a.extra)
+if (largas.length > 0) {
+  console.log('\n--- alto de pagina en 1440x700 (informativo) ---')
+  console.log('    Un listado largo se desplaza y esta bien; lo que interesa es')
+  console.log('    detectar cuando una pantalla de contenido acotado se dispara.\n')
+  for (const { path, extra } of largas.slice(0, 10)) {
+    console.log(`  +${String(extra).padStart(5)}px  ${path}`)
+  }
+  console.log()
+}
 
 if (hallazgos.length === 0) {
   console.log('Auditoría de interfaz: sin hallazgos.')

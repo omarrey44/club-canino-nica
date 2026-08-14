@@ -60,8 +60,8 @@ export function PetForm({
         <CardHeader>
           <CardTitle>Datos basicos</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
-          <Field errors={errors.name} className="sm:col-span-2">
+        <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Field errors={errors.name} className="sm:col-span-2 lg:col-span-3">
             <Label>Nombre</Label>
             <Input name="name" defaultValue={defaults.name} required autoFocus />
           </Field>
@@ -123,7 +123,7 @@ export function PetForm({
             />
           </Field>
 
-          <Field errors={errors.temperament} className="sm:col-span-2">
+          <Field errors={errors.temperament} className="sm:col-span-2 lg:col-span-3">
             <Label>Carácter</Label>
             <Textarea
               name="temperament"
@@ -140,7 +140,7 @@ export function PetForm({
         <CardHeader>
           <CardTitle>Información de cuidado</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
+        <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Field errors={errors.allergies}>
             <Label>Alergias</Label>
             <Input name="allergies" defaultValue={defaults.allergies ?? ''} placeholder="Pollo" />
@@ -151,7 +151,7 @@ export function PetForm({
             <Input name="medications" defaultValue={defaults.medications ?? ''} />
           </Field>
 
-          <Field errors={errors.medicalConditions} className="sm:col-span-2">
+          <Field errors={errors.medicalConditions} className="sm:col-span-2 lg:col-span-3">
             <Label>Condiciones a tener en cuenta</Label>
             <Textarea
               name="medicalConditions"
@@ -181,7 +181,7 @@ export function PetForm({
             />
           </Field>
 
-          <Field className="sm:col-span-2">
+          <Field className="sm:col-span-2 lg:col-span-3">
             <Checkbox name="isSterilized" label="Esta esterilizado" defaultChecked={defaults.isSterilized} />
           </Field>
 
@@ -195,12 +195,12 @@ export function PetForm({
             <Input type="tel" name="vetPhone" inputMode="tel" defaultValue={defaults.vetPhone ?? ''} />
           </Field>
 
-          <Field errors={errors.vetClinic} className="sm:col-span-2">
+          <Field errors={errors.vetClinic} className="sm:col-span-2 lg:col-span-3">
             <Label>Clínica</Label>
             <Input name="vetClinic" defaultValue={defaults.vetClinic ?? ''} />
           </Field>
 
-          <Field errors={errors.specialNotes} className="sm:col-span-2">
+          <Field errors={errors.specialNotes} className="sm:col-span-2 lg:col-span-3">
             <Label>Observaciones especiales</Label>
             <Textarea
               name="specialNotes"

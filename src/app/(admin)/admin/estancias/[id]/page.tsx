@@ -106,6 +106,16 @@ export default async function StayDetailPage({ params }: Props) {
         </Alert>
       )}
 
+      {/*
+        Dos columnas desde `xl`.
+
+        La pantalla eran seis tarjetas apiladas y superaba los 1900 px: el
+        cuidador tenia que bajar para ver las fotos o la ficha de alimentacion
+        justo cuando esta de pie con el perro. A la izquierda queda lo que se
+        usa cada rato (registrar y ver el dia); a la derecha, lo que se consulta.
+      */}
+      <div className="grid gap-5 xl:grid-cols-[1.15fr_1fr] xl:items-start">
+        <div className="space-y-5">
       {isOpen && (
         <Card>
           <CardHeader>
@@ -140,7 +150,9 @@ export default async function StayDetailPage({ params }: Props) {
           )}
         </CardContent>
       </Card>
+        </div>
 
+        <div className="space-y-5">
       <Card>
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle>Fotos de la estancia</CardTitle>
@@ -202,6 +214,8 @@ export default async function StayDetailPage({ params }: Props) {
           <CheckOutForm stayId={stay.id} petName={stay.pet.name} />
         </div>
       )}
+        </div>
+      </div>
     </div>
   )
 }

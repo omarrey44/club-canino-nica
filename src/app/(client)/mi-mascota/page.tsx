@@ -107,45 +107,56 @@ export default async function PetTodayPage() {
         </CardContent>
       </Card>
 
-      {/* El reporte solo aparece cuando el equipo lo publica, al cerrar el día. */}
-      {report && (
-        <DailyReportCard
-          report={report}
-          petName={stay.pet.name}
-          photos={stay.photos.filter((photo) => photo.isFeatured)}
-        />
-      )}
+      {/*
+        Dos columnas desde `lg`.
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Su día, paso a paso</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {stay.activities.length === 0 ? (
-            <p className="text-sm text-ink-muted">
-              Acaba de llegar. En cuanto el equipo registre algo, aparecera aquí.
-            </p>
-          ) : (
-            <ActivityTimeline activities={stay.activities} />
-          )}
-        </CardContent>
-      </Card>
-
-      {stay.photos.length > 0 && (
+        El timeline crece durante el dia y empujaba las fotos y el reporte fuera
+        de pantalla. Puestos al lado, el propietario ve de un vistazo lo que
+        vino a ver: como le fue y las fotos, sin bajar.
+      */}
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
         <Card>
           <CardHeader>
-            <CardTitle>
-              <span className="inline-flex items-center gap-2">
-                <Images className="size-4" aria-hidden />
-                Fotos de hoy
-              </span>
-            </CardTitle>
+            <CardTitle>Su día, paso a paso</CardTitle>
           </CardHeader>
           <CardContent>
-            <PhotoGrid photos={stay.photos} petName={stay.pet.name} />
+            {stay.activities.length === 0 ? (
+              <p className="text-sm text-ink-muted">
+                Acaba de llegar. En cuanto el equipo registre algo, aparecerá aquí.
+              </p>
+            ) : (
+              <ActivityTimeline activities={stay.activities} />
+            )}
           </CardContent>
         </Card>
-      )}
+
+        <div className="space-y-5">
+          {/* El reporte solo aparece cuando el equipo lo publica, al cerrar el día. */}
+          {report && (
+            <DailyReportCard
+              report={report}
+              petName={stay.pet.name}
+              photos={stay.photos.filter((photo) => photo.isFeatured)}
+            />
+          )}
+
+          {stay.photos.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  <span className="inline-flex items-center gap-2">
+                    <Images className="size-4" aria-hidden />
+                    Fotos de hoy
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <PhotoGrid photos={stay.photos} petName={stay.pet.name} />
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

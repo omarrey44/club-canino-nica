@@ -221,6 +221,12 @@ humano:
 - areas tactiles por debajo de 44 px, ignorando controles pequenos cuya
   etiqueta ya es tocable
 - violaciones de accesibilidad segun `axe-core` (WCAG 2.1 AA)
+- pantallas de acceso que no quepan en una ventana de 1440x700, que es lo que
+  deja una portatil real una vez descontada la barra del navegador
+
+Ademas imprime el alto de cada pantalla como informacion. Un listado largo se
+desplaza y esta bien; lo que interesa es notar cuando una pantalla de contenido
+acotado se dispara.
 
 Agrupa por problema y no por pantalla: el mismo fallo en veinte rutas es un
 solo arreglo, no veinte. Mide, no arregla; el juicio visual sigue siendo humano.

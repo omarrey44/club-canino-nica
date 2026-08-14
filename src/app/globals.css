@@ -139,6 +139,67 @@
 }
 
 @layer utilities {
+  /*
+    Ventanas bajas.
+
+    Una portatil de 1440x900 deja unos 700px de viewport una vez descontada la
+    barra del navegador, y ahi la pantalla de acceso empezaba a desplazarse.
+    Tailwind no trae variantes por altura, asi que el ajuste va aqui: en cuanto
+    la ventana es baja, el logo y los margenes ceden para que el formulario
+    entero quepa sin bajar.
+
+    Va en la capa `utilities` y no en `components` porque en Tailwind v4 las
+    utilidades ganan por orden de capa: desde `components`, `p-5` pisaria esto.
+  */
+  @media (max-height: 780px) {
+    .auth-shell {
+      padding-block: 0.75rem;
+    }
+    .auth-logo {
+      width: 5rem;
+    }
+    .auth-card {
+      margin-top: 0.375rem;
+      padding: 1.15rem;
+    }
+    /* El titular es lo que mas ocupa despues del formulario. */
+    .auth-card h1 {
+      font-size: 1.7rem;
+      line-height: 1.1;
+    }
+    /* Aprieta la pila de la tarjeta: gana mas que reducir cualquier tipografia.
+       Repite la forma del selector de Tailwind y anade un nivel, porque
+       `.space-y-5 > :not([hidden]) ~ :not([hidden])` tiene mas especificidad de
+       la que parece y una regla mas simple no lo pisa. */
+    .auth-card > div > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 0.9rem;
+    }
+  }
+
+  @media (max-height: 720px) {
+    .auth-logo {
+      width: 4.25rem;
+    }
+    .auth-card {
+      padding: 1rem;
+    }
+  }
+
+  @media (max-height: 660px) {
+    .auth-logo {
+      width: 4rem;
+    }
+    .auth-card {
+      padding: 1rem;
+    }
+    .auth-card h1 {
+      font-size: 1.45rem;
+    }
+    /* El separador decorativo es lo primero que sobra cuando falta alto. */
+    .auth-card [data-decorative-divider] {
+      display: none;
+    }
+  }
   .font-display {
     font-family: var(--font-display);
   }

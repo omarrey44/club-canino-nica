@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       <main
         id="main-content"
-        className="relative z-10 flex min-h-dvh items-center justify-center overflow-hidden px-4 pt-3 pb-16 sm:px-6 lg:px-8 lg:py-4 xl:px-10 2xl:py-8"
+        className="auth-shell relative z-10 flex min-h-dvh items-center justify-center overflow-hidden px-4 pt-3 pb-16 sm:px-6 lg:px-8 lg:py-3 xl:px-10 2xl:py-6"
       >
         <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden>
           <PawPrint className="absolute top-[8%] -left-14 size-64 -rotate-12 fill-brand-100/50 text-transparent" />
@@ -32,12 +32,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <BrandLogo
               decorative
               priority
-              sizes="(max-width: 1023px) 112px, (max-width: 1535px) 128px, 144px"
-              className="w-28 drop-shadow-[0_10px_18px_rgb(13_38_57_/_0.14)] lg:w-32 2xl:w-36"
+              sizes="(max-width: 1023px) 96px, (max-width: 1535px) 112px, 128px"
+              className="auth-logo w-24 drop-shadow-[0_10px_18px_rgb(13_38_57_/_0.14)] lg:w-28 2xl:w-32"
             />
           </Link>
 
-          <div className="mt-2 rounded-[1.75rem] border border-white bg-white/95 p-5 shadow-overlay ring-1 ring-navy-900/5 backdrop-blur lg:mt-3 lg:rounded-[2rem] lg:p-6 lg:shadow-[0_24px_64px_rgb(13_38_57_/_0.15)] 2xl:mt-4 2xl:p-8">
+          <div className="auth-card mt-2 rounded-[1.75rem] border border-white bg-white/95 p-5 shadow-overlay ring-1 ring-navy-900/5 backdrop-blur lg:mt-3 lg:rounded-[2rem] lg:p-6 lg:shadow-[0_24px_64px_rgb(13_38_57_/_0.15)]">
             {children}
           </div>
 

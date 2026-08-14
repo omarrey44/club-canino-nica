@@ -261,7 +261,30 @@ La paleta original no cumplia AA y hubo que ceder en tres sitios:
 Todo esto salio de medir, no de opinar: `npm run audit:ui` devolvio 94
 hallazgos en la primera pasada.
 
-### 6.4 Accesibilidad, no como capa final
+### 6.4 Densidad: el escritorio no es el movil estirado
+
+El producto se diseno movil primero y por un tiempo eso significo una sola
+columna en todas partes, tambien en pantallas anchas. El resultado era
+paradojico: en escritorio habia que bajar mas, con media pantalla vacia al lado.
+
+Las pantallas de detalle pasan a dos columnas cuando hay sitio, repartidas por
+uso y no por simetria:
+
+- **Ficha de mascota**: a la izquierda lo estable (datos, cuidado, veterinario);
+  a la derecha las vacunas, que son lo que crece y lo que se edita.
+- **Estancia en el panel**: a la izquierda lo que el cuidador usa cada rato
+  (registrar actividad y ver el dia); a la derecha lo que consulta.
+- **Mi mascota hoy**: el timeline a la izquierda, el reporte y las fotos a la
+  derecha, para que lo que el propietario vino a ver no quede empujado hacia
+  abajo segun avanza el dia.
+
+Las pantallas de acceso ademas se compactan por altura de ventana. Tailwind no
+trae variantes por alto, asi que van unas reglas propias en `globals.css`: por
+debajo de 780 px el logo, los margenes y el titular ceden. Tienen que ir en la
+capa `utilities` y con la misma forma de selector que usa Tailwind para
+`space-y-*`, o las utilidades las pisan.
+
+### 6.5 Accesibilidad, no como capa final
 
 - Foco visible global; nunca `outline: none` sin reemplazo.
 - Controles de 44px minimo de alto.

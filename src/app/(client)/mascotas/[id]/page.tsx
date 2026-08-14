@@ -53,6 +53,7 @@ export default async function PetDetailPage({ params }: Props) {
       medical.dietNotes ||
       medical.feedingSchedule ||
       medical.isSterilized)
+  const hasVet = medical && (medical.vetName || medical.vetPhone || medical.vetClinic)
 
   return (
     <div className="space-y-6">
@@ -95,103 +96,119 @@ export default async function PetDetailPage({ params }: Props) {
         </div>
       </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Datos</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <dl className="divide-y divide-line text-sm">
-            <Row label="Sexo" value={petSexLabels[pet.sex]} />
-            <Row label="Tamaño" value={petSizeLabels[pet.size]} />
-            <Row label="Edad" value={formatAge(pet.birthDate)} />
-            <Row
-              label="Fecha de nacimiento"
-              value={pet.birthDate ? formatDate(pet.birthDate) : null}
-            />
-            <Row label="Peso" value={pet.weightKg ? `${pet.weightKg} kg` : null} />
-            <Row label="Color y señas" value={pet.colorMarks} />
-            <Row label="Carácter" value={pet.temperament} />
-          </dl>
-        </CardContent>
-      </Card>
+      {/*
+        Dos columnas desde `lg`.
 
-      <VaccinationSection
-        vaccinations={pet.vaccinations}
-        addAction={addVaccination.bind(null, pet.id)}
-        canEdit
-      />
+        Eran ocho tarjetas apiladas: en escritorio obligaba a bajar casi mil
+        pixeles con media pantalla vacia al lado. Las vacunas van solas en la
+        derecha porque son la seccion que crece y la que se edita.
+      */}
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
+        <div className="space-y-5">
+          <Card>
+            <CardHeader>
+              <CardTitle>Datos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="divide-y divide-line text-sm">
+                <Row label="Sexo" value={petSexLabels[pet.sex]} />
+                <Row label="Tamaño" value={petSizeLabels[pet.size]} />
+                <Row label="Edad" value={formatAge(pet.birthDate)} />
+                <Row
+                  label="Fecha de nacimiento"
+                  value={pet.birthDate ? formatDate(pet.birthDate) : null}
+                />
+                <Row label="Peso" value={pet.weightKg ? `${pet.weightKg} kg` : null} />
+                <Row label="Color y señas" value={pet.colorMarks} />
+                <Row label="Carácter" value={pet.temperament} />
+              </dl>
+            </CardContent>
+          </Card>
 
-      {hasCareInfo && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Cuidado</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="divide-y divide-line text-sm">
-              <Row label="Alergias" value={medical.allergies} />
-              <Row label="Medicamentos" value={medical.medications} />
-              <Row label="Condiciones" value={medical.medicalConditions} />
-              <Row label="Alimentación" value={medical.dietNotes} />
-              <Row label="Horario de comida" value={medical.feedingSchedule} />
-              <Row label="Esterilizado" value={medical.isSterilized ? 'Si' : null} />
-            </dl>
-          </CardContent>
-        </Card>
-      )}
+          {hasCareInfo && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Cuidado</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <dl className="divide-y divide-line text-sm">
+                  <Row label="Alergias" value={medical.allergies} />
+                  <Row label="Medicamentos" value={medical.medications} />
+                  <Row label="Condiciones" value={medical.medicalConditions} />
+                  <Row label="Alimentación" value={medical.dietNotes} />
+                  <Row label="Horario de comida" value={medical.feedingSchedule} />
+                  <Row label="Esterilizado" value={medical.isSterilized ? 'Sí' : null} />
+                </dl>
+              </CardContent>
+            </Card>
+          )}
 
-      {medical && (medical.vetName || medical.vetPhone || medical.vetClinic) && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Veterinario</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="divide-y divide-line text-sm">
-              <Row label="Nombre" value={medical.vetName} />
-              <Row label="Teléfono" value={medical.vetPhone} />
-              <Row label="Clínica" value={medical.vetClinic} />
-            </dl>
-          </CardContent>
-        </Card>
-      )}
+          {hasVet && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Veterinario</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <dl className="divide-y divide-line text-sm">
+                  <Row label="Nombre" value={medical.vetName} />
+                  <Row label="Teléfono" value={medical.vetPhone} />
+                  <Row label="Clínica" value={medical.vetClinic} />
+                </dl>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
-      {pet.emergencyContacts.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Contactos de emergencia</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="divide-y divide-line text-sm">
-              {pet.emergencyContacts.map((contact) => (
-                <li key={contact.id} className="flex justify-between gap-4 py-2.5">
-                  <div>
-                    <p className="font-medium text-ink">{contact.name}</p>
-                    {contact.relationship && (
-                      <p className="text-ink-muted">{contact.relationship}</p>
-                    )}
-                  </div>
-                  <a
-                    href={`tel:${contact.phone}`}
-                    className="inline-flex min-h-11 items-center font-medium text-brand-700 hover:underline"
-                  >
-                    {contact.phone}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
+        <div className="space-y-5">
+          <VaccinationSection
+            vaccinations={pet.vaccinations}
+            addAction={addVaccination.bind(null, pet.id)}
+            canEdit
+          />
 
-      {medical?.specialNotes && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Observaciones especiales</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-ink-muted">{medical.specialNotes}</p>
-          </CardContent>
-        </Card>
-      )}
+          {pet.emergencyContacts.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Contactos de emergencia</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="divide-y divide-line text-sm">
+                  {pet.emergencyContacts.map((contact) => (
+                    <li
+                      key={contact.id}
+                      className="flex items-center justify-between gap-4 py-1"
+                    >
+                      <div>
+                        <p className="font-medium text-ink">{contact.name}</p>
+                        {contact.relationship && (
+                          <p className="text-ink-muted">{contact.relationship}</p>
+                        )}
+                      </div>
+                      <a
+                        href={`tel:${contact.phone}`}
+                        className="inline-flex min-h-11 items-center font-medium text-brand-700 hover:underline"
+                      >
+                        {contact.phone}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+
+          {medical?.specialNotes && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Observaciones especiales</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-ink-muted">{medical.specialNotes}</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
