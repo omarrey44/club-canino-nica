@@ -153,7 +153,12 @@ npm run db:deploy      # aplicar migraciones en produccion
 npm run db:seed        # datos demo (idempotente)
 npm run db:studio      # explorador visual
 npm run db:reset       # BORRA todo y vuelve a migrar + sembrar
+npm run db:wipe        # BORRA los datos y las cuentas, sin tocar el esquema
 ```
+
+`db:wipe` vacia todas las tablas y borra todos los usuarios de Supabase Auth,
+que `db:reset` no toca porque viven fuera de Postgres. Exige confirmacion
+explicita: `npm run db:wipe -- --si-borrar-todo`. Despues, `npm run db:seed`.
 
 Las URLs de conexion viven en `prisma.config.ts`, no en `schema.prisma`
 (Prisma 7 movio la configuracion de datasource fuera del schema).
@@ -165,13 +170,20 @@ El modelo de datos y sus relaciones estan documentados en
 
 ## Cuentas demo
 
-Se crean con `npm run db:seed`. La contrasena sale de `SEED_DEMO_PASSWORD`.
+Se crean con `npm run db:seed`. La contrasena sale de `SEED_DEMO_PASSWORD`, que
+es **obligatoria**: el seed falla sin ella. No hay valor por defecto a proposito,
+porque este repositorio es publico.
 
 | Rol | Correo | Que puede ver |
 |---|---|---|
 | Cliente | `camila@correo.com` | Portal del cliente, con Rocky en estancia activa |
 | Colaborador | `cuidador@clubcaninonica.com` | Panel administrativo |
 | Administrador | `admin@clubcaninonica.com` | Panel administrativo + configuracion |
+
+Si defines `SEED_OWNER_EMAIL` (y opcionalmente `SEED_OWNER_NAME`), el seed crea
+ademas un segundo administrador con ese correo. **El registro publico siempre
+crea `CLIENT`**, asi que el primer administrador no puede salir de la interfaz:
+sale del seed o de un `UPDATE` a mano.
 
 El seed deja a **Rocky** (labrador de Camila) dentro del club con actividades del
 dia, fotos, historial de estancias anteriores, una reservacion futura y

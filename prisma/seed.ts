@@ -24,7 +24,20 @@ const prisma = new PrismaClient({
 })
 
 const ORG_SLUG = 'club-canino-nica'
-const DEMO_PASSWORD = process.env.SEED_DEMO_PASSWORD ?? 'ClubCanino2026!'
+
+/**
+ * Sin valor por defecto a proposito: el repositorio es publico y una clave
+ * escrita aqui seria la clave real de las cuentas demo de quien lo despliegue.
+ */
+const DEMO_PASSWORD = requireEnv('SEED_DEMO_PASSWORD')
+
+/**
+ * Segundo administrador, el del dueno de la instalacion. Se toma del entorno
+ * para no dejar un correo personal en un repositorio publico; si no esta
+ * definido, el seed sigue sin el.
+ */
+const OWNER_EMAIL = process.env.SEED_OWNER_EMAIL?.trim()
+const OWNER_NAME = process.env.SEED_OWNER_NAME?.trim() || 'Administrador'
 
 const supabaseAdmin = createClient(
   requireEnv('NEXT_PUBLIC_SUPABASE_URL'),
@@ -128,6 +141,15 @@ async function main() {
     phone: '+505 0000 0001',
     role: 'ADMIN',
   })
+
+  if (OWNER_EMAIL) {
+    await upsertUser({
+      organizationId: org.id,
+      email: OWNER_EMAIL,
+      fullName: OWNER_NAME,
+      role: 'ADMIN',
+    })
+  }
 
   const employee = await upsertUser({
     organizationId: org.id,
@@ -558,10 +580,11 @@ async function main() {
     },
   })
 
-  console.log('Listo. Cuentas demo (contrasena:', DEMO_PASSWORD + '):')
+  console.log('Listo. Cuentas demo (contrasena: la de SEED_DEMO_PASSWORD):')
   console.log('  Cliente       camila@correo.com')
   console.log('  Colaborador   cuidador@clubcaninonica.com')
   console.log('  Administrador admin@clubcaninonica.com')
+  if (OWNER_EMAIL) console.log(`  Administrador ${OWNER_EMAIL}`)
 }
 
 main()
