@@ -428,6 +428,20 @@ async function main() {
       update: {},
     })
 
+    // Toda reservacion nace con su fila de pago, igual que las que crea la app.
+    await prisma.payment.upsert({
+      where: { reservationId: reservation.id },
+      create: {
+        reservationId: reservation.id,
+        provider: 'demo',
+        providerRef: `demo_pi_${item.code.replace('CCN-', '')}`,
+        status: 'PAID',
+        amount: item.total,
+        paidAt: daysAgo(item.days + 1, 19),
+      },
+      update: {},
+    })
+
     const pastStay = await prisma.stay.upsert({
       where: { reservationId: reservation.id },
       create: {
@@ -465,7 +479,7 @@ async function main() {
   }
 
   // --- Reservacion futura ---------------------------------------------------
-  await prisma.reservation.upsert({
+  const upcoming = await prisma.reservation.upsert({
     where: { code: 'CCN-1042' },
     create: {
       code: 'CCN-1042',
@@ -476,9 +490,21 @@ async function main() {
       startAt: new Date(todayAt(8).getTime() + 5 * 86_400_000),
       endAt: new Date(todayAt(17).getTime() + 8 * 86_400_000),
       status: 'CONFIRMED',
+      // 3 noches de hospedaje a 750, mas 15% de impuesto.
       subtotal: '2250.00',
       taxes: '337.50',
       total: '2587.50',
+    },
+    update: {},
+  })
+
+  await prisma.payment.upsert({
+    where: { reservationId: upcoming.id },
+    create: {
+      reservationId: upcoming.id,
+      provider: 'demo',
+      status: 'PENDING',
+      amount: '2587.50',
     },
     update: {},
   })

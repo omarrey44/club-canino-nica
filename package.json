@@ -9,6 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "smoke": "node scripts/smoke.mjs",
+    "check:pricing": "tsx scripts/check-pricing.mjs",
+    "check:booking": "node scripts/check-booking.mjs",
     "storage:init": "node scripts/init-storage.mjs",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

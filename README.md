@@ -27,7 +27,11 @@ usarse de pie, con el celular en la mano.
 | Mascotas: alta, edicion, ficha completa y foto de perfil | Listo |
 | Vacunas con aviso de vencimiento y comprobante | Listo |
 | Listado de mascotas del panel, con busqueda y filtros | Listo |
-| Reservaciones, estancias, camaras, pagos, notificaciones | Por fases |
+| Catalogo de servicios con precios y cupos editables desde el panel | Listo |
+| Flujo de reserva en cinco pasos, con precio visible en todo momento | Listo |
+| Mis reservaciones con filtros, detalle, desglose del cobro y cancelacion | Listo |
+| Agenda del panel por dia y semana, con confirmar y cancelar | Listo |
+| Estancias, camaras, pagos en linea, notificaciones | Por fases |
 
 ---
 
@@ -177,6 +181,25 @@ npm run lint         # eslint
 npm run smoke        # prueba de humo contra el dev server (ver abajo)
 ```
 
+### Verificaciones
+
+`npm run check:pricing` no necesita nada corriendo. Comprueba el calculo de
+precios, que es la unica logica del producto donde un error se traduce directo
+en dinero mal cobrado: unidades cobrables por dia y por noche, conversion a
+centavos y redondeo del impuesto una sola vez sobre el subtotal.
+
+Las otras dos necesitan `npm run dev` en otra terminal:
+
+```bash
+npm run smoke           # rutas privadas y permisos
+npm run check:booking   # la Server Action de reserva, de punta a punta
+```
+
+`check:booking` localiza el id de la Server Action en el manifiesto de Next y
+la invoca por HTTP con una sesion real. Cubre lo que ninguna prueba de
+renderizado alcanza: validacion, propiedad de la mascota, cupo, calculo del
+total y escritura en base. Crea dos reservaciones y las borra al terminar.
+
 ### Prueba de humo
 
 Con `npm run dev` corriendo en otra terminal:
@@ -271,8 +294,8 @@ El panel administrativo los muestra con una advertencia visible en
 |---|---|---|
 | 1 | Arquitectura, base de datos, auth, roles, design system, layouts | Completada |
 | 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Completada |
-| 3 | Servicios, flujo de reservacion, administracion de reservaciones | Siguiente |
-| 4 | Check-in, estancias, actividades, timeline | |
+| 3 | Servicios, flujo de reservacion, administracion de reservaciones | Completada |
+| 4 | Check-in, estancias, actividades, timeline | Siguiente |
 | 5 | Fotografias, reportes diarios, historial | |
 | 6 | Camaras, permisos, player demo | |
 | 7 | Pagos con Stripe sandbox | |

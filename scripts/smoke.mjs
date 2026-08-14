@@ -92,8 +92,54 @@ if (petId) {
 
 await check('CLIENTE', 'camila@correo.com', '/perfil', ['camila@correo.com', 'Cliente'])
 
+// --- Reservaciones ----------------------------------------------------------
+const reservas = await check('CLIENTE', 'camila@correo.com', '/reservas', ['Rocky'])
+await check('CLIENTE', 'camila@correo.com', '/reservas?filtro=past', ['Finalizadas'])
+await check('CLIENTE', 'camila@correo.com', '/reservas/nueva', [
+  'Mascota',
+  'Servicio',
+  'Fechas',
+  'Adicionales',
+  'Resumen',
+])
+
+const reservaId = reservas.match(/\/reservas\/([a-z0-9]{20,})"/)?.[1]
+if (reservaId) {
+  await check('CLIENTE', 'camila@correo.com', `/reservas/${reservaId}`, [
+    'Detalle del cobro',
+    'Total',
+    'Estado del pago',
+  ])
+} else {
+  console.log('\n   FALTA no se pudo extraer el id de una reservacion')
+}
+
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones', ['Reservaciones'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones?rango=week', ['Semana'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/servicios', [
+  'Guarderia de dia',
+  'Hospedaje',
+  'DEMO',
+])
+
 // --- Permisos ---------------------------------------------------------------
 console.log('\n--- permisos ---')
+
+// El catalogo y los precios son de ADMIN, no de todo el personal.
+const serviciosEmpleado = await get('cuidador@clubcaninonica.com', '/admin/servicios')
+console.log(
+  `COLABORADOR -> /admin/servicios ${serviciosEmpleado.status} ${
+    serviciosEmpleado.headers.get('location') ?? ''
+  }  ${serviciosEmpleado.status === 307 ? '(bloqueado, correcto)' : '(REVISAR)'}`
+)
+
+// Una reservacion de otro cliente no debe ser alcanzable.
+const reservaAjena = await get('camila@correo.com', '/reservas/clnoexistenoexiste0000')
+console.log(
+  `CLIENTE -> reserva inexistente  ${reservaAjena.status}  ${
+    reservaAjena.status === 404 ? '(404, correcto)' : '(REVISAR)'
+  }`
+)
 
 const denied = await get('camila@correo.com', '/admin')
 console.log(

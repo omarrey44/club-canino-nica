@@ -63,7 +63,42 @@ export function relativeTime(date: Date, now: Date = new Date()): string {
  * el ano y un desfase fijo basta para calcular los limites del dia operativo.
  * Si la plataforma se abre a una zona con DST, esto debe pasar a `date-fns-tz`.
  */
-const CLUB_UTC_OFFSET_HOURS = -6
+export const CLUB_UTC_OFFSET_HOURS = -6
+
+/**
+ * Numero de dia calendario del club para un instante dado.
+ *
+ * Sirve para contar dias entre dos fechas sin que el huso los desplace: un dia
+ * de guarderia de 8:00 a 18:00 en Managua cruza la medianoche UTC, asi que
+ * compararlo en UTC lo contaria como dos dias.
+ */
+export function clubDayIndex(date: Date): number {
+  const shifted = new Date(date.getTime() + CLUB_UTC_OFFSET_HOURS * 3_600_000)
+  return Math.floor(
+    Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate()) / 86_400_000
+  )
+}
+
+/**
+ * Convierte fecha y hora escritas en el calendario del club a un instante UTC.
+ *
+ * Los inputs nativos `type="date"` y `type="time"` devuelven la hora local que
+ * el usuario ve, sin huso. Aqui se le pega el del club para no depender del
+ * reloj del dispositivo.
+ */
+export function clubDateTime(dateInput: string, timeInput: string): Date {
+  const [year, month, day] = dateInput.split('-').map(Number)
+  const [hour, minute] = timeInput.split(':').map(Number)
+  return new Date(
+    Date.UTC(year, month - 1, day, hour - CLUB_UTC_OFFSET_HOURS, minute)
+  )
+}
+
+/** Fecha del club en formato YYYY-MM-DD, para inicializar inputs `type="date"`. */
+export function clubDateInput(date: Date = new Date()): string {
+  const shifted = new Date(date.getTime() + CLUB_UTC_OFFSET_HOURS * 3_600_000)
+  return shifted.toISOString().slice(0, 10)
+}
 
 /** Rango [inicio, fin) del dia del club, expresado en UTC para consultar Postgres. */
 export function clubDayRange(reference: Date = new Date()): { start: Date; end: Date } {

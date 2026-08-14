@@ -1,19 +1,46 @@
-import { Sparkles } from 'lucide-react'
 import type { Metadata } from 'next'
 
-import { PhasePlaceholder } from '@/components/layout/phase-placeholder'
+import { Alert } from '@/components/ui/alert'
+import { PageHeader } from '@/components/ui/page-header'
+import { ServicesManager } from '@/components/services/services-manager'
+import { business } from '@/config/business'
+import { getAllServices } from '@/server/queries/services'
+import { requireRole } from '@/server/auth/session'
 
 export const metadata: Metadata = { title: 'Servicios' }
 
-export default function AdminServicesPage() {
+export default async function AdminServicesPage() {
+  // El catalogo y los precios son decision de administracion.
+  const user = await requireRole('ADMIN', 'SUPER_ADMIN')
+  const services = await getAllServices(user.organizationId)
+
   return (
-    <PhasePlaceholder
-      icon={Sparkles}
-      title="Servicios"
-      description="Catalogo, precios, duracion y disponibilidad."
-      emptyTitle="Aun no hay servicios configurados"
-      emptyDescription="Los precios viven en base de datos: cambiarlos aqui actualiza el flujo de reserva sin desplegar."
-      phase="Fase 3"
-    />
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Catalogo"
+        title="Servicios"
+        description="Precios, duracion y cupos. Lo que se cambia aqui aplica a las reservas nuevas."
+      />
+
+      <Alert tone="warning">
+        Los precios cargados son <strong>DEMO</strong>. No son las tarifas oficiales de{' '}
+        {business.name} y deben confirmarse antes de mostrar la plataforma a clientes.
+      </Alert>
+
+      <ServicesManager
+        services={services.map((service) => ({
+          id: service.id,
+          name: service.name,
+          description: service.description,
+          kind: service.kind,
+          basePrice: String(service.basePrice),
+          priceUnit: service.priceUnit,
+          durationMinutes: service.durationMinutes,
+          dailyCapacity: service.dailyCapacity,
+          isActive: service.isActive,
+          reservationCount: service._count.reservations,
+        }))}
+      />
+    </div>
   )
 }
