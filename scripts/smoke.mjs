@@ -69,7 +69,7 @@ await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/mascotas?q=Rocky', [
 await check('CLIENTE', 'camila@correo.com', '/inicio', [
   'Camila',
   'Rocky',
-  'Últimas actualizaciones',
+  'Actividad reciente',
   'Próxima reservación',
 ])
 
@@ -95,6 +95,11 @@ if (petId) {
 }
 
 await check('CLIENTE', 'camila@correo.com', '/perfil', ['camila@correo.com', 'Cliente'])
+await check('CLIENTE', 'camila@correo.com', '/camaras', ['Cámaras'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/camaras', [
+  'Quién puede verla ahora',
+  'nunca se guardan',
+])
 
 // --- Reservaciones ----------------------------------------------------------
 const reservas = await check('CLIENTE', 'camila@correo.com', '/reservas', ['Rocky'])

@@ -1,7 +1,7 @@
 import { Camera, Clock3, LogIn, LogOut, MapPin, Waypoints } from 'lucide-react'
 import Image from 'next/image'
 
-import { Button, LinkButton } from '@/components/ui/button'
+import { LinkButton } from '@/components/ui/button'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { formatTime, relativeTime } from '@/lib/datetime'
 import { stayStatusLabels, stayStatusTones } from '@/lib/constants/labels'
@@ -100,11 +100,10 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               <Waypoints aria-hidden />
               Ver actividad
             </LinkButton>
-            {/* La cámara llega en la Fase 6; el boton ya ocupa su lugar. */}
-            <Button size="sm" variant="outline" disabled className="px-3">
+            <LinkButton size="sm" variant="outline" href="/camaras" className="px-3">
               <Camera aria-hidden />
               Cámara en vivo
-            </Button>
+            </LinkButton>
           </div>
         </div>
       </div>

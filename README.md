@@ -37,7 +37,8 @@ usarse de pie, con el celular en la mano.
 | Galeria de fotos por estancia, con destacadas para el reporte | Listo |
 | Reporte diario, precargado con lo ya registrado durante el dia | Listo |
 | Historial por mascota, con actividades, fotos, reporte y cobro | Listo |
-| Camaras, pagos en linea, notificaciones | Por fases |
+| Camaras con permisos por estancia y modo demostracion | Listo |
+| Pagos en linea, notificaciones | Por fases |
 
 ---
 
@@ -269,15 +270,30 @@ resto de la aplicacion no cambia.
 
 ### Camaras (`CameraProvider`)
 
-`validateCameraAccess`, `getStreamAccess`, `createTemporaryStreamAccess`.
+`src/server/providers/camera.ts`. Es el modulo mas delicado del producto: de el
+depende quien puede ver video de un area donde hay perros ajenos.
 
-Reglas de seguridad que el modulo respeta:
+- **Ninguna credencial llega al navegador.** La base guarda un `providerRef`
+  opaco, y el formulario rechaza que alguien pegue ahi una URL con usuario y
+  contrasena.
+- **El acceso se valida en el servidor** recorriendo la cadena
+  **usuario → mascota → estancia → `CameraAccess`**. No existe forma de pedir
+  "la camara X" sin una estancia abierta que la autorice.
+- **Doble corte al terminar la estancia**: el check-out marca `revokedAt`, y
+  ademas la consulta exige que la estancia siga abierta. Si una de las dos
+  fallara, la otra sostiene.
+- **Permisos con vencimiento**, y cada reproduccion se concede por cinco
+  minutos con una URL firmada. Una URL copiada deja de servir enseguida.
+- **Sin proveedor real no se inventa video.** La interfaz muestra un cartel que
+  dice que es una demostracion. Un propietario no debe poder confundir una
+  animacion con su mascota.
 
-- Ninguna credencial de camara llega al navegador.
-- El acceso se valida en el servidor siguiendo la cadena
-  **usuario → mascota → estancia → camara autorizada** (`CameraAccess`).
-- Al cerrar la estancia el propietario pierde el acceso.
-- Sin proveedor real, se sirve un video de muestra **etiquetado como DEMO**.
+`npm run check:camera` comprueba las cinco cosas contra el servidor real.
+
+Para conectar un proveedor: poner `CAMERA_PROVIDER`, `CAMERA_STREAM_BASE_URL` y
+`CAMERA_SIGNING_SECRET`, y cambiar el protocolo de cada camara. Para navegadores
+que no reproducen HLS de forma nativa hara falta `hls.js`, que se agrega cuando
+exista un stream real que probar.
 
 ### Pagos (`PaymentProvider`)
 
@@ -315,8 +331,8 @@ El panel administrativo los muestra con una advertencia visible en
 | 3 | Servicios, flujo de reservacion, administracion de reservaciones | Completada |
 | 4 | Check-in, estancias, actividades, timeline | Completada |
 | 5 | Fotografias, reportes diarios, historial | Completada |
-| 6 | Camaras, permisos, player demo | Siguiente |
-| 7 | Pagos con Stripe sandbox | |
+| 6 | Camaras, permisos, player demo | Completada |
+| 7 | Pagos con Stripe sandbox | Siguiente |
 | 8 | Notificaciones | |
 | 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | |
 

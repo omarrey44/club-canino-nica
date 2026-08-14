@@ -2,7 +2,7 @@ import { Camera, Images, MapPin, PawPrint } from 'lucide-react'
 import type { Metadata } from 'next'
 
 import { ActivityTimeline } from '@/components/stays/activity-timeline'
-import { Button, LinkButton } from '@/components/ui/button'
+import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DailyReportCard } from '@/components/reports/daily-report-card'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -100,11 +100,10 @@ export default async function PetTodayPage() {
             </p>
           </div>
 
-          {/* La cámara llega en la Fase 6; el boton ya ocupa su lugar. */}
-          <Button variant="outline" size="sm" disabled>
+          <LinkButton variant="outline" size="sm" href="/camaras">
             <Camera aria-hidden />
             Cámara en vivo
-          </Button>
+          </LinkButton>
         </CardContent>
       </Card>
 
