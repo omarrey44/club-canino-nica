@@ -17,10 +17,10 @@ export default async function ClientLayout({ children }: { children: React.React
       <ClientSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <ClientMobileHeader />
-        {/* El espacio inferior deja aire sobre la barra flotante en movil. */}
+        {/* Reserva solo el espacio real de la barra flotante en movil. */}
         <main
           id="main-content"
-          className="mx-auto w-full max-w-4xl flex-1 px-4 pt-6 pb-32 sm:px-6 sm:pt-8 md:py-10"
+          className="mx-auto w-full max-w-4xl flex-1 px-4 pt-4 pb-24 sm:px-6 sm:pt-5 md:py-6"
         >
           {children}
         </main>

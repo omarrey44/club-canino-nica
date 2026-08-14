@@ -20,15 +20,15 @@ export default async function LoginPage({
   const { redirectTo, error } = await searchParams
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-3">
-        <p className="text-[0.7rem] font-extrabold tracking-[0.2em] text-brand-600 uppercase lg:text-xs">
+    <div className="space-y-5 2xl:space-y-6">
+      <div className="space-y-2">
+        <p className="text-[0.65rem] font-extrabold tracking-[0.2em] text-brand-600 uppercase lg:text-[0.7rem]">
           Bienvenido de vuelta
         </p>
-        <h1 className="font-sans text-[2.15rem] leading-[1.08] font-extrabold tracking-[-0.035em] text-navy-900 sm:text-[2.4rem] lg:text-[2.5rem]">
+        <h1 className="font-sans text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-navy-900 lg:text-[2.25rem] 2xl:text-[2.4rem]">
           Qué gusto verte
         </h1>
-        <p className="text-[1.05rem] leading-relaxed text-ink-muted">
+        <p className="text-base leading-normal text-ink-muted">
           Entra para ver cómo está tu mascota y lo que ha hecho hoy.
         </p>
       </div>
@@ -37,7 +37,7 @@ export default async function LoginPage({
 
       <LoginForm redirectTo={redirectTo} />
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         <div className="flex items-center gap-4" aria-hidden>
           <span className="h-px flex-1 bg-brand-100" />
           <PawPrint className="size-5 fill-brand-100 text-brand-100" />

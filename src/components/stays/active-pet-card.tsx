@@ -23,14 +23,14 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
       aria-labelledby="mascota-activa"
       className="overflow-hidden rounded-[1.5rem] border border-line bg-surface shadow-raised"
     >
-      <div className="sm:grid sm:grid-cols-[minmax(15rem,0.9fr)_minmax(0,1.25fr)]">
-        <div className="relative aspect-[16/10] w-full bg-brand-50 sm:aspect-auto sm:min-h-[24rem]">
+      <div className="lg:grid lg:grid-cols-[minmax(20rem,0.95fr)_minmax(0,1.15fr)]">
+        <div className="relative aspect-video w-full bg-brand-50 lg:aspect-auto lg:min-h-[18rem]">
           {stay.pet.photoUrl ? (
             <Image
               src={stay.pet.photoUrl}
               alt={`Foto de ${stay.pet.name}`}
               fill
-              sizes="(max-width: 640px) 100vw, 380px"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 45vw, 560px"
               className="object-cover"
               priority
             />
@@ -41,11 +41,11 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
           )}
         </div>
 
-        <div className="flex min-w-0 flex-col justify-center gap-5 p-5 sm:p-7">
-          <div className="space-y-2.5">
+        <div className="flex min-w-0 flex-col justify-center gap-4 p-4 sm:p-5 lg:gap-3.5">
+          <div className="space-y-1.5">
             <p className="text-xs font-extrabold tracking-[0.14em] text-brand-600 uppercase">Ahora en el club</p>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 id="mascota-activa" className="text-3xl leading-none text-navy-900">
+              <h2 id="mascota-activa" className="text-2xl leading-none text-navy-900 sm:text-3xl">
                 {stay.pet.name}
               </h2>
               <StatusBadge tone={stayStatusTones[stay.status]}>
@@ -53,23 +53,23 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               </StatusBadge>
             </div>
 
-            <p className="leading-relaxed text-ink-muted">
+            <p className="leading-snug text-ink-muted">
               {isReady
                 ? `${stay.pet.name} termino su día y te esta esperando.`
                 : `${stay.pet.name} está disfrutando su ${stay.reservation.service.name.toLowerCase()}.`}
             </p>
           </div>
 
-          <dl className="grid grid-cols-2 gap-3 text-sm">
+          <dl className="grid grid-cols-2 gap-2 text-sm">
             {stay.currentLocation && (
-              <div className="col-span-2 flex items-center gap-2 rounded-field bg-brand-50 px-3.5 py-3 text-brand-800">
+              <div className="col-span-2 flex items-center gap-2 rounded-field bg-brand-50 px-3 py-2.5 text-brand-800">
                 <MapPin className="size-4 shrink-0 text-brand-600" aria-hidden />
                 <dt className="sr-only">Lugar</dt>
                 <dd className="font-extrabold">{stay.currentLocation}</dd>
               </div>
             )}
 
-            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3.5 py-3">
+            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3 py-2.5">
               <LogIn className="size-4 shrink-0 text-navy-400" aria-hidden />
               <div>
                 <dt className="text-xs font-bold text-ink-muted">Entrada</dt>
@@ -79,7 +79,7 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3.5 py-3">
+            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3 py-2.5">
               <LogOut className="size-4 shrink-0 text-navy-400" aria-hidden />
               <div>
                 <dt className="text-xs font-bold text-ink-muted">Salida estimada</dt>

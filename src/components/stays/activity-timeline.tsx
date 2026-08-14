@@ -54,11 +54,14 @@ const activityIcons: Record<ActivityType, LucideIcon> = {
 export function ActivityTimeline({
   activities,
   className,
+  compact = false,
   /** Vista del personal: agrega autor y marca lo que el propietario no ve. */
   showInternal = false,
 }: {
   activities: TimelineActivity[]
   className?: string
+  /** Resumen para tableros: conserva la información con menos altura. */
+  compact?: boolean
   showInternal?: boolean
 }) {
   return (
@@ -68,19 +71,22 @@ export function ActivityTimeline({
         const Icon = activityIcons[activity.type]
 
         return (
-          <li key={activity.id} className="flex gap-3">
+          <li key={activity.id} className={cn('flex', compact ? 'gap-2.5' : 'gap-3')}>
             {/* Columna del hilo: icono + linea que conecta con el siguiente. */}
             <div className="flex flex-col items-center">
               <span
-                className="flex size-10 shrink-0 items-center justify-center rounded-[0.8rem] border border-brand-100 bg-brand-50 text-brand-600"
+                className={cn(
+                  'flex shrink-0 items-center justify-center border border-brand-100 bg-brand-50 text-brand-600',
+                  compact ? 'size-9 rounded-[0.7rem]' : 'size-10 rounded-[0.8rem]'
+                )}
                 aria-hidden
               >
-                <Icon className="size-4.5" />
+                <Icon className={compact ? 'size-4' : 'size-4.5'} />
               </span>
               {!isLast && <span className="w-px flex-1 bg-brand-100" aria-hidden />}
             </div>
 
-            <div className={cn('min-w-0 flex-1', isLast ? 'pb-0' : 'pb-5')}>
+            <div className={cn('min-w-0 flex-1', isLast ? 'pb-0' : compact ? 'pb-3.5' : 'pb-4')}>
               <div className="flex flex-wrap items-baseline gap-x-2">
                 <p className="font-extrabold text-navy-900">{activityTypeLabels[activity.type]}</p>
                 <time
@@ -97,11 +103,14 @@ export function ActivityTimeline({
               </div>
 
               {activity.description && (
-                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{activity.description}</p>
+                <p className={cn('text-sm text-ink-muted', compact ? 'mt-0.5 leading-snug' : 'mt-1 leading-relaxed')}>{activity.description}</p>
               )}
 
               {activity.photoUrl && (
-                <div className="relative mt-2 aspect-[4/3] max-w-xs overflow-hidden rounded-field bg-navy-50">
+                <div className={cn(
+                  'relative mt-2 overflow-hidden rounded-field bg-navy-50',
+                  compact ? 'aspect-video max-w-48' : 'aspect-[4/3] max-w-64'
+                )}>
                   <Image
                     src={activity.photoUrl}
                     alt={activity.description ?? activityTypeLabels[activity.type]}

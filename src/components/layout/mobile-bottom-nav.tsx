@@ -12,7 +12,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] md:hidden"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] md:hidden"
     >
       <ul className="pointer-events-auto mx-auto flex max-w-lg items-stretch rounded-[1.4rem] border border-line/90 bg-surface/95 px-1.5 shadow-overlay backdrop-blur-xl">
         {clientNavItems.map(({ href, label, icon: Icon }) => {
@@ -24,7 +24,7 @@ export function MobileBottomNav() {
                 href={href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-16 flex-col items-center justify-center gap-1 text-[0.65rem] font-extrabold transition-colors',
+                  'flex min-h-14 flex-col items-center justify-center gap-0.5 text-[0.65rem] font-extrabold transition-colors',
                   active ? 'text-brand-700' : 'text-ink-muted'
                 )}
               >

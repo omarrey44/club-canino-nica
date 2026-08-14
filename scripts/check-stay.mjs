@@ -153,6 +153,60 @@ try {
   assert.ok(visto.includes('Recepción'), 'el propietario ve donde esta su mascota')
   console.log('OK  el propietario ve la actividad visible y no la interna')
 
+  // --- Reporte del día ------------------------------------------------------
+  await staff.goto(`${BASE}/admin/reportes`)
+  // Por href y no por nombre: el seed deja otra estancia de Rocky pendiente el
+  // mismo dia, y "el primer Rocky de la lista" abriria la equivocada.
+  const enlaceReporte = staff.locator(`a[href="/admin/reportes/${stayId}"]`)
+  assert.equal(await enlaceReporte.count(), 1, 'la estancia debe salir en pendientes')
+  await enlaceReporte.click()
+  await staff.waitForURL(new RegExp(`/admin/reportes/${stayId}$`), { timeout: 20000 })
+
+  // El formulario precarga los paseos con lo ya registrado durante el día.
+  const paseosPrecargados = await staff.getByLabel('Paseos').inputValue()
+  assert.equal(paseosPrecargados, '0', 'sin paseos registrados, la sugerencia es cero')
+
+  // Las fichas de opción son radios reales dentro de la etiqueta.
+  await staff.locator('fieldset', { hasText: 'Comida' }).getByText('Mitad', { exact: true }).click()
+  await staff.getByLabel('Paseos').fill('2')
+  await staff.getByLabel('Descanso (minutos)').fill('45')
+  await staff.getByLabel('Nota del cuidador').fill('Prueba automatica: día tranquilo.')
+  await staff.getByRole('button', { name: /Publicar reporte/ }).click()
+  // La URL del editor ya contiene "/admin/reportes", asi que hay que esperar la
+  // de exito: si no, la consulta a la base corre antes que la accion.
+  await staff.waitForURL(/\/admin\/reportes\?guardado=1$/, { timeout: 20000 })
+
+  const { rows: reporte } = await db.query(
+    `SELECT "foodIntake", "walkCount", "restMinutes", "publishedAt", "caregiverNotes"
+     FROM daily_reports WHERE "stayId" = $1`,
+    [stayId]
+  )
+  assert.equal(reporte.length, 1, 'debería existir un reporte')
+  assert.equal(reporte[0].foodIntake, 'HALF', 'la ficha elegida se guarda')
+  assert.equal(reporte[0].walkCount, 2)
+  assert.equal(reporte[0].restMinutes, 45)
+  assert.ok(reporte[0].publishedAt, 'el reporte se publica al guardarlo')
+
+  const { rows: avisoReporte } = await db.query(
+    `SELECT type FROM notifications WHERE "userId" = $1 AND type = 'NEW_REPORT'
+     ORDER BY "createdAt" DESC LIMIT 1`,
+    [client]
+  )
+  assert.equal(avisoReporte.length, 1, 'el propietario recibe el aviso del reporte')
+  console.log('OK  reporte publicado con los valores elegidos y aviso enviado')
+
+  // --- El propietario ve el reporte ----------------------------------------
+  await owner.goto(`${BASE}/mi-mascota`)
+  await owner.waitForSelector('text=Reporte de Rocky', { timeout: 20000 })
+  const conReporte = await owner.content()
+  assert.ok(conReporte.includes('Mitad'), 'el propietario ve cuánto comió')
+  assert.ok(conReporte.includes('2 paseos'), 'el propietario ve los paseos')
+  assert.ok(
+    conReporte.includes('Prueba automatica: día tranquilo.'),
+    'el propietario ve la nota del cuidador'
+  )
+  console.log('OK  el propietario ve el reporte en su pantalla')
+
   // --- Listo para recoger ---------------------------------------------------
   await staff.goto(stayUrl)
   await staff.getByRole('button', { name: 'Avisar que está listo' }).click()
@@ -196,6 +250,26 @@ try {
   )
   assert.equal(salida.length, 1, 'el check-out se registra en el timeline')
   console.log('OK  check-out: estancia y reservacion completadas')
+
+  // --- Historial ------------------------------------------------------------
+  await owner.goto(`${BASE}/mascotas/${pet}/historial`)
+  await owner.waitForSelector('text=Estancias de Rocky', { timeout: 20000 })
+
+  const historial = await owner.content()
+  assert.ok(historial.includes('Con reporte'), 'la estancia aparece con su reporte')
+  assert.ok(historial.includes('Completada'), 'la estancia aparece como completada')
+
+  await owner.locator(`a[href="/mascotas/${pet}/historial/${stayId}"]`).click()
+  await owner.waitForURL(new RegExp(`/historial/${stayId}$`), { timeout: 20000 })
+
+  const detalle = await owner.content()
+  assert.ok(detalle.includes('Reporte de Rocky'), 'el detalle muestra el reporte')
+  assert.ok(detalle.includes('Comió todo.'), 'el detalle muestra las actividades visibles')
+  assert.ok(
+    !detalle.includes('Nota interna del equipo.'),
+    'el historial tampoco debe filtrar notas internas'
+  )
+  console.log('OK  historial: estancia, reporte y actividades, sin notas internas')
 
   await staffContext.close()
   await ownerContext.close()

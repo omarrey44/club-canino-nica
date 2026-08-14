@@ -34,7 +34,10 @@ usarse de pie, con el celular en la mano.
 | Check-in con alertas de cuidado, y check-out | Listo |
 | Estancia con registro rapido de actividades y ubicacion en vivo | Listo |
 | Timeline del dia para el propietario, con actualizacion automatica | Listo |
-| Camaras, pagos en linea, reportes diarios, notificaciones | Por fases |
+| Galeria de fotos por estancia, con destacadas para el reporte | Listo |
+| Reporte diario, precargado con lo ya registrado durante el dia | Listo |
+| Historial por mascota, con actividades, fotos, reporte y cobro | Listo |
+| Camaras, pagos en linea, notificaciones | Por fases |
 
 ---
 
@@ -206,11 +209,14 @@ total y escritura en base. Crea dos reservaciones y las borra al terminar.
 
 `check:stay` usa Playwright porque las acciones de estancia reciben `FormData`
 desde componentes con `useActionState`, y eso no se puede invocar por HTTP sin
-falsificar la codificacion interna de React. Hace clic como lo hace el personal:
-check-in, registrar comida, registrar una nota interna, avisar que esta listo y
-check-out. Ademas abre una segunda sesion como propietaria y comprueba que la
-nota interna **no** aparezca en su pantalla, que es la clase de fallo que
-ninguna prueba de servidor detecta.
+falsificar la codificacion interna de React. Recorre el dia completo haciendo
+clic como lo hace el personal: check-in, registrar comida, registrar una nota
+interna, publicar el reporte, avisar que esta listo y check-out.
+
+Lo importante es que abre una segunda sesion como propietaria y comprueba dos
+cosas que ninguna prueba de servidor detecta: que vea su reporte y sus
+actividades, y que la nota interna **no** aparezca ni en la pantalla del dia ni
+despues en el historial.
 
 ### Prueba de humo
 
@@ -308,8 +314,8 @@ El panel administrativo los muestra con una advertencia visible en
 | 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Completada |
 | 3 | Servicios, flujo de reservacion, administracion de reservaciones | Completada |
 | 4 | Check-in, estancias, actividades, timeline | Completada |
-| 5 | Fotografias, reportes diarios, historial | Siguiente |
-| 6 | Camaras, permisos, player demo | |
+| 5 | Fotografias, reportes diarios, historial | Completada |
+| 6 | Camaras, permisos, player demo | Siguiente |
 | 7 | Pagos con Stripe sandbox | |
 | 8 | Notificaciones | |
 | 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | |

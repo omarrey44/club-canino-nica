@@ -49,7 +49,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
   const [, startTransition] = useTransition()
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex justify-end">
         <Button
           size="sm"
@@ -73,14 +73,14 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
           description="Los precios viven aquí, no en el código: cambiarlos actualiza el flujo de reserva sin desplegar."
         />
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-2.5 sm:grid-cols-2">
           {services.map((service) => (
             <li
               key={service.id}
-              className="overflow-hidden rounded-card border border-line bg-surface"
+              className="h-fit overflow-hidden rounded-card border border-line bg-surface"
             >
-              <div className="flex flex-wrap items-center gap-3 p-4">
-                <div className="min-w-0 flex-1">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 p-3.5">
+                <div className="col-span-2 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="font-bold text-navy-900">{service.name}</p>
                     <StatusBadge tone={service.isActive ? 'success' : 'neutral'}>
@@ -92,10 +92,10 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
                   </div>
 
                   {service.description && (
-                    <p className="mt-0.5 text-sm text-ink-muted">{service.description}</p>
+                    <p className="mt-0.5 text-sm leading-snug text-ink-muted">{service.description}</p>
                   )}
 
-                  <p className="mt-1 text-sm text-ink-muted">
+                  <p className="mt-0.5 text-xs text-ink-muted">
                     {service.dailyCapacity
                       ? `Cupo ${service.dailyCapacity} por día`
                       : 'Sin cupo maximo configurado'}
@@ -104,7 +104,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
                   </p>
                 </div>
 
-                <div className="shrink-0 text-right">
+                <div className="min-w-0">
                   <p className="font-extrabold text-navy-900 tabular-nums">
                     {formatCurrency(service.basePrice)}
                   </p>
@@ -113,7 +113,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
                   </p>
                 </div>
 
-                <div className="flex shrink-0 gap-1.5">
+                <div className="flex shrink-0 justify-end gap-1.5">
                   <Button
                     size="sm"
                     variant="outline"

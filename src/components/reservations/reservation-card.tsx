@@ -6,6 +6,7 @@ import { formatCurrency } from '@/config/business'
 import { formatDate, formatTime } from '@/lib/datetime'
 import { reservationStatusLabels, reservationStatusTones } from '@/lib/constants/labels'
 import type { ReservationStatus } from '@/generated/prisma/client'
+import { cn } from '@/lib/utils'
 
 export type ReservationCardData = {
   id: string
@@ -26,9 +27,21 @@ function formatRange(startAt: Date, endAt: Date): string {
     : `${formatDate(startAt)} – ${formatDate(endAt)}`
 }
 
-export function ReservationCard({ reservation }: { reservation: ReservationCardData }) {
+export function ReservationCard({
+  reservation,
+  embedded = false,
+}: {
+  reservation: ReservationCardData
+  /** Integra la información dentro de otro panel sin duplicar borde o sombra. */
+  embedded?: boolean
+}) {
   return (
-    <article className="rounded-card border border-line bg-surface p-4 shadow-card sm:p-5">
+    <article
+      className={cn(
+        'rounded-card border border-line bg-surface p-4 shadow-card sm:p-5',
+        embedded && 'rounded-none border-0 bg-transparent p-0 shadow-none sm:p-0'
+      )}
+    >
       <div className="flex items-start gap-3.5">
         <PetAvatar name={reservation.pet.name} photoUrl={reservation.pet.photoUrl} />
 

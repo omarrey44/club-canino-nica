@@ -1,16 +1,18 @@
 import { Camera, Images, MapPin, PawPrint } from 'lucide-react'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 
 import { ActivityTimeline } from '@/components/stays/activity-timeline'
 import { Button, LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { DailyReportCard } from '@/components/reports/daily-report-card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { LiveRefresh } from '@/components/stays/live-refresh'
 import { PageHeader } from '@/components/ui/page-header'
 import { PetAvatar } from '@/components/ui/pet-avatar'
+import { PhotoGrid } from '@/components/photos/photo-grid'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { formatDate, formatTime, relativeTime } from '@/lib/datetime'
+import { getPublishedReport } from '@/server/queries/reports'
 import { getMyActiveStay, getMyLastStay } from '@/server/queries/stays'
 import { requireUser } from '@/server/auth/session'
 
@@ -19,6 +21,7 @@ export const metadata: Metadata = { title: 'Mi mascota hoy' }
 export default async function PetTodayPage() {
   const user = await requireUser()
   const stay = await getMyActiveStay(user)
+  const report = stay ? await getPublishedReport(stay.id, user) : null
 
   if (!stay) {
     const last = await getMyLastStay(user)
@@ -53,11 +56,11 @@ export default async function PetTodayPage() {
   const lastUpdate = stay.activities[0]?.occurredAt ?? stay.checkInAt
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* La pantalla se actualiza sola mientras la mascota esta en el club. */}
       <LiveRefresh />
 
-      <header className="space-y-2">
+      <header className="space-y-1.5">
         <p className="text-xs font-extrabold tracking-[0.14em] text-brand-600 uppercase">
           Hoy
         </p>
@@ -69,7 +72,7 @@ export default async function PetTodayPage() {
       </header>
 
       <Card>
-        <CardContent className="flex flex-wrap items-center gap-4 pt-5">
+        <CardContent className="flex flex-wrap items-center gap-3 pt-4">
           <PetAvatar name={stay.pet.name} photoUrl={stay.pet.photoUrl} size="lg" />
 
           <div className="min-w-0 flex-1 space-y-1.5">
@@ -105,6 +108,15 @@ export default async function PetTodayPage() {
         </CardContent>
       </Card>
 
+      {/* El reporte solo aparece cuando el equipo lo publica, al cerrar el día. */}
+      {report && (
+        <DailyReportCard
+          report={report}
+          petName={stay.pet.name}
+          photos={stay.photos.filter((photo) => photo.isFeatured)}
+        />
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle>Su día, paso a paso</CardTitle>
@@ -131,27 +143,7 @@ export default async function PetTodayPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="grid grid-cols-2 gap-3">
-              {stay.photos.map((photo) => (
-                <li key={photo.id} className="space-y-1.5">
-                  <div className="relative aspect-square overflow-hidden rounded-field bg-navy-50">
-                    <Image
-                      src={photo.url}
-                      alt={photo.caption ?? `Foto de ${stay.pet.name}`}
-                      fill
-                      sizes="(max-width: 640px) 45vw, 300px"
-                      className="object-cover"
-                    />
-                  </div>
-                  {photo.caption && (
-                    <p className="text-sm text-ink-muted">{photo.caption}</p>
-                  )}
-                  <p className="text-2xs text-ink-subtle tabular-nums">
-                    {formatTime(photo.takenAt)}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <PhotoGrid photos={stay.photos} petName={stay.pet.name} />
           </CardContent>
         </Card>
       )}

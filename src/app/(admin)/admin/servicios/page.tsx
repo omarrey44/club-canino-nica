@@ -15,7 +15,7 @@ export default async function AdminServicesPage() {
   const services = await getAllServices(user.organizationId)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         eyebrow="Catalogo"
         title="Servicios"

@@ -16,14 +16,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminMobileNav />
 
-        <header className="hidden items-center justify-between gap-4 border-b border-line bg-surface px-7 py-3.5 lg:flex">
+        <header className="hidden items-center justify-between gap-4 border-b border-line bg-surface px-7 py-2.5 lg:flex">
           <p className="text-sm text-ink-muted">
             Sesión de <span className="font-medium text-ink">{user.fullName}</span>
           </p>
           <LogoutButton />
         </header>
 
-        <main id="main-content" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+        <main id="main-content" className="mx-auto w-full max-w-6xl flex-1 px-4 py-4 sm:px-6 sm:py-5 lg:py-6">{children}</main>
       </div>
     </div>
   )

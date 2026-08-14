@@ -1,4 +1,4 @@
-import { ArrowLeft, Pencil } from 'lucide-react'
+import { ArrowLeft, History, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -83,10 +83,16 @@ export default async function PetDetailPage({ params }: Props) {
           {pet.breed && <p className="text-ink-muted">{pet.breed}</p>}
         </div>
 
-        <LinkButton size="sm" variant="outline" href={`/mascotas/${pet.id}/editar`}>
-          <Pencil aria-hidden />
-          Editar
-        </LinkButton>
+        <div className="flex gap-2">
+          <LinkButton size="sm" variant="outline" href={`/mascotas/${pet.id}/historial`}>
+            <History aria-hidden />
+            Historial
+          </LinkButton>
+          <LinkButton size="sm" variant="outline" href={`/mascotas/${pet.id}/editar`}>
+            <Pencil aria-hidden />
+            Editar
+          </LinkButton>
+        </div>
       </header>
 
       <Card>

@@ -145,7 +145,13 @@ export async function getStayDetail(stayId: string, user: SessionUser) {
       },
       photos: {
         orderBy: { takenAt: 'desc' },
-        select: { id: true, url: true, caption: true, takenAt: true },
+        select: {
+          id: true,
+          url: true,
+          caption: true,
+          takenAt: true,
+          isFeatured: true,
+        },
       },
     },
   })

@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowLeft, Phone } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, FileText, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -6,6 +6,8 @@ import type { Metadata } from 'next'
 import { ActivityTimeline } from '@/components/stays/activity-timeline'
 import { Alert } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LinkButton } from '@/components/ui/button'
+import { StayPhotoManager } from '@/components/photos/stay-photo-manager'
 import { PetAvatar } from '@/components/ui/pet-avatar'
 import { QuickActivityForm } from '@/components/stays/quick-activity-form'
 import { StatusBadge } from '@/components/ui/status-badge'
@@ -136,6 +138,24 @@ export default async function StayDetailPage({ params }: Props) {
           ) : (
             <ActivityTimeline activities={stay.activities} showInternal />
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Fotos de la estancia</CardTitle>
+          <LinkButton size="sm" variant="outline" href={`/admin/reportes/${stay.id}`}>
+            <FileText aria-hidden />
+            Reporte
+          </LinkButton>
+        </CardHeader>
+        <CardContent>
+          <StayPhotoManager
+            stayId={stay.id}
+            petName={stay.pet.name}
+            photos={stay.photos}
+            canEdit={isOpen}
+          />
         </CardContent>
       </Card>
 

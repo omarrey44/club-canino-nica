@@ -77,13 +77,13 @@ export function AdminMobileNav() {
       aria-label="Navegación del panel"
       className="sticky top-0 z-30 border-b border-navy-700 bg-navy-900 shadow-raised lg:hidden"
     >
-      <div className="flex items-center gap-1 px-2 py-1.5">
+      <div className="flex items-center gap-1 px-2 py-1">
         <Link
           href="/admin"
           aria-label="Ir al dashboard"
-          className="flex size-12 shrink-0 items-center justify-center rounded-[0.8rem] bg-white"
+          className="flex size-11 shrink-0 items-center justify-center rounded-[0.8rem] bg-white"
         >
-          <BrandLogo decorative sizes="44px" className="w-11" />
+          <BrandLogo decorative sizes="40px" className="w-10" />
         </Link>
         <ul className="flex min-w-0 flex-1 gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {adminNavItems.map(({ href, label, icon: Icon }) => {

@@ -86,6 +86,10 @@ if (petId) {
     'Andres Ruiz',
   ])
   await check('CLIENTE', 'camila@correo.com', `/mascotas/${petId}/editar`, ['Editar a Rocky'])
+  await check('CLIENTE', 'camila@correo.com', `/mascotas/${petId}/historial`, [
+    'Estancias de Rocky',
+    'Con reporte',
+  ])
 } else {
   console.log('\n   FALTA no se pudo extraer el id de la mascota del listado')
 }
@@ -115,6 +119,7 @@ if (reservaId) {
 }
 
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/check-in', ['Entradas de hoy'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reportes', ['Pendientes'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/estancias', ['Estancias'])
 await check('CLIENTE', 'camila@correo.com', '/mi-mascota', ['Su día, paso a paso'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones', ['Reservaciones'])

@@ -15,14 +15,14 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <form action={action} className="space-y-6" noValidate>
+    <form action={action} className="space-y-4 2xl:space-y-5" noValidate>
       {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
 
       {state.status === 'error' && state.message && (
         <Alert tone="danger">{state.message}</Alert>
       )}
 
-      <Field errors={state.fieldErrors?.email} className="gap-2">
+      <Field errors={state.fieldErrors?.email} className="gap-1.5">
         <Label className="text-[0.95rem]">Correo electrónico</Label>
         <div className="relative">
           <Mail className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-navy-800" aria-hidden />
@@ -32,13 +32,13 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
             autoComplete="email"
             inputMode="email"
             placeholder="tu@correo.com"
-            className="h-14 bg-white pl-12"
+            className="h-13 bg-white pl-12"
             required
           />
         </div>
       </Field>
 
-      <Field errors={state.fieldErrors?.password} className="gap-2">
+      <Field errors={state.fieldErrors?.password} className="gap-1.5">
         <div className="flex items-baseline justify-between">
           <Label className="text-[0.95rem]">Contraseña</Label>
           <Link
@@ -54,7 +54,7 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
             name="password"
             type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
-            className="h-14 bg-white pr-12 pl-12"
+            className="h-13 bg-white pr-12 pl-12"
             required
           />
           <button
@@ -75,14 +75,14 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
         block
         loading={pending}
         loadingLabel="Entrando"
-        className="text-lg"
+        className="h-13 text-base"
       >
         Entrar
         <ArrowRight aria-hidden />
       </Button>
 
-      <p className="flex items-center justify-center gap-2 text-sm font-semibold text-ink-muted">
-        <ShieldCheck className="size-5 text-success" aria-hidden />
+      <p className="flex items-center justify-center gap-2 text-xs font-semibold text-ink-muted">
+        <ShieldCheck className="size-4 text-success" aria-hidden />
         Acceso privado y protegido
       </p>
     </form>

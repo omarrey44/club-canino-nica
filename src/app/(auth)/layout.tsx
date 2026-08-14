@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       <main
         id="main-content"
-        className="relative z-10 flex min-h-dvh items-start justify-center overflow-hidden px-4 pt-8 pb-40 sm:px-8 sm:pt-10 sm:pb-44 lg:items-center lg:px-8 lg:py-12 xl:px-12"
+        className="relative z-10 flex min-h-dvh items-center justify-center overflow-hidden px-4 pt-3 pb-16 sm:px-6 lg:px-8 lg:py-4 xl:px-10 2xl:py-8"
       >
         <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden>
           <PawPrint className="absolute top-[8%] -left-14 size-64 -rotate-12 fill-brand-100/50 text-transparent" />
@@ -32,19 +32,19 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <BrandLogo
               decorative
               priority
-              sizes="(max-width: 640px) 144px, (max-width: 1279px) 160px, 176px"
-              className="w-36 drop-shadow-[0_12px_22px_rgb(13_38_57_/_0.14)] sm:w-40 lg:w-40 xl:w-44"
+              sizes="(max-width: 1023px) 112px, (max-width: 1535px) 128px, 144px"
+              className="w-28 drop-shadow-[0_10px_18px_rgb(13_38_57_/_0.14)] lg:w-32 2xl:w-36"
             />
           </Link>
 
-          <div className="mt-6 rounded-[2rem] border border-white bg-white/95 px-6 py-8 shadow-overlay ring-1 ring-navy-900/5 backdrop-blur sm:px-8 sm:py-9 lg:mt-7 lg:rounded-[2.25rem] lg:p-10 lg:shadow-[0_30px_80px_rgb(13_38_57_/_0.16)]">
+          <div className="mt-2 rounded-[1.75rem] border border-white bg-white/95 p-5 shadow-overlay ring-1 ring-navy-900/5 backdrop-blur lg:mt-3 lg:rounded-[2rem] lg:p-6 lg:shadow-[0_24px_64px_rgb(13_38_57_/_0.15)] 2xl:mt-4 2xl:p-8">
             {children}
           </div>
 
         </div>
       </main>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-32 lg:hidden" aria-hidden>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-16 lg:hidden" aria-hidden>
         <svg
           viewBox="0 0 864 180"
           preserveAspectRatio="none"
@@ -66,7 +66,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </svg>
       </div>
 
-      <aside className="relative hidden min-h-dvh overflow-hidden border-l-4 border-brand-500 bg-navy-900 p-8 text-white lg:flex lg:flex-col lg:justify-between xl:p-12 2xl:p-16">
+      <aside className="relative hidden min-h-dvh overflow-hidden border-l-4 border-brand-500 bg-navy-900 p-6 text-white lg:flex lg:flex-col lg:justify-between xl:p-8 2xl:p-12">
         <div className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full border-[4.5rem] border-brand-500/15" aria-hidden />
         <PawPrint
           className="pointer-events-none absolute top-[16%] right-[8%] size-72 rotate-12 text-white/[0.035]"
@@ -80,18 +80,18 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           Acompañamiento en cada estancia
         </div>
 
-        <div className="relative max-w-2xl py-8 xl:py-10">
+        <div className="relative max-w-2xl py-4 2xl:py-8">
           <p className="text-xs font-extrabold tracking-[0.18em] text-brand-300 uppercase">
             Más cerca, incluso cuando no estás
           </p>
-          <h2 className="mt-5 max-w-xl text-4xl leading-[1.08] text-white xl:text-5xl 2xl:text-[3.5rem]">
+          <h2 className="mt-3 max-w-xl text-4xl leading-[1.08] text-white xl:text-[2.65rem] 2xl:mt-5 2xl:text-5xl">
             Su día en el club, siempre cerca de ti.
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-navy-200 xl:text-lg">
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-navy-200 2xl:mt-5 2xl:text-lg">
             Sigue sus actividades, fotos y reservas desde un solo lugar pensado para tu tranquilidad.
           </p>
 
-          <section className="mt-8 max-w-2xl rounded-[1.75rem] border border-white/10 bg-white/[0.065] p-5 shadow-[0_24px_60px_rgb(0_0_0_/_0.14)] backdrop-blur-sm xl:p-6" aria-labelledby="portal-benefits-title">
+          <section className="mt-4 max-w-2xl rounded-[1.5rem] border border-white/10 bg-white/[0.065] p-4 shadow-[0_20px_48px_rgb(0_0_0_/_0.12)] backdrop-blur-sm 2xl:mt-7 2xl:rounded-[1.75rem] 2xl:p-5" aria-labelledby="portal-benefits-title">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="grid size-11 place-items-center rounded-[0.9rem] bg-brand-500 text-white shadow-[0_8px_20px_rgb(249_115_22_/_0.25)]">
@@ -109,15 +109,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               </span>
             </div>
 
-            <ul className="mt-5 grid gap-3 sm:grid-cols-3" aria-label="Beneficios del portal">
+            <ul className="mt-4 grid gap-2 sm:grid-cols-3 2xl:mt-5 2xl:gap-3" aria-label="Beneficios del portal">
               {[
                 { icon: BellRing, label: 'Avisos al momento', detail: 'Novedades importantes' },
                 { icon: Clock3, label: 'Actividad del día', detail: 'Su rutina organizada' },
                 { icon: ShieldCheck, label: 'Cuidado confiable', detail: 'Acceso solo para ti' },
               ].map(({ icon: Icon, label, detail }) => (
-                <li key={label} className="rounded-card border border-white/10 bg-navy-900/30 p-4">
+                <li key={label} className="rounded-[1rem] border border-white/10 bg-navy-900/30 p-3 2xl:rounded-card 2xl:p-4">
                   <Icon className="size-5 text-brand-300" aria-hidden />
-                  <span className="mt-3 block text-sm font-extrabold leading-snug text-white">{label}</span>
+                  <span className="mt-2 block text-sm font-extrabold leading-snug text-white 2xl:mt-3">{label}</span>
                   <span className="mt-1 hidden text-xs leading-relaxed text-navy-200 xl:block">{detail}</span>
                 </li>
               ))}
