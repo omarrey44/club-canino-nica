@@ -24,7 +24,7 @@ export default async function NewReservationPage() {
     <div className="space-y-6">
       <Link
         href="/reservas"
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
       >
         <ArrowLeft className="size-4" aria-hidden />
         Mis reservaciones

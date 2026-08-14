@@ -101,7 +101,7 @@ export default async function AdminReservationsPage({
 
         <Link
           href={buildHref({ rango, estado })}
-          className="text-sm font-semibold text-brand-600 hover:underline"
+          className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-700 hover:underline"
         >
           Hoy
         </Link>
@@ -177,7 +177,7 @@ export default async function AdminReservationsPage({
                 <div className="flex flex-wrap items-center gap-2">
                   <Link
                     href={`/reservas/${reservation.id}`}
-                    className="font-bold text-navy-900 hover:underline"
+                    className="inline-flex min-h-11 items-center font-bold text-navy-900 hover:underline"
                   >
                     {reservation.pet.name}
                   </Link>

@@ -58,7 +58,7 @@ export default async function PetDetailPage({ params }: Props) {
     <div className="space-y-6">
       <Link
         href="/mascotas"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-ink"
       >
         <ArrowLeft className="size-4" aria-hidden />
         Mis mascotas
@@ -171,7 +171,7 @@ export default async function PetDetailPage({ params }: Props) {
                   </div>
                   <a
                     href={`tel:${contact.phone}`}
-                    className="font-medium text-brand-600 hover:underline"
+                    className="inline-flex min-h-11 items-center font-medium text-brand-700 hover:underline"
                   >
                     {contact.phone}
                   </a>

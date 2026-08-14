@@ -45,7 +45,7 @@ export default async function CamerasPage() {
                     <CardTitle>{camera.name}</CardTitle>
                     <p className="text-sm text-ink-muted">{camera.area}</p>
                     {camera.petsHere.length > 0 && (
-                      <p className="mt-1 text-sm font-semibold text-brand-600">
+                      <p className="mt-1 text-sm font-semibold text-brand-700">
                         {camera.petsHere.join(' y ')}{' '}
                         {camera.petsHere.length === 1 ? 'está' : 'están'} en esta área ahora.
                       </p>

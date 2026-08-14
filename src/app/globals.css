@@ -40,18 +40,26 @@
   --color-canvas-warm: #fffaf5;
   --color-ink: #142d3f;
   --color-ink-muted: #5e7180;
-  --color-ink-subtle: #8999a5;
+  /* Acaba valiendo lo mismo que `ink-muted`, y no es un descuido: a 11-12px no
+     existe un gris mas palido que cumpla 4.5:1. El token se conserva porque
+     marca intencion ("el texto menos prominente") y podra separarse el dia que
+     se use en tamanos mayores; hoy la jerarquia la da el tamano y el peso. */
+  --color-ink-subtle: #5e7180;
   --color-line: #e2e9ed;
   --color-line-strong: #cbd7de;
 
-  /* --- Semanticos --------------------------------------------------------- */
-  --color-success: #27ae60;
+  /* --- Semanticos ---------------------------------------------------------
+     Cada color se usa como texto sobre su propio `-soft`, y ahi es donde tiene
+     que cumplir 4.5:1. Los tonos vivos que se usaban antes no llegaban ni sobre
+     blanco, asi que estan oscurecidos hasta pasar. Siguen leyendose como verde,
+     ambar, rojo y azul. */
+  --color-success: #1c7a49;
   --color-success-soft: #e8f7ee;
-  --color-warning: #d98218;
+  --color-warning: #a15c07;
   --color-warning-soft: #fdf3e4;
-  --color-danger: #d64545;
+  --color-danger: #c02626;
   --color-danger-soft: #fdecec;
-  --color-info: #2f80ed;
+  --color-info: #1d5fbf;
   --color-info-soft: #eaf2fd;
 
   /* --- Tipografia --------------------------------------------------------- */

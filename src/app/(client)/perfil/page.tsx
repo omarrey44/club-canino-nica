@@ -53,7 +53,7 @@ export default async function ProfilePage() {
           {isStaff(user.role) && (
             <Link
               href="/admin"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
+              className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-700 hover:underline"
             >
               <ShieldCheck className="size-4" aria-hidden />
               Ir al panel administrativo
@@ -69,7 +69,7 @@ export default async function ProfilePage() {
         <CardContent>
           <Link
             href="/mascotas"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-700 hover:underline"
           >
             <PawPrint className="size-4" aria-hidden />
             Ver y administrar mascotas

@@ -35,7 +35,7 @@ export default async function ReportEditorPage({ params }: Props) {
     <div className="space-y-6">
       <Link
         href="/admin/reportes"
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
       >
         <ArrowLeft className="size-4" aria-hidden />
         Reportes

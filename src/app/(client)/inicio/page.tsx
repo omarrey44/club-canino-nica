@@ -38,7 +38,7 @@ export default async function ClientHomePage() {
     <div className="space-y-4 md:relative md:left-1/2 md:w-[calc(100vw-20rem)] md:max-w-[90rem] md:-translate-x-1/2">
       <header className="relative flex min-h-32 items-center overflow-hidden rounded-card border border-brand-100 bg-canvas-warm p-4 shadow-card sm:p-6 lg:min-h-36 lg:px-8">
         <div className="relative z-10 max-w-2xl space-y-2 lg:max-w-[64%]">
-          <p className="text-xs font-extrabold tracking-[0.15em] text-brand-600 uppercase">
+          <p className="text-xs font-extrabold tracking-[0.15em] text-brand-700 uppercase">
             Tu espacio en el club
           </p>
           <h1 className="text-2xl leading-tight text-navy-900 sm:text-4xl">
@@ -60,7 +60,7 @@ export default async function ClientHomePage() {
           <span className="absolute -right-12 -bottom-24 size-64 rounded-full bg-brand-100/80" />
           <span className="absolute right-32 -bottom-20 size-44 rounded-full bg-success-soft" />
           <div className="absolute right-10 bottom-3 flex size-28 items-center justify-center rounded-[2rem] border border-brand-200 bg-surface shadow-raised">
-            <House className="size-16 text-brand-600" strokeWidth={1.7} />
+            <House className="size-16 text-brand-700" strokeWidth={1.7} />
             <PawPrint className="absolute size-5 text-navy-800" />
           </div>
         </div>
@@ -120,7 +120,7 @@ export default async function ClientHomePage() {
         {activeStay && activeStay.activities.length > 0 && (
           <Card className="xl:col-start-2 xl:row-start-1 xl:row-span-2 xl:h-full">
             <CardHeader className="flex-row items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-brand-50 text-brand-600">
+              <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-brand-50 text-brand-700">
                 <Activity className="size-4.5" aria-hidden />
               </span>
               <h2 className="text-lg text-navy-900">Actividad reciente</h2>
@@ -148,7 +148,7 @@ export default async function ClientHomePage() {
           {lastPhoto && activeStay && (
             <Card className="h-full overflow-hidden">
               <CardHeader className="flex-row items-center gap-2.5">
-                <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-brand-50 text-brand-600">
+                <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-brand-50 text-brand-700">
                   <Camera className="size-4.5" aria-hidden />
                 </span>
                 <h2 className="text-lg text-navy-900">Última foto</h2>
@@ -184,7 +184,7 @@ export default async function ClientHomePage() {
 
           <Card className="h-full">
             <CardHeader className="flex-row items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-canvas-warm text-brand-600">
+              <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-canvas-warm text-brand-700">
                 <Sparkles className="size-4.5" aria-hidden />
               </span>
               <h2 className="text-lg text-navy-900">Accesos rápidos</h2>
@@ -219,7 +219,7 @@ export default async function ClientHomePage() {
 }
 
 const quickLinkTones = {
-  brand: 'bg-brand-50 text-brand-600',
+  brand: 'bg-brand-50 text-brand-700',
   info: 'bg-info-soft text-info',
   navy: 'bg-navy-50 text-navy-600',
   success: 'bg-success-soft text-success',

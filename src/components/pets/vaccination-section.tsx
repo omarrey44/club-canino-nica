@@ -98,7 +98,7 @@ export function VaccinationSection({
                         href={vaccination.documentUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:underline"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 hover:underline"
                       >
                         <FileText className="size-3.5" aria-hidden />
                         Ver comprobante

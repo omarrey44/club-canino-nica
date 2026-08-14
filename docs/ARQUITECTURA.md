@@ -242,7 +242,26 @@ Definidos en `@theme` de Tailwind v4 (`src/app/globals.css`): escalas `brand` y
 Sombras deliberadamente discretas. Sin glassmorphism, sin gradientes decorativos,
 sin cards flotando.
 
-### 6.3 Accesibilidad, no como capa final
+### 6.3 El contraste manda sobre la paleta
+
+La paleta original no cumplia AA y hubo que ceder en tres sitios:
+
+- **El naranja de marca no sirve como fondo de boton.** Blanco sobre `#F97316`
+  da 2.8:1. Los botones y las pastillas activas usan `brand-700`; el naranja
+  vivo queda para acentos, puntos de estado y bordes, donde no lleva texto
+  encima.
+- **Los colores semanticos se oscurecieron.** Cada uno se usa como texto sobre
+  su propio `-soft`, y ahi es donde tiene que cumplir. Los tonos vivos no
+  llegaban ni sobre blanco.
+- **`ink-subtle` acabo valiendo lo mismo que `ink-muted`.** A 11-12px no existe
+  un gris mas palido que cumpla 4.5:1. El token se conserva porque marca
+  intencion y podra separarse en tamanos mayores, pero hoy la jerarquia del
+  texto secundario la da el tamano y el peso, no un gris mas claro.
+
+Todo esto salio de medir, no de opinar: `npm run audit:ui` devolvio 94
+hallazgos en la primera pasada.
+
+### 6.4 Accesibilidad, no como capa final
 
 - Foco visible global; nunca `outline: none` sin reemplazo.
 - Controles de 44px minimo de alto.

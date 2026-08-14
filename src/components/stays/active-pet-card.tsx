@@ -43,7 +43,7 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
 
         <div className="flex min-w-0 flex-col justify-center gap-4 p-4 sm:p-5 lg:gap-3.5">
           <div className="space-y-1.5">
-            <p className="text-xs font-extrabold tracking-[0.14em] text-brand-600 uppercase">Ahora en el club</p>
+            <p className="text-xs font-extrabold tracking-[0.14em] text-brand-700 uppercase">Ahora en el club</p>
             <div className="flex flex-wrap items-center gap-2">
               <h2 id="mascota-activa" className="text-2xl leading-none text-navy-900 sm:text-3xl">
                 {stay.pet.name}
@@ -63,30 +63,28 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
           <dl className="grid grid-cols-2 gap-2 text-sm">
             {stay.currentLocation && (
               <div className="col-span-2 flex items-center gap-2 rounded-field bg-brand-50 px-3 py-2.5 text-brand-800">
-                <MapPin className="size-4 shrink-0 text-brand-600" aria-hidden />
+                <MapPin className="size-4 shrink-0 text-brand-700" aria-hidden />
                 <dt className="sr-only">Lugar</dt>
                 <dd className="font-extrabold">{stay.currentLocation}</dd>
               </div>
             )}
 
-            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3 py-2.5">
-              <LogIn className="size-4 shrink-0 text-navy-400" aria-hidden />
-              <div>
-                <dt className="text-xs font-bold text-ink-muted">Entrada</dt>
-                <dd className="font-extrabold text-navy-900 tabular-nums">
-                  {formatTime(stay.checkInAt)}
-                </dd>
-              </div>
+            {/* Grid en vez de un div anidado: dentro de un `dl`, `dt` y `dd`
+                solo pueden colgar de un div hijo directo, no de uno anidado. */}
+            <div className="grid grid-cols-[auto_1fr] items-center gap-x-2.5 rounded-field bg-canvas px-3 py-2.5">
+              <LogIn className="row-span-2 size-4 shrink-0 text-navy-400" aria-hidden />
+              <dt className="text-xs font-bold text-ink-muted">Entrada</dt>
+              <dd className="font-extrabold text-navy-900 tabular-nums">
+                {formatTime(stay.checkInAt)}
+              </dd>
             </div>
 
-            <div className="flex items-center gap-2.5 rounded-field bg-canvas px-3 py-2.5">
-              <LogOut className="size-4 shrink-0 text-navy-400" aria-hidden />
-              <div>
-                <dt className="text-xs font-bold text-ink-muted">Salida estimada</dt>
-                <dd className="font-extrabold text-navy-900 tabular-nums">
-                  {formatTime(stay.expectedCheckOutAt)}
-                </dd>
-              </div>
+            <div className="grid grid-cols-[auto_1fr] items-center gap-x-2.5 rounded-field bg-canvas px-3 py-2.5">
+              <LogOut className="row-span-2 size-4 shrink-0 text-navy-400" aria-hidden />
+              <dt className="text-xs font-bold text-ink-muted">Salida estimada</dt>
+              <dd className="font-extrabold text-navy-900 tabular-nums">
+                {formatTime(stay.expectedCheckOutAt)}
+              </dd>
             </div>
           </dl>
 

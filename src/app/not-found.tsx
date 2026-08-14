@@ -10,7 +10,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/inicio"
-          className="inline-flex font-semibold text-brand-600 hover:underline"
+          className="inline-flex font-semibold text-brand-700 hover:underline"
         >
           Volver al inicio
         </Link>

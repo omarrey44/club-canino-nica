@@ -61,7 +61,7 @@ export default async function PetTodayPage() {
       <LiveRefresh />
 
       <header className="space-y-1.5">
-        <p className="text-xs font-extrabold tracking-[0.14em] text-brand-600 uppercase">
+        <p className="text-xs font-extrabold tracking-[0.14em] text-brand-700 uppercase">
           Hoy
         </p>
         <h1 className="text-2xl font-extrabold text-navy-900 sm:text-3xl">

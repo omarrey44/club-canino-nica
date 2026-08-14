@@ -10,8 +10,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // brand-700 y no brand-500: el naranja vivo con texto blanco se queda
+        // en 2.8:1. Sigue siendo el naranja de la marca, pero legible.
         primary:
-          'bg-brand-500 text-white shadow-[0_8px_18px_rgb(249_115_22_/_0.2)] hover:bg-brand-600 hover:shadow-[0_10px_22px_rgb(249_115_22_/_0.26)] active:bg-brand-700',
+          'bg-brand-700 text-white shadow-[0_8px_18px_rgb(249_115_22_/_0.2)] hover:bg-brand-800 hover:shadow-[0_10px_22px_rgb(249_115_22_/_0.26)] active:bg-brand-900',
         secondary: 'bg-navy-800 text-white shadow-card hover:bg-navy-700 active:bg-navy-900',
         outline:
           'border border-line-strong bg-surface text-ink shadow-[0_1px_2px_rgb(13_38_57_/_0.03)] hover:border-navy-300 hover:bg-navy-50',

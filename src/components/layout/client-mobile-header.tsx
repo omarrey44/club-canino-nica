@@ -15,7 +15,7 @@ export function ClientMobileHeader() {
             <span className="block font-display text-sm leading-tight text-navy-900">
               {business.shortName}
             </span>
-            <span className="block text-[0.58rem] font-extrabold tracking-[0.13em] text-brand-600 uppercase">
+            <span className="block text-[0.68rem] font-extrabold tracking-[0.13em] text-brand-700 uppercase">
               Portal familiar
             </span>
           </span>

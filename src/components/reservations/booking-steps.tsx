@@ -212,7 +212,7 @@ export function StepExtras({
               {addon.description && (
                 <p className="mt-0.5 text-sm text-ink-muted">{addon.description}</p>
               )}
-              <p className="mt-1 text-sm font-semibold text-brand-600 tabular-nums">
+              <p className="mt-1 text-sm font-semibold text-brand-700 tabular-nums">
                 {formatCurrency(addon.basePrice)}
               </p>
             </div>

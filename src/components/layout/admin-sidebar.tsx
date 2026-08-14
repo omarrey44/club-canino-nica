@@ -28,7 +28,7 @@ export function AdminSidebar() {
           <div className="space-y-5">
             {adminNavGroups.map((group) => (
               <div key={group.label}>
-                <p className="px-3 text-[0.62rem] font-extrabold tracking-[0.15em] text-navy-400 uppercase">
+                <p className="px-3 text-[0.68rem] font-extrabold tracking-[0.15em] text-navy-300 uppercase">
                   {group.label}
                 </p>
                 <ul className="mt-1.5 space-y-0.5">
@@ -96,7 +96,9 @@ export function AdminMobileNav() {
                 aria-current={active ? 'page' : undefined}
                 className={cn(
                   'flex min-h-11 items-center gap-2 rounded-pill px-3.5 text-sm font-medium whitespace-nowrap transition-colors',
-                  active ? 'bg-brand-500 text-white' : 'text-navy-200 hover:bg-navy-700'
+                  // brand-700 y no brand-500: blanco sobre el naranja vivo se
+                  // queda en 2.8:1, igual que pasaba en los botones.
+                  active ? 'bg-brand-700 text-white' : 'text-navy-200 hover:bg-navy-700'
                 )}
               >
                 <Icon className="size-4" aria-hidden />

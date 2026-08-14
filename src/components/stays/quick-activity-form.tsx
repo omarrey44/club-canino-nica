@@ -101,7 +101,7 @@ export function QuickActivityForm({ stayId }: { stayId: string }) {
           <button
             type="button"
             onClick={() => setShowAll(true)}
-            className="mt-2 text-sm font-semibold text-brand-600 hover:underline"
+            className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-brand-700 hover:underline"
           >
             Más tipos
           </button>
@@ -166,7 +166,7 @@ export function QuickActivityForm({ stayId }: { stayId: string }) {
               <button
                 type="button"
                 onClick={() => setShowDetails(true)}
-                className="text-sm font-semibold text-brand-600 hover:underline"
+                className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-700 hover:underline"
               >
                 Cambiar hora o visibilidad
               </button>

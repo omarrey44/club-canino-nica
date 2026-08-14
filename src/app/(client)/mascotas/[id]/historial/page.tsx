@@ -33,7 +33,7 @@ export default async function PetHistoryPage({ params }: Props) {
     <div className="space-y-6">
       <Link
         href={`/mascotas/${pet.id}`}
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
       >
         <ArrowLeft className="size-4" aria-hidden />
         {pet.name}
@@ -88,7 +88,7 @@ export default async function PetHistoryPage({ params }: Props) {
                         </span>
                       )}
                       {stay.reports.length > 0 && (
-                        <span className="inline-flex items-center gap-1 text-brand-600">
+                        <span className="inline-flex items-center gap-1 text-brand-700">
                           <FileText className="size-3.5" aria-hidden />
                           Con reporte
                         </span>

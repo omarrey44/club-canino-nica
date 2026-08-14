@@ -51,7 +51,7 @@ export default async function StayDetailPage({ params }: Props) {
     <div className="space-y-6">
       <Link
         href="/admin/estancias"
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
       >
         <ArrowLeft className="size-4" aria-hidden />
         Estancias
@@ -83,7 +83,7 @@ export default async function StayDetailPage({ params }: Props) {
         {stay.reservation.client.phone && (
           <a
             href={`tel:${stay.reservation.client.phone}`}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:underline"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hover:underline"
           >
             <Phone className="size-4" aria-hidden />
             {stay.reservation.client.phone}

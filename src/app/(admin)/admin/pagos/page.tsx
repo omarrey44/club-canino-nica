@@ -158,7 +158,7 @@ export default async function AdminPaymentsPage({
                 <div className="flex flex-wrap items-center gap-2">
                   <Link
                     href={`/reservas/${payment.reservation.id}`}
-                    className="font-bold text-navy-900 hover:underline"
+                    className="inline-flex min-h-11 items-center font-bold text-navy-900 hover:underline"
                   >
                     {payment.reservation.pet.name}
                   </Link>

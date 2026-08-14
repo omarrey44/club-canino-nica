@@ -35,7 +35,7 @@ export function ClientSidebar({ unreadCount = 0 }: { unreadCount?: number }) {
             <span
               className={cn(
                 'flex size-8 items-center justify-center rounded-[0.65rem] transition-colors',
-                active ? 'bg-white text-brand-600 shadow-card' : 'text-navy-500 group-hover:bg-white'
+                active ? 'bg-white text-brand-700 shadow-card' : 'text-navy-500 group-hover:bg-white'
               )}
             >
               <Icon className="size-4.5" aria-hidden />

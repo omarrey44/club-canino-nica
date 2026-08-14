@@ -187,7 +187,7 @@ export function BookingStepper({
             <p
               className={cn(
                 'mt-1.5 text-2xs font-semibold',
-                index === step ? 'text-brand-600' : 'text-ink-subtle'
+                index === step ? 'text-brand-700' : 'text-ink-subtle'
               )}
               aria-current={index === step ? 'step' : undefined}
             >

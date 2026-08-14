@@ -76,7 +76,7 @@ export function ActivityTimeline({
             <div className="flex flex-col items-center">
               <span
                 className={cn(
-                  'flex shrink-0 items-center justify-center border border-brand-100 bg-brand-50 text-brand-600',
+                  'flex shrink-0 items-center justify-center border border-brand-100 bg-brand-50 text-brand-700',
                   compact ? 'size-9 rounded-[0.7rem]' : 'size-10 rounded-[0.8rem]'
                 )}
                 aria-hidden

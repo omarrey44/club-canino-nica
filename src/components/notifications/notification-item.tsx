@@ -64,7 +64,7 @@ export function NotificationItem({ notification }: { notification: NotificationI
         <span
           className={cn(
             'flex size-12 shrink-0 items-center justify-center rounded-full',
-            unread ? 'bg-brand-50 text-brand-600' : 'bg-navy-50 text-navy-400'
+            unread ? 'bg-brand-50 text-brand-700' : 'bg-navy-50 text-navy-400'
           )}
           aria-hidden
         >

@@ -22,7 +22,7 @@ export default async function LoginPage({
   return (
     <div className="space-y-5 2xl:space-y-6">
       <div className="space-y-2">
-        <p className="text-[0.65rem] font-extrabold tracking-[0.2em] text-brand-600 uppercase lg:text-[0.7rem]">
+        <p className="text-[0.65rem] font-extrabold tracking-[0.2em] text-brand-700 uppercase lg:text-[0.7rem]">
           Bienvenido de vuelta
         </p>
         <h1 className="font-sans text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-navy-900 lg:text-[2.25rem] 2xl:text-[2.4rem]">

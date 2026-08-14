@@ -40,7 +40,7 @@ usarse de pie, con el celular en la mano.
 | Camaras con permisos por estancia y modo demostracion | Listo |
 | Cobro en linea con proveedor demo, webhook firmado y reembolsos | Listo |
 | Notificaciones in-app, con contador de no leidas | Listo |
-| Pulido final: responsive, accesibilidad, pruebas | Por fases |
+| Responsive y accesibilidad AA verificados con auditoria automatica | Listo |
 
 ---
 
@@ -208,7 +208,24 @@ npm run check:payment   # el camino del dinero
 npm run check:notification
 
 npm run check:all       # todas, en orden
+npm run audit:ui        # responsive y accesibilidad
 ```
+
+### Auditoria de interfaz
+
+`npm run audit:ui` recorre las 26 pantallas en los cinco anchos del pliego
+(375, 430, 768, 1024 y 1440) y reporta lo que se puede medir sin criterio
+humano:
+
+- scroll horizontal accidental, senalando el elemento que se sale
+- areas tactiles por debajo de 44 px, ignorando controles pequenos cuya
+  etiqueta ya es tocable
+- violaciones de accesibilidad segun `axe-core` (WCAG 2.1 AA)
+
+Agrupa por problema y no por pantalla: el mismo fallo en veinte rutas es un
+solo arreglo, no veinte. Mide, no arregla; el juicio visual sigue siendo humano.
+
+Estado actual: **sin hallazgos**. La primera pasada devolvio 94.
 
 `check:booking` localiza el id de la Server Action en el manifiesto de Next y
 la invoca por HTTP con una sesion real. Cubre lo que ninguna prueba de
@@ -365,7 +382,7 @@ El panel administrativo los muestra con una advertencia visible en
 | 6 | Camaras, permisos, player demo | Completada |
 | 7 | Pagos con Stripe sandbox | Completada |
 | 8 | Notificaciones | Completada |
-| 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | Siguiente |
+| 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | Completada |
 
 ---
 

@@ -35,7 +35,7 @@ export function PetCard({ pet }: { pet: PetListItem }) {
         )}
       </div>
 
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-canvas text-ink-subtle transition-colors group-hover:bg-brand-50 group-hover:text-brand-600">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-canvas text-ink-subtle transition-colors group-hover:bg-brand-50 group-hover:text-brand-700">
         <ChevronRight className="size-5" aria-hidden />
       </span>
     </Link>
