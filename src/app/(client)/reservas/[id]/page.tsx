@@ -16,12 +16,14 @@ import {
   reservationStatusLabels,
   reservationStatusTones,
 } from '@/lib/constants/labels'
+import { PayButton, PaymentReturnNotice } from '@/components/payments/pay-button'
 import { getReservationDetail } from '@/server/queries/reservations'
+import { isDemoPayments } from '@/server/providers/payment'
 import { requireUser } from '@/server/auth/session'
 
 type Props = {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ nueva?: string }>
+  searchParams: Promise<{ nueva?: string; pago?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -43,7 +45,7 @@ function Row({ label, value }: { label: string; value: string | null | undefined
 
 export default async function ReservationDetailPage({ params, searchParams }: Props) {
   const { id } = await params
-  const { nueva } = await searchParams
+  const { nueva, pago } = await searchParams
   const user = await requireUser()
   const reservation = await getReservationDetail(id, user)
 
@@ -51,6 +53,11 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
 
   const sameDay = formatDate(reservation.startAt) === formatDate(reservation.endAt)
   const canCancel = ['PENDING', 'CONFIRMED'].includes(reservation.status)
+  const canPay =
+    reservation.status !== 'CANCELLED' &&
+    reservation.payment !== null &&
+    reservation.payment.status !== 'PAID' &&
+    reservation.payment.status !== 'REFUNDED'
 
   return (
     <div className="space-y-6">
@@ -61,6 +68,8 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
         <ArrowLeft className="size-4" aria-hidden />
         Mis reservaciones
       </Link>
+
+      {pago && <PaymentReturnNotice reservationId={reservation.id} outcome={pago} />}
 
       {nueva && (
         <Alert tone="success">
@@ -170,10 +179,23 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
             </div>
           )}
 
-          {reservation.payment?.status === 'PENDING' && (
+          {canPay && (
+            <div className="mt-4 space-y-3 border-t border-line pt-4">
+              <PayButton
+                reservationId={reservation.id}
+                amount={formatCurrency(String(reservation.total))}
+              />
+              <p className="text-xs text-ink-subtle">
+                {isDemoPayments
+                  ? 'El club todavía no conecta su pasarela de pago, así que este cobro es una demostración: no se cobra nada.'
+                  : 'El pago se procesa en la página del proveedor. La plataforma nunca ve ni guarda los datos de tu tarjeta.'}
+              </p>
+            </div>
+          )}
+
+          {reservation.payment?.status === 'REFUNDED' && (
             <p className="mt-3 text-sm text-ink-muted">
-              El pago en línea llega pronto. Por ahora coordinamos el pago contigo al
-              confirmar la reservación.
+              Este cobro fue reembolsado. El movimiento puede tardar unos días en reflejarse.
             </p>
           )}
         </CardContent>

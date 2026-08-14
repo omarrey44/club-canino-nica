@@ -127,6 +127,7 @@ await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/check-in', ['Entradas 
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reportes', ['Pendientes'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/estancias', ['Estancias'])
 await check('CLIENTE', 'camila@correo.com', '/mi-mascota', ['Su día, paso a paso'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/pagos', ['Pagos', 'Pagado'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones', ['Reservaciones'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones?rango=week', ['Semana'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/servicios', [

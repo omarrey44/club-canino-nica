@@ -13,6 +13,7 @@
     "check:booking": "node scripts/check-booking.mjs",
     "check:stay": "node scripts/check-stay.mjs",
     "check:camera": "node scripts/check-camera.mjs",
+    "check:payment": "node scripts/check-payment.mjs",
     "storage:init": "node scripts/init-storage.mjs",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

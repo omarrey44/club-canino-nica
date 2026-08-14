@@ -38,7 +38,8 @@ usarse de pie, con el celular en la mano.
 | Reporte diario, precargado con lo ya registrado durante el dia | Listo |
 | Historial por mascota, con actividades, fotos, reporte y cobro | Listo |
 | Camaras con permisos por estancia y modo demostracion | Listo |
-| Pagos en linea, notificaciones | Por fases |
+| Cobro en linea con proveedor demo, webhook firmado y reembolsos | Listo |
+| Notificaciones | Por fases |
 
 ---
 
@@ -201,6 +202,8 @@ Las otras dos necesitan `npm run dev` en otra terminal:
 npm run smoke           # rutas privadas y permisos
 npm run check:booking   # la Server Action de reserva, de punta a punta
 npm run check:stay      # el ciclo de estancia en un navegador real
+npm run check:camera    # la cadena de autorizacion de camaras
+npm run check:payment   # el camino del dinero
 ```
 
 `check:booking` localiza el id de la Server Action en el manifiesto de Next y
@@ -297,9 +300,33 @@ exista un stream real que probar.
 
 ### Pagos (`PaymentProvider`)
 
-`createCheckout`, `verifyPayment`, `refundPayment`, `getPaymentStatus`.
-Stripe en modo sandbox. La plataforma guarda solo estado y referencia opaca del
-proveedor: **ningun dato de tarjeta se almacena ni pasa por la aplicacion**.
+`src/server/providers/payment.ts`: `createCheckout`, `getPaymentStatus`,
+`refundPayment`, `verifyWebhookSignature`.
+
+- **Ningun dato de tarjeta pasa por la plataforma.** El cliente los escribe en
+  la pagina del proveedor. Solo se guarda el estado y una referencia opaca.
+- **El monto sale de la reservacion guardada**, nunca del navegador.
+- **Quien confirma un cobro es el proveedor**, no la pantalla de exito: al
+  volver se le pregunta el estado real, y con Stripe manda el webhook firmado.
+- La ruta del webhook es publica por necesidad y se protege solo con la firma,
+  con ventana de cinco minutos contra reenvios.
+- Las llamadas de cobro y reembolso llevan clave de idempotencia: un reintento
+  por fallo de red no cobra dos veces.
+- El reembolso queda restringido a ADMIN. Registrar un pago recibido en
+  efectivo lo puede hacer todo el personal, porque pasa a diario.
+
+Sin llaves configuradas corre el proveedor `demo`: una pantalla de cobro
+simulada, marcada como demostracion, que **no pide ni aparenta pedir datos de
+tarjeta** (un formulario falso ensenaria a la gente a escribirlos donde no
+debe). Sus referencias empiezan con `demo_` para que no se confundan con cobros
+reales al mirar la base o el panel.
+
+`npm run check:payment` verifica el camino del dinero contra el servidor real.
+
+Para activar Stripe: poner `PAYMENT_PROVIDER=stripe`, `STRIPE_SECRET_KEY` y
+`STRIPE_WEBHOOK_SECRET`. El adaptador habla con la API por `fetch`, sin el SDK
+oficial: mientras no haya llaves con que probarlo, la dependencia seria peso sin
+verificar. Al entrar en operacion conviene migrar al SDK por sus reintentos.
 
 ---
 
@@ -332,8 +359,8 @@ El panel administrativo los muestra con una advertencia visible en
 | 4 | Check-in, estancias, actividades, timeline | Completada |
 | 5 | Fotografias, reportes diarios, historial | Completada |
 | 6 | Camaras, permisos, player demo | Completada |
-| 7 | Pagos con Stripe sandbox | Siguiente |
-| 8 | Notificaciones | |
+| 7 | Pagos con Stripe sandbox | Completada |
+| 8 | Notificaciones | Siguiente |
 | 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | |
 
 ---

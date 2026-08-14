@@ -1,7 +1,16 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PUBLIC_ROUTES = ['/login', '/registro', '/recuperar', '/restablecer', '/auth']
+const PUBLIC_ROUTES = [
+  '/login',
+  '/registro',
+  '/recuperar',
+  '/restablecer',
+  '/auth',
+  // El proveedor de pagos no tiene sesion. Esa ruta se protege verificando la
+  // firma del webhook, no con cookies.
+  '/api/webhooks',
+]
 
 /**
  * Renueva la sesion de Supabase y bloquea rutas privadas.
