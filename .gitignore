@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# La plantilla si va al repositorio: no tiene valores, y sin ella nadie sabe
+# que variables hacen falta. El README manda copiarla a .env.
+!.env.example
 
 # vercel
 .vercel
