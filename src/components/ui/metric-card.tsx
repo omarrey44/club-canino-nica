@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
- * KPI operativo. Sin graficos: en recepcion importa el numero y que se lea de
+ * KPI operativo. Sin graficos: en recepción importa el numero y que se lea de
  * lejos, no una tendencia decorativa.
  */
 export function MetricCard({

@@ -1,7 +1,7 @@
 import { Bell } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 
+import { BrandLogo } from '@/components/ui/brand-logo'
 import { business } from '@/config/business'
 
 /** Cabecera compacta para que el portal conserve identidad fuera del login. */
@@ -10,13 +10,7 @@ export function ClientMobileHeader() {
     <header className="sticky top-0 z-30 border-b border-line/80 bg-canvas/90 px-4 py-3 backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-lg items-center justify-between">
         <Link href="/inicio" className="flex items-center gap-2.5 rounded-field">
-          <Image
-            src="/brand/icon.svg"
-            width={36}
-            height={36}
-            alt=""
-            className="size-9 rounded-[0.7rem] shadow-card"
-          />
+          <BrandLogo decorative sizes="48px" className="w-12 shrink-0" />
           <span>
             <span className="block font-display text-sm leading-tight text-navy-900">
               {business.shortName}

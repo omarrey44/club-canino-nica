@@ -13,12 +13,12 @@ export function greeting(now: Date = new Date()): string {
     }).format(now)
   )
 
-  if (hour < 12) return 'Buenos dias'
+  if (hour < 12) return 'Buenos días'
   if (hour < 19) return 'Buenas tardes'
   return 'Buenas noches'
 }
 
-/** Primer nombre, para saludos ("Buenos dias, Camila"). */
+/** Primer nombre, para saludos ("Buenos días, Camila"). */
 export function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName
 }
@@ -44,7 +44,7 @@ export function formatDateTime(date: Date): string {
   return `${formatDate(date)}, ${formatTime(date)}`
 }
 
-/** "Hace 4 minutos", para la ultima actualizacion de la mascota. */
+/** "Hace 4 minutos", para la ultima actualización de la mascota. */
 export function relativeTime(date: Date, now: Date = new Date()): string {
   const seconds = Math.round((now.getTime() - date.getTime()) / 1000)
 
@@ -54,23 +54,23 @@ export function relativeTime(date: Date, now: Date = new Date()): string {
   const hours = Math.round(minutes / 60)
   if (hours < 24) return `Hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`
   const days = Math.round(hours / 24)
-  if (days < 7) return `Hace ${days} ${days === 1 ? 'dia' : 'dias'}`
+  if (days < 7) return `Hace ${days} ${days === 1 ? 'dia' : 'días'}`
   return formatDate(date)
 }
 
 /**
  * Nicaragua no observa horario de verano, asi que America/Managua es UTC-6 todo
- * el ano y un desfase fijo basta para calcular los limites del dia operativo.
+ * el ano y un desfase fijo basta para calcular los limites del día operativo.
  * Si la plataforma se abre a una zona con DST, esto debe pasar a `date-fns-tz`.
  */
 export const CLUB_UTC_OFFSET_HOURS = -6
 
 /**
- * Numero de dia calendario del club para un instante dado.
+ * Número de día calendario del club para un instante dado.
  *
- * Sirve para contar dias entre dos fechas sin que el huso los desplace: un dia
- * de guarderia de 8:00 a 18:00 en Managua cruza la medianoche UTC, asi que
- * compararlo en UTC lo contaria como dos dias.
+ * Sirve para contar días entre dos fechas sin que el huso los desplace: un día
+ * de guardería de 8:00 a 18:00 en Managua cruza la medianoche UTC, asi que
+ * compararlo en UTC lo contaria como dos días.
  */
 export function clubDayIndex(date: Date): number {
   const shifted = new Date(date.getTime() + CLUB_UTC_OFFSET_HOURS * 3_600_000)
@@ -83,7 +83,7 @@ export function clubDayIndex(date: Date): number {
  * Convierte fecha y hora escritas en el calendario del club a un instante UTC.
  *
  * Los inputs nativos `type="date"` y `type="time"` devuelven la hora local que
- * el usuario ve, sin huso. Aqui se le pega el del club para no depender del
+ * el usuario ve, sin huso. Aquí se le pega el del club para no depender del
  * reloj del dispositivo.
  */
 export function clubDateTime(dateInput: string, timeInput: string): Date {
@@ -100,7 +100,7 @@ export function clubDateInput(date: Date = new Date()): string {
   return shifted.toISOString().slice(0, 10)
 }
 
-/** Rango [inicio, fin) del dia del club, expresado en UTC para consultar Postgres. */
+/** Rango [inicio, fin) del día del club, expresado en UTC para consultar Postgres. */
 export function clubDayRange(reference: Date = new Date()): { start: Date; end: Date } {
   const shifted = new Date(reference.getTime() + CLUB_UTC_OFFSET_HOURS * 3_600_000)
   const start = new Date(

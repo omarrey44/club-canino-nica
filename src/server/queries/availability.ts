@@ -3,7 +3,7 @@ import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { clubDateInput } from '@/lib/datetime'
 
-/** Estados que ocupan un cupo. Una reservacion cancelada libera su lugar. */
+/** Estados que ocupan un cupo. Una reservación cancelada libera su lugar. */
 const OCCUPYING = [
   'PENDING',
   'CONFIRMED',
@@ -15,9 +15,9 @@ const OCCUPYING = [
 const MS_PER_DAY = 86_400_000
 
 /**
- * Todos los dias del club que toca una reservacion, como YYYY-MM-DD.
+ * Todos los días del club que toca una reservación, como YYYY-MM-DD.
  *
- * Una estancia de tres noches ocupa cupo los tres dias, no solo el de entrada.
+ * Una estancia de tres noches ocupa cupo los tres días, no solo el de entrada.
  */
 function daysCovered(startAt: Date, endAt: Date): string[] {
   const days: string[] = []
@@ -47,11 +47,11 @@ export type DayAvailability = {
 }
 
 /**
- * Ocupacion diaria de un servicio para los proximos `days` dias.
+ * Ocupacion diaria de un servicio para los proximos `days` días.
  *
  * Una sola consulta: se traen las reservaciones de la ventana y se expanden en
- * memoria. Con los volumenes de una guarderia esto es mas barato que una
- * consulta por dia, y mucho mas simple que un `generate_series` en SQL.
+ * memoria. Con los volumenes de una guardería esto es mas barato que una
+ * consulta por día, y mucho mas simple que un `generate_series` en SQL.
  *
  * ponytail: expansion en memoria, mover a SQL si la ventana crece a meses.
  */
@@ -102,10 +102,10 @@ export async function getServiceAvailability(
 }
 
 /**
- * Comprueba el cupo antes de crear una reservacion.
+ * Comprueba el cupo antes de crear una reservación.
  *
  * Se vuelve a verificar en el servidor aunque la interfaz ya haya deshabilitado
- * los dias llenos: entre que el cliente abrio el formulario y lo envio pudieron
+ * los días llenos: entre que el cliente abrio el formulario y lo envio pudieron
  * entrar otras reservaciones.
  *
  * ponytail: sin bloqueo de fila, asi que dos envios simultaneos podrian pasarse

@@ -33,7 +33,7 @@ assert.equal(billableUnits('BOARDING', at('2026-08-10T14:00Z'), at('2026-08-10T2
 
 // El singular y el plural se usan en la interfaz.
 assert.equal(billableUnits('BOARDING', at('2026-08-10T14:00Z'), at('2026-08-11T17:00Z')).label, 'noche')
-assert.equal(billableUnits('DAYCARE', at('2026-08-13T14:00Z'), at('2026-08-14T23:00Z')).label, 'dias')
+assert.equal(billableUnits('DAYCARE', at('2026-08-13T14:00Z'), at('2026-08-14T23:00Z')).label, 'días')
 
 // --- Conversion a centavos ---------------------------------------------------
 
@@ -54,7 +54,7 @@ assert.equal(simple.subtotalCents, 45000)
 assert.equal(simple.taxesCents, 6750)
 assert.equal(simple.totalCents, 51750)
 assert.equal(simple.lines.length, 1)
-assert.equal(simple.lines[0].detail, '1 dia')
+assert.equal(simple.lines[0].detail, '1 día')
 
 const conExtras = quote({
   service: boarding,

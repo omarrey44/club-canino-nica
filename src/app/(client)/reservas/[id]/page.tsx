@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const user = await requireUser()
   const reservation = await getReservationDetail(id, user)
-  return { title: reservation ? `Reservacion ${reservation.code}` : 'Reservacion' }
+  return { title: reservation ? `Reservación ${reservation.code}` : 'Reservación' }
 }
 
 function Row({ label, value }: { label: string; value: string | null | undefined }) {
@@ -67,7 +67,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
           <span className="flex items-start gap-1.5">
             <CheckCircle2 className="sr-only" aria-hidden />
             Listo, apartamos el lugar de {reservation.pet.name}. Te confirmamos en breve y te
-            avisamos por aqui.
+            avisamos por aquí.
           </span>
         </Alert>
       )}
@@ -86,7 +86,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
             </StatusBadge>
           </div>
           <p className="text-ink-muted">
-            {reservation.service.name} · codigo {reservation.code}
+            {reservation.service.name} · código {reservation.code}
           </p>
         </div>
       </header>
@@ -172,8 +172,8 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
 
           {reservation.payment?.status === 'PENDING' && (
             <p className="mt-3 text-sm text-ink-muted">
-              El pago en linea llega pronto. Por ahora coordinamos el pago contigo al
-              confirmar la reservacion.
+              El pago en línea llega pronto. Por ahora coordinamos el pago contigo al
+              confirmar la reservación.
             </p>
           )}
         </CardContent>
@@ -182,7 +182,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
       {reservation.status === 'CANCELLED' && reservation.cancellationReason && (
         <Card>
           <CardHeader>
-            <CardTitle>Motivo de la cancelacion</CardTitle>
+            <CardTitle>Motivo de la cancelación</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-ink-muted">{reservation.cancellationReason}</p>

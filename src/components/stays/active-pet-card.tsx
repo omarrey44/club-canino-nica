@@ -55,8 +55,8 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
 
             <p className="leading-relaxed text-ink-muted">
               {isReady
-                ? `${stay.pet.name} termino su dia y te esta esperando.`
-                : `${stay.pet.name} esta disfrutando su ${stay.reservation.service.name.toLowerCase()}.`}
+                ? `${stay.pet.name} termino su día y te esta esperando.`
+                : `${stay.pet.name} está disfrutando su ${stay.reservation.service.name.toLowerCase()}.`}
             </p>
           </div>
 
@@ -100,10 +100,10 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               <Waypoints aria-hidden />
               Ver actividad
             </LinkButton>
-            {/* La camara llega en la Fase 6; el boton ya ocupa su lugar. */}
+            {/* La cámara llega en la Fase 6; el boton ya ocupa su lugar. */}
             <Button size="sm" variant="outline" disabled className="px-3">
               <Camera aria-hidden />
-              Camara en vivo
+              Cámara en vivo
             </Button>
           </div>
         </div>

@@ -13,11 +13,14 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#FFFAF5',
     theme_color: '#F97316',
     lang: 'es-NI',
-    // Icono provisional en SVG. Reemplazar por PNG 192/512 y maskable cuando
-    // exista el logotipo definitivo de la marca.
     icons: [
-      { src: '/brand/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-      { src: '/brand/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
+      { src: business.appIconUrl, sizes: '512x512', type: 'image/png', purpose: 'any' },
+      {
+        src: business.maskableIconUrl,
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
     ],
   }
 }

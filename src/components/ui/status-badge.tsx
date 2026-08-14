@@ -23,7 +23,7 @@ const dotClasses: Record<Tone, string> = {
  * Estado en texto + punto de color.
  *
  * El punto nunca va solo: el color no puede ser el unico portador de la
- * informacion para quien no distingue matices.
+ * información para quien no distingue matices.
  */
 export function StatusBadge({
   tone = 'neutral',

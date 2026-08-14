@@ -18,9 +18,9 @@ import {
 import { errorState, successState, type ActionState } from './types'
 
 /**
- * Codigo corto y legible para buscar en recepcion.
+ * Código corto y legible para buscar en recepción.
  *
- * Se evitan las letras que se confunden al dictarlo por telefono (I, O, 0, 1).
+ * Se evitan las letras que se confunden al dictarlo por teléfono (I, O, 0, 1).
  */
 const CODE_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
 
@@ -97,7 +97,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     )
   }
 
-  // El total se calcula aqui, con los precios que estan en base ahora mismo.
+  // El total se calcula aquí, con los precios que estan en base ahora mismo.
   const cotizacion = quote({
     service: {
       id: service.id,
@@ -122,7 +122,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     taxRate: business.billing.taxRate,
   })
 
-  // Reintenta si el codigo aleatorio ya existia. Con 32^5 combinaciones la
+  // Reintenta si el código aleatorio ya existia. Con 32^5 combinaciones la
   // colision es rara, pero no imposible.
   let created: { id: string; code: string } | null = null
   for (let attempt = 0; attempt < 5 && !created; attempt += 1) {
@@ -169,13 +169,13 @@ export async function createReservation(input: unknown): Promise<ActionState> {
         typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002'
       if (!isDuplicateCode) {
         console.error('[reservations.create]', error)
-        return errorState('No fue posible completar la reservacion. Intenta de nuevo.')
+        return errorState('No fue posible completar la reservación. Intenta de nuevo.')
       }
     }
   }
 
   if (!created) {
-    return errorState('No fue posible completar la reservacion. Intenta de nuevo.')
+    return errorState('No fue posible completar la reservación. Intenta de nuevo.')
   }
 
   await prisma.notification.create({
@@ -184,7 +184,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
       userId: user.id,
       petId: pet.id,
       type: 'RESERVATION_CONFIRMED',
-      title: 'Recibimos tu reservacion',
+      title: 'Recibimos tu reservación',
       body: `${pet.name} tiene lugar apartado para el ${formatDate(startAt)}. Te confirmamos en breve.`,
       linkUrl: `/reservas/${created.id}`,
     },
@@ -206,19 +206,19 @@ export async function cancelReservation(input: unknown): Promise<ActionState> {
   const user = await requireUser()
 
   const parsed = cancelReservationSchema.safeParse(input)
-  if (!parsed.success) return errorState('No pudimos procesar la cancelacion.')
+  if (!parsed.success) return errorState('No pudimos procesar la cancelación.')
 
   const reservation = await prisma.reservation.findFirst({
     where: { id: parsed.data.reservationId, clientId: user.id },
     select: { id: true, status: true, code: true },
   })
-  if (!reservation) return errorState('No encontramos esa reservacion.')
+  if (!reservation) return errorState('No encontramos esa reservación.')
 
   // Una estancia ya iniciada no se cancela desde la app: hay una mascota en el
   // club y eso lo resuelve el personal.
   if (!['PENDING', 'CONFIRMED'].includes(reservation.status)) {
     return errorState(
-      'Esta reservacion ya no se puede cancelar desde aqui. Escribenos y lo vemos.'
+      'Esta reservación ya no se puede cancelar desde aquí. Escribenos y lo vemos.'
     )
   }
 
@@ -265,12 +265,12 @@ export async function setReservationStatus(
     where: { id: reservationId, organizationId: user.organizationId },
     select: { id: true, code: true, status: true, clientId: true, petId: true, startAt: true },
   })
-  if (!reservation) return errorState('No encontramos esa reservacion.')
+  if (!reservation) return errorState('No encontramos esa reservación.')
 
   const allowed = STAFF_TRANSITIONS[reservation.status] ?? []
   if (!allowed.includes(nextStatus)) {
     return errorState(
-      `Una reservacion ${reservationStatusLabels[reservation.status].toLowerCase()} no puede pasar a ese estado.`
+      `Una reservación ${reservationStatusLabels[reservation.status].toLowerCase()} no puede pasar a ese estado.`
     )
   }
 
@@ -289,7 +289,7 @@ export async function setReservationStatus(
         userId: reservation.clientId,
         petId: reservation.petId,
         type: 'RESERVATION_CONFIRMED',
-        title: 'Tu reservacion esta confirmada',
+        title: 'Tu reservación esta confirmada',
         body: `Te esperamos el ${formatDate(reservation.startAt)}.`,
         linkUrl: `/reservas/${reservation.id}`,
       },
@@ -305,5 +305,5 @@ export async function setReservationStatus(
 
   revalidatePath('/admin/reservaciones')
   revalidatePath('/admin')
-  return successState('Reservacion actualizada.')
+  return successState('Reservación actualizada.')
 }

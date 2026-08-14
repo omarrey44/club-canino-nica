@@ -13,7 +13,7 @@ import { requireUser } from '@/server/auth/session'
 export const metadata: Metadata = { title: 'Mis mascotas' }
 
 /**
- * El esqueleto va aqui dentro y no en un `loading.tsx` del segmento.
+ * El esqueleto va aquí dentro y no en un `loading.tsx` del segmento.
  *
  * Un `loading.tsx` en /mascotas tambien envuelve a /mascotas/[id], y al
  * enviar el shell de inmediato la respuesta sale con 200: cuando la ficha

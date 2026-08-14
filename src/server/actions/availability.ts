@@ -7,7 +7,7 @@ import { getServiceAvailability } from '@/server/queries/availability'
 export type AvailabilityAnswer = {
   /** null = el servicio no tiene cupo maximo configurado. */
   capacity: number | null
-  /** Lugares libres el dia de entrada. */
+  /** Lugares libres el día de entrada. */
   remaining: number | null
   /** Dias sin cupo dentro del rango pedido, como YYYY-MM-DD. */
   fullDays: string[]

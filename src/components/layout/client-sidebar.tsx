@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
-import { business } from '@/config/business'
+import { BrandLogo } from '@/components/ui/brand-logo'
 import { clientNavItems } from './client-nav-items'
 import { cn } from '@/lib/utils'
 
@@ -52,15 +51,11 @@ export function ClientSidebar() {
   return (
     <aside className="hidden w-68 shrink-0 border-r border-line bg-surface md:block">
       <div className="sticky top-0 flex h-dvh flex-col p-5">
-        <Link href="/inicio" className="flex items-center gap-3 rounded-field px-1 py-1">
-          <Image src="/brand/icon.svg" width={42} height={42} alt="" className="size-10.5 rounded-[0.8rem] shadow-card" priority />
-          <span>
-            <span className="block font-display text-base leading-tight text-navy-900">{business.shortName}</span>
-            <span className="block text-[0.62rem] font-extrabold tracking-[0.12em] text-brand-600 uppercase">Portal familiar</span>
-          </span>
+        <Link href="/inicio" className="mx-auto flex rounded-field" aria-label="Ir al inicio">
+          <BrandLogo decorative priority sizes="160px" className="w-40" />
         </Link>
 
-        <nav aria-label="Navegación principal" className="mt-9 flex-1">
+        <nav aria-label="Navegación principal" className="mt-5 flex-1">
           <div>
             <p className="px-3.5 text-[0.65rem] font-extrabold tracking-[0.15em] text-ink-subtle uppercase">Tu club</p>
             <ul className="mt-2 space-y-1">{renderItems(primaryItems)}</ul>

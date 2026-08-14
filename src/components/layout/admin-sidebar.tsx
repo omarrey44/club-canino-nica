@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
-import { business } from '@/config/business'
+import { BrandLogo } from '@/components/ui/brand-logo'
 import { adminNavGroups, adminNavItems } from './admin-nav-items'
 import { cn } from '@/lib/utils'
 
@@ -21,15 +20,11 @@ export function AdminSidebar() {
   return (
     <aside className="hidden w-68 shrink-0 bg-navy-900 lg:block">
       <div className="sticky top-0 flex h-dvh flex-col p-4">
-        <Link href="/admin" className="flex items-center gap-3 rounded-field px-2 py-2">
-          <Image src="/brand/icon.svg" width={42} height={42} alt="" className="size-10.5 rounded-[0.8rem] shadow-card" priority />
-          <span>
-            <span className="block font-display text-sm leading-tight text-white">{business.shortName}</span>
-            <span className="block text-[0.6rem] font-extrabold tracking-[0.13em] text-brand-300 uppercase">Panel operativo</span>
-          </span>
+        <Link href="/admin" className="mx-auto flex rounded-field" aria-label="Ir al dashboard">
+          <BrandLogo decorative priority sizes="144px" className="w-36" />
         </Link>
 
-        <nav aria-label="Navegación del panel" className="mt-6 min-h-0 flex-1 overflow-y-auto">
+        <nav aria-label="Navegación del panel" className="mt-3 min-h-0 flex-1 overflow-y-auto">
           <div className="space-y-5">
             {adminNavGroups.map((group) => (
               <div key={group.label}>
@@ -82,7 +77,15 @@ export function AdminMobileNav() {
       aria-label="Navegación del panel"
       className="sticky top-0 z-30 border-b border-navy-700 bg-navy-900 shadow-raised lg:hidden"
     >
-      <ul className="flex gap-1 overflow-x-auto px-3 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-center gap-1 px-2 py-1.5">
+        <Link
+          href="/admin"
+          aria-label="Ir al dashboard"
+          className="flex size-12 shrink-0 items-center justify-center rounded-[0.8rem] bg-white"
+        >
+          <BrandLogo decorative sizes="44px" className="w-11" />
+        </Link>
+        <ul className="flex min-w-0 flex-1 gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {adminNavItems.map(({ href, label, icon: Icon }) => {
           const active = isActive(href)
 
@@ -102,7 +105,8 @@ export function AdminMobileNav() {
             </li>
           )
         })}
-      </ul>
+        </ul>
+      </div>
     </nav>
   )
 }

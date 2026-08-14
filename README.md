@@ -31,7 +31,10 @@ usarse de pie, con el celular en la mano.
 | Flujo de reserva en cinco pasos, con precio visible en todo momento | Listo |
 | Mis reservaciones con filtros, detalle, desglose del cobro y cancelacion | Listo |
 | Agenda del panel por dia y semana, con confirmar y cancelar | Listo |
-| Estancias, camaras, pagos en linea, notificaciones | Por fases |
+| Check-in con alertas de cuidado, y check-out | Listo |
+| Estancia con registro rapido de actividades y ubicacion en vivo | Listo |
+| Timeline del dia para el propietario, con actualizacion automatica | Listo |
+| Camaras, pagos en linea, reportes diarios, notificaciones | Por fases |
 
 ---
 
@@ -193,12 +196,21 @@ Las otras dos necesitan `npm run dev` en otra terminal:
 ```bash
 npm run smoke           # rutas privadas y permisos
 npm run check:booking   # la Server Action de reserva, de punta a punta
+npm run check:stay      # el ciclo de estancia en un navegador real
 ```
 
 `check:booking` localiza el id de la Server Action en el manifiesto de Next y
 la invoca por HTTP con una sesion real. Cubre lo que ninguna prueba de
 renderizado alcanza: validacion, propiedad de la mascota, cupo, calculo del
 total y escritura en base. Crea dos reservaciones y las borra al terminar.
+
+`check:stay` usa Playwright porque las acciones de estancia reciben `FormData`
+desde componentes con `useActionState`, y eso no se puede invocar por HTTP sin
+falsificar la codificacion interna de React. Hace clic como lo hace el personal:
+check-in, registrar comida, registrar una nota interna, avisar que esta listo y
+check-out. Ademas abre una segunda sesion como propietaria y comprueba que la
+nota interna **no** aparezca en su pantalla, que es la clase de fallo que
+ninguna prueba de servidor detecta.
 
 ### Prueba de humo
 
@@ -295,8 +307,8 @@ El panel administrativo los muestra con una advertencia visible en
 | 1 | Arquitectura, base de datos, auth, roles, design system, layouts | Completada |
 | 2 | Dashboard del cliente, mascotas, perfiles, salud y vacunas | Completada |
 | 3 | Servicios, flujo de reservacion, administracion de reservaciones | Completada |
-| 4 | Check-in, estancias, actividades, timeline | Siguiente |
-| 5 | Fotografias, reportes diarios, historial | |
+| 4 | Check-in, estancias, actividades, timeline | Completada |
+| 5 | Fotografias, reportes diarios, historial | Siguiente |
 | 6 | Camaras, permisos, player demo | |
 | 7 | Pagos con Stripe sandbox | |
 | 8 | Notificaciones | |

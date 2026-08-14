@@ -34,9 +34,9 @@ export type PetFormDefaults = {
  * Formulario unico para alta y edicion.
  *
  * Se divide en dos bloques porque son dos momentos distintos: los datos
- * basicos se llenan de memoria, la informacion de cuidado hay que pensarla.
+ * basicos se llenan de memoria, la información de cuidado hay que pensarla.
  * Solo el nombre y el sexo son obligatorios; el resto se puede completar
- * despues, y forzarlo aqui haria que nadie termine el registro.
+ * despues, y forzarlo aquí haria que nadie termine el registro.
  */
 export function PetForm({
   action,
@@ -86,7 +86,7 @@ export function PetForm({
           </Field>
 
           <Field errors={errors.size}>
-            <Label>Tamano</Label>
+            <Label>Tamaño</Label>
             <Select name="size" defaultValue={defaults.size ?? 'MEDIUM'}>
               {Object.entries(petSizeLabels).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -115,7 +115,7 @@ export function PetForm({
           </Field>
 
           <Field errors={errors.colorMarks}>
-            <Label>Color y senas</Label>
+            <Label>Color y señas</Label>
             <Input
               name="colorMarks"
               defaultValue={defaults.colorMarks ?? ''}
@@ -124,7 +124,7 @@ export function PetForm({
           </Field>
 
           <Field errors={errors.temperament} className="sm:col-span-2">
-            <Label>Caracter</Label>
+            <Label>Carácter</Label>
             <Textarea
               name="temperament"
               rows={2}
@@ -138,7 +138,7 @@ export function PetForm({
 
       <Card>
         <CardHeader>
-          <CardTitle>Informacion de cuidado</CardTitle>
+          <CardTitle>Información de cuidado</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field errors={errors.allergies}>
@@ -159,12 +159,12 @@ export function PetForm({
               defaultValue={defaults.medicalConditions ?? ''}
             />
             <Hint>
-              Esta informacion es solo para el equipo del club. No sustituye a tu veterinario.
+              Esta información es solo para el equipo del club. No sustituye a tu veterinario.
             </Hint>
           </Field>
 
           <Field errors={errors.dietNotes}>
-            <Label>Alimentacion</Label>
+            <Label>Alimentación</Label>
             <Input
               name="dietNotes"
               defaultValue={defaults.dietNotes ?? ''}
@@ -191,12 +191,12 @@ export function PetForm({
           </Field>
 
           <Field errors={errors.vetPhone}>
-            <Label>Telefono del veterinario</Label>
+            <Label>Teléfono del veterinario</Label>
             <Input type="tel" name="vetPhone" inputMode="tel" defaultValue={defaults.vetPhone ?? ''} />
           </Field>
 
           <Field errors={errors.vetClinic} className="sm:col-span-2">
-            <Label>Clinica</Label>
+            <Label>Clínica</Label>
             <Input name="vetClinic" defaultValue={defaults.vetClinic ?? ''} />
           </Field>
 

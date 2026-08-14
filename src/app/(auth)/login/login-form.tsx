@@ -15,46 +15,46 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <form action={action} className="space-y-5" noValidate>
+    <form action={action} className="space-y-6" noValidate>
       {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
 
       {state.status === 'error' && state.message && (
         <Alert tone="danger">{state.message}</Alert>
       )}
 
-      <Field errors={state.fieldErrors?.email}>
-        <Label>Correo electrónico</Label>
+      <Field errors={state.fieldErrors?.email} className="gap-2">
+        <Label className="text-[0.95rem]">Correo electrónico</Label>
         <div className="relative">
-          <Mail className="pointer-events-none absolute top-1/2 left-4 size-4.5 -translate-y-1/2 text-ink-subtle" aria-hidden />
+          <Mail className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-navy-800" aria-hidden />
           <Input
             name="email"
             type="email"
             autoComplete="email"
             inputMode="email"
             placeholder="tu@correo.com"
-            className="pl-11"
+            className="h-14 bg-white pl-12"
             required
           />
         </div>
       </Field>
 
-      <Field errors={state.fieldErrors?.password}>
+      <Field errors={state.fieldErrors?.password} className="gap-2">
         <div className="flex items-baseline justify-between">
-          <Label>Contraseña</Label>
+          <Label className="text-[0.95rem]">Contraseña</Label>
           <Link
             href="/recuperar"
-            className="text-sm font-bold text-brand-700 underline-offset-4 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-bold text-brand-700 underline-offset-4 transition-colors hover:text-brand-800 hover:underline"
           >
             Olvidé mi contraseña
           </Link>
         </div>
         <div className="relative">
-          <LockKeyhole className="pointer-events-none absolute top-1/2 left-4 size-4.5 -translate-y-1/2 text-ink-subtle" aria-hidden />
+          <LockKeyhole className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-navy-800" aria-hidden />
           <Input
             name="password"
             type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
-            className="pr-12 pl-11"
+            className="h-14 bg-white pr-12 pl-12"
             required
           />
           <button
@@ -62,20 +62,27 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
             onClick={() => setShowPassword((visible) => !visible)}
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             aria-pressed={showPassword}
-            className="absolute inset-y-0 right-1 flex w-11 items-center justify-center rounded-field text-ink-muted transition-colors hover:bg-navy-50 hover:text-navy-800"
+            className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-field text-navy-700 transition-colors hover:bg-navy-50 hover:text-navy-900"
           >
             {showPassword ? <EyeOff className="size-5" aria-hidden /> : <Eye className="size-5" aria-hidden />}
           </button>
         </div>
       </Field>
 
-      <Button type="submit" size="lg" block loading={pending} loadingLabel="Entrando">
+      <Button
+        type="submit"
+        size="lg"
+        block
+        loading={pending}
+        loadingLabel="Entrando"
+        className="text-lg"
+      >
         Entrar
         <ArrowRight aria-hidden />
       </Button>
 
-      <p className="flex items-center justify-center gap-2 text-xs font-semibold text-ink-muted">
-        <ShieldCheck className="size-4 text-success" aria-hidden />
+      <p className="flex items-center justify-center gap-2 text-sm font-semibold text-ink-muted">
+        <ShieldCheck className="size-5 text-success" aria-hidden />
         Acceso privado y protegido
       </p>
     </form>

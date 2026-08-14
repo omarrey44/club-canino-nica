@@ -25,20 +25,20 @@ export type ManagedService = {
 }
 
 const kindLabels: Record<string, string> = {
-  DAYCARE: 'Guarderia',
+  DAYCARE: 'Guardería',
   BOARDING: 'Hospedaje',
   ADDON: 'Adicional',
 }
 
 function unitLabel(kind: string, priceUnit: string): string {
   if (priceUnit === 'UNIT') return 'por servicio'
-  return kind === 'BOARDING' ? 'por noche' : 'por dia'
+  return kind === 'BOARDING' ? 'por noche' : 'por día'
 }
 
 /**
  * Administracion del catalogo.
  *
- * El formulario se abre en linea, debajo del servicio que se edita: son pocos
+ * El formulario se abre en línea, debajo del servicio que se edita: son pocos
  * servicios y llevar al usuario a otra pantalla por cambiar un precio le hace
  * perder el contexto de la lista.
  */
@@ -69,8 +69,8 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
       {services.length === 0 && !creating ? (
         <EmptyState
           icon={Sparkles}
-          title="Aun no hay servicios configurados"
-          description="Los precios viven aqui, no en el codigo: cambiarlos actualiza el flujo de reserva sin desplegar."
+          title="Aún no hay servicios configurados"
+          description="Los precios viven aquí, no en el código: cambiarlos actualiza el flujo de reserva sin desplegar."
         />
       ) : (
         <ul className="space-y-3">
@@ -97,7 +97,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
 
                   <p className="mt-1 text-sm text-ink-muted">
                     {service.dailyCapacity
-                      ? `Cupo ${service.dailyCapacity} por dia`
+                      ? `Cupo ${service.dailyCapacity} por día`
                       : 'Sin cupo maximo configurado'}
                     {service.reservationCount > 0 &&
                       ` · ${service.reservationCount} reservaciones`}

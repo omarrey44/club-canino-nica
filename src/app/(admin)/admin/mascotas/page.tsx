@@ -97,7 +97,7 @@ export default async function AdminPetsPage({
           description={
             q
               ? 'Prueba con el nombre del propietario o con la raza.'
-              : 'Las mascotas aparecen aqui cuando sus propietarios las registran.'
+              : 'Las mascotas aparecen aquí cuando sus propietarios las registran.'
           }
         />
       ) : (

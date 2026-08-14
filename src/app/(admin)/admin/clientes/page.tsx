@@ -11,7 +11,7 @@ export default function AdminClientsPage() {
       icon={Users}
       title="Clientes"
       description="Contacto, mascotas, reservaciones e historial de pagos."
-      emptyTitle="Aun no hay clientes registrados"
+      emptyTitle="Aún no hay clientes registrados"
       emptyDescription="Cada cliente mostrara sus mascotas, sus reservaciones y su historial en un solo lugar."
       phase="Fase 3"
     />

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import type { ActivityType } from '@/generated/prisma/client'
 import {
   Bone,
@@ -23,6 +25,10 @@ export type TimelineActivity = {
   type: ActivityType
   occurredAt: Date
   description: string | null
+  photoUrl?: string | null
+  /** Solo llega en la vista del personal; el cliente nunca ve las internas. */
+  isVisibleToOwner?: boolean
+  recordedBy?: { fullName: string } | null
 }
 
 const activityIcons: Record<ActivityType, LucideIcon> = {
@@ -40,17 +46,20 @@ const activityIcons: Record<ActivityType, LucideIcon> = {
 }
 
 /**
- * Linea de tiempo del dia.
+ * Linea de tiempo del día.
  *
  * Es una lista ordenada de verdad (`<ol>`): para quien navega con lector de
- * pantalla, el orden cronologico es la informacion principal.
+ * pantalla, el orden cronologico es la información principal.
  */
 export function ActivityTimeline({
   activities,
   className,
+  /** Vista del personal: agrega autor y marca lo que el propietario no ve. */
+  showInternal = false,
 }: {
   activities: TimelineActivity[]
   className?: string
+  showInternal?: boolean
 }) {
   return (
     <ol className={cn('space-y-0', className)}>
@@ -80,9 +89,33 @@ export function ActivityTimeline({
                 >
                   {formatTime(activity.occurredAt)}
                 </time>
+                {showInternal && activity.isVisibleToOwner === false && (
+                  <span className="rounded-pill bg-navy-100 px-2 py-0.5 text-2xs font-bold text-navy-600">
+                    Solo interno
+                  </span>
+                )}
               </div>
+
               {activity.description && (
                 <p className="mt-1 text-sm leading-relaxed text-ink-muted">{activity.description}</p>
+              )}
+
+              {activity.photoUrl && (
+                <div className="relative mt-2 aspect-[4/3] max-w-xs overflow-hidden rounded-field bg-navy-50">
+                  <Image
+                    src={activity.photoUrl}
+                    alt={activity.description ?? activityTypeLabels[activity.type]}
+                    fill
+                    sizes="(max-width: 640px) 90vw, 320px"
+                    className="object-cover"
+                  />
+                </div>
+              )}
+
+              {showInternal && activity.recordedBy && (
+                <p className="mt-1 text-2xs text-ink-subtle">
+                  Registrado por {activity.recordedBy.fullName}
+                </p>
               )}
             </div>
           </li>

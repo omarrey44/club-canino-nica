@@ -9,7 +9,7 @@ import { Field, Input, Label } from '@/components/ui/field'
 import { cancelReservation } from '@/server/actions/reservations'
 
 /**
- * Cancelar es irreversible desde la app, asi que pide confirmacion explicita
+ * Cancelar es irreversible desde la app, asi que pide confirmación explícita
  * en vez de un solo toque.
  */
 export function CancelReservationButton({ reservationId }: { reservationId: string }) {
@@ -22,7 +22,7 @@ export function CancelReservationButton({ reservationId }: { reservationId: stri
     return (
       <Button variant="outline" onClick={() => setConfirming(true)}>
         <X aria-hidden />
-        Cancelar reservacion
+        Cancelar reservación
       </Button>
     )
   }
@@ -30,7 +30,7 @@ export function CancelReservationButton({ reservationId }: { reservationId: stri
   return (
     <div className="w-full space-y-3 rounded-card border border-danger/30 bg-danger-soft p-4">
       <p className="text-sm font-semibold text-ink">
-        Se cancelara esta reservacion y el lugar quedara libre. No se puede deshacer.
+        Se cancelará esta reservación y el lugar quedará libre. No se puede deshacer.
       </p>
 
       {error && <Alert tone="danger">{error}</Alert>}
@@ -54,12 +54,12 @@ export function CancelReservationButton({ reservationId }: { reservationId: stri
             startTransition(async () => {
               const result = await cancelReservation({ reservationId, reason })
               if (result?.status === 'error') {
-                setError(result.message ?? 'No pudimos cancelar la reservacion.')
+                setError(result.message ?? 'No pudimos cancelar la reservación.')
               }
             })
           }
         >
-          Si, cancelar
+          Sí, cancelar
         </Button>
         <Button variant="ghost" onClick={() => setConfirming(false)} disabled={pending}>
           Mejor no

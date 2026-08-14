@@ -29,7 +29,7 @@ export const serviceSchema = z.object({
     .or(z.literal(''))
     .transform((value) => (value ? Number(value) : null))
     .refine((n) => n === null || (Number.isInteger(n) && n > 0 && n <= 1440), {
-      message: 'La duracion va en minutos, entre 1 y 1440.',
+      message: 'La duración va en minutos, entre 1 y 1440.',
     }),
 
   /** Vacio significa "sin limite configurado", no cero. */

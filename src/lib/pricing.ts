@@ -1,10 +1,10 @@
 /**
- * Cotizacion de una reservacion.
+ * Cotizacion de una reservación.
  *
  * Puro y sin dependencias: lo usa el navegador para mostrar el total mientras
  * el cliente arma su reserva, y el servidor para calcularlo de verdad al
  * guardarla. El precio que llega del formulario NUNCA se guarda; se recalcula
- * aqui con los precios que estan en base de datos en ese momento.
+ * aquí con los precios que estan en base de datos en ese momento.
  *
  * Todo el dinero se maneja en centavos enteros. Con decimales, 0.1 + 0.2 deja
  * de ser 0.3 y los totales empiezan a descuadrar por un centavo.
@@ -34,7 +34,7 @@ export type QuoteLine = {
 }
 
 export type Quote = {
-  /** Unidades cobradas del servicio principal: dias o noches. */
+  /** Unidades cobradas del servicio principal: días o noches. */
   units: number
   unitLabel: string
   lines: QuoteLine[]
@@ -54,13 +54,13 @@ export function fromCents(cents: number): number {
 /**
  * Unidades cobrables.
  *
- * Guarderia se cobra por dia calendario de asistencia: entrar y salir el mismo
- * dia es un dia, no cero. Hospedaje se cobra por noche, que es como lo entiende
+ * Guardería se cobra por día calendario de asistencia: entrar y salir el mismo
+ * dia es un día, no cero. Hospedaje se cobra por noche, que es como lo entiende
  * cualquiera que haya reservado un hotel: del lunes al miercoles son dos noches.
  *
- * Los dias se cuentan en el calendario del club, no en UTC. Una jornada de
- * guarderia de 8:00 a 18:00 en Managua cruza la medianoche UTC, y contarla en
- * UTC cobraria dos dias por un solo dia de estancia.
+ * Los días se cuentan en el calendario del club, no en UTC. Una jornada de
+ * guardería de 8:00 a 18:00 en Managua cruza la medianoche UTC, y contarla en
+ * UTC cobraria dos días por un solo dia de estancia.
  */
 export function billableUnits(
   kind: ServiceKindForPricing,
@@ -75,7 +75,7 @@ export function billableUnits(
   }
 
   const attended = Math.max(1, days + 1)
-  return { units: attended, label: attended === 1 ? 'dia' : 'dias' }
+  return { units: attended, label: attended === 1 ? 'día' : 'días' }
 }
 
 export function quote({

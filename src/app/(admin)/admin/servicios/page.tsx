@@ -19,7 +19,7 @@ export default async function AdminServicesPage() {
       <PageHeader
         eyebrow="Catalogo"
         title="Servicios"
-        description="Precios, duracion y cupos. Lo que se cambia aqui aplica a las reservas nuevas."
+        description="Precios, duración y cupos. Lo que se cambia aquí aplica a las reservas nuevas."
       />
 
       <Alert tone="warning">

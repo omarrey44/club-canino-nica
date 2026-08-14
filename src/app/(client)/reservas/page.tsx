@@ -22,20 +22,20 @@ const FILTERS: ClientReservationFilter[] = ['upcoming', 'active', 'past', 'cance
 
 const emptyCopy: Record<ClientReservationFilter, { title: string; description: string }> = {
   upcoming: {
-    title: 'No tienes reservaciones proximas',
-    description: 'Aparta el lugar de tu mascota y la veras aqui con su fecha y horario.',
+    title: 'No tienes reservaciones próximas',
+    description: 'Aparta el lugar de tu mascota y la veras aquí con su fecha y horario.',
   },
   active: {
     title: 'Ninguna mascota en el club ahora',
     description: 'Cuando tu mascota ingrese, su estancia aparecera en esta pestana.',
   },
   past: {
-    title: 'Todavia no hay estancias finalizadas',
-    description: 'Aqui quedara el historial de cada visita al club.',
+    title: 'Todavía no hay estancias finalizadas',
+    description: 'Aquí quedará el historial de cada visita al club.',
   },
   cancelled: {
-    title: 'No has cancelado ninguna reservacion',
-    description: 'Las reservaciones canceladas se guardan aqui como referencia.',
+    title: 'No has cancelado ninguna reservación',
+    description: 'Las reservaciones canceladas se guardan aquí como referencia.',
   },
 }
 
@@ -93,7 +93,7 @@ export default async function ReservationsPage({
       <PageHeader
         eyebrow="Tus estancias"
         title="Mis reservaciones"
-        description="Proximas, activas y finalizadas."
+        description="Próximas, activas y finalizadas."
         action={
           <LinkButton size="sm" href="/reservas/nueva">
             <Plus aria-hidden />

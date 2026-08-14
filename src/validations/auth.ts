@@ -24,7 +24,7 @@ export const registerSchema = z
     phone: z
       .string()
       .trim()
-      .min(8, 'El telefono necesita al menos 8 digitos.')
+      .min(8, 'El teléfono necesita al menos 8 digitos.')
       .max(20)
       .optional()
       .or(z.literal('')),
@@ -32,7 +32,7 @@ export const registerSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Las contrasenas no coinciden.',
+    message: 'Las contraseñas no coinciden.',
     path: ['confirmPassword'],
   })
 
@@ -44,7 +44,7 @@ export const resetPasswordSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Las contrasenas no coinciden.',
+    message: 'Las contraseñas no coinciden.',
     path: ['confirmPassword'],
   })
 

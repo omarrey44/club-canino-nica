@@ -44,7 +44,7 @@ export const petSchema = z.object({
 })
 
 /**
- * Informacion de cuidado, no expediente clinico. El personal la consulta
+ * Información de cuidado, no expediente clinico. El personal la consulta
  * durante la estancia; la plataforma no interpreta nada de esto.
  */
 export const petMedicalSchema = z.object({
@@ -66,7 +66,7 @@ export const petMedicalSchema = z.object({
 export const emergencyContactSchema = z.object({
   name: z.string().trim().min(2, 'Escribe el nombre del contacto.').max(120),
   relationship: optionalText(60),
-  phone: z.string().trim().min(8, 'El telefono necesita al menos 8 digitos.').max(30),
+  phone: z.string().trim().min(8, 'El teléfono necesita al menos 8 digitos.').max(30),
 })
 
 export const vaccinationSchema = z

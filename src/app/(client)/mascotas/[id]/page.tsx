@@ -96,15 +96,15 @@ export default async function PetDetailPage({ params }: Props) {
         <CardContent>
           <dl className="divide-y divide-line text-sm">
             <Row label="Sexo" value={petSexLabels[pet.sex]} />
-            <Row label="Tamano" value={petSizeLabels[pet.size]} />
+            <Row label="Tamaño" value={petSizeLabels[pet.size]} />
             <Row label="Edad" value={formatAge(pet.birthDate)} />
             <Row
               label="Fecha de nacimiento"
               value={pet.birthDate ? formatDate(pet.birthDate) : null}
             />
             <Row label="Peso" value={pet.weightKg ? `${pet.weightKg} kg` : null} />
-            <Row label="Color y senas" value={pet.colorMarks} />
-            <Row label="Caracter" value={pet.temperament} />
+            <Row label="Color y señas" value={pet.colorMarks} />
+            <Row label="Carácter" value={pet.temperament} />
           </dl>
         </CardContent>
       </Card>
@@ -125,7 +125,7 @@ export default async function PetDetailPage({ params }: Props) {
               <Row label="Alergias" value={medical.allergies} />
               <Row label="Medicamentos" value={medical.medications} />
               <Row label="Condiciones" value={medical.medicalConditions} />
-              <Row label="Alimentacion" value={medical.dietNotes} />
+              <Row label="Alimentación" value={medical.dietNotes} />
               <Row label="Horario de comida" value={medical.feedingSchedule} />
               <Row label="Esterilizado" value={medical.isSterilized ? 'Si' : null} />
             </dl>
@@ -141,8 +141,8 @@ export default async function PetDetailPage({ params }: Props) {
           <CardContent>
             <dl className="divide-y divide-line text-sm">
               <Row label="Nombre" value={medical.vetName} />
-              <Row label="Telefono" value={medical.vetPhone} />
-              <Row label="Clinica" value={medical.vetClinic} />
+              <Row label="Teléfono" value={medical.vetPhone} />
+              <Row label="Clínica" value={medical.vetClinic} />
             </dl>
           </CardContent>
         </Card>

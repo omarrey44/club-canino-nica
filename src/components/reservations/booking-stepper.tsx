@@ -25,7 +25,7 @@ const STEPS = ['Mascota', 'Servicio', 'Fechas', 'Adicionales', 'Resumen'] as con
  * Todo el estado vive en el navegador y se guarda una sola vez, al confirmar:
  * un flujo abandonado no debe dejar filas a medias en la base.
  *
- * El total se calcula aqui solo para mostrarlo. El servidor lo vuelve a
+ * El total se calcula aquí solo para mostrarlo. El servidor lo vuelve a
  * calcular con los precios vigentes, porque nada que venga del navegador puede
  * decidir cuanto se cobra.
  */
@@ -264,7 +264,7 @@ export function BookingStepper({
               <Alert tone="info">
                 <span className="flex items-start gap-1.5">
                   <CreditCard className="sr-only" aria-hidden />
-                  El pago en linea llega pronto. Por ahora apartamos el lugar y coordinamos el
+                  El pago en línea llega pronto. Por ahora apartamos el lugar y coordinamos el
                   pago contigo al confirmar.
                 </span>
               </Alert>

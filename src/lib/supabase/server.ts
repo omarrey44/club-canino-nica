@@ -25,7 +25,7 @@ export async function createClient() {
             }
           } catch {
             // Los Server Components no pueden escribir cookies. La renovacion de
-            // sesion la hace proxy.ts, asi que ignorar aqui es seguro.
+            // sesion la hace proxy.ts, asi que ignorar aquí es seguro.
           }
         },
       },

@@ -53,5 +53,5 @@ export type BookableService = Awaited<ReturnType<typeof getBookableServices>>['m
 /** Texto de la unidad de cobro, para no repetirlo en cada pantalla. */
 export function priceUnitLabel(kind: ServiceKind, priceUnit: string): string {
   if (priceUnit === 'UNIT') return 'por servicio'
-  return kind === 'BOARDING' ? 'por noche' : 'por dia'
+  return kind === 'BOARDING' ? 'por noche' : 'por día'
 }

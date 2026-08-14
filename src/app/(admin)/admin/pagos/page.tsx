@@ -10,7 +10,7 @@ export default function AdminPaymentsPage() {
     <PhasePlaceholder
       icon={CreditCard}
       title="Pagos"
-      description="Estado de cobro de cada reservacion."
+      description="Estado de cobro de cada reservación."
       emptyTitle="No hay pagos registrados"
       emptyDescription="Se guarda solo el estado y la referencia del proveedor. Ningun dato de tarjeta pasa por la plataforma."
       phase="Fase 7"

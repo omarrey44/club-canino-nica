@@ -10,7 +10,7 @@ export default function AdminReportsPage() {
     <PhasePlaceholder
       icon={FileText}
       title="Reportes diarios"
-      description="El resumen del dia que recibe cada propietario."
+      description="El resumen del día que recibe cada propietario."
       emptyTitle="No hay reportes pendientes"
       emptyDescription="El formulario se precarga con las actividades ya registradas para no capturar lo mismo dos veces."
       phase="Fase 5"

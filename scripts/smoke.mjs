@@ -114,6 +114,9 @@ if (reservaId) {
   console.log('\n   FALTA no se pudo extraer el id de una reservacion')
 }
 
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/check-in', ['Entradas de hoy'])
+await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/estancias', ['Estancias'])
+await check('CLIENTE', 'camila@correo.com', '/mi-mascota', ['Su día, paso a paso'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones', ['Reservaciones'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/reservaciones?rango=week', ['Semana'])
 await check('ADMIN ', 'admin@clubcaninonica.com', '/admin/servicios', [

@@ -49,14 +49,14 @@ export function ServiceForm({
         </Field>
 
         <Field errors={errors.description} className="sm:col-span-2">
-          <Label>Descripcion</Label>
+          <Label>Descripción</Label>
           <Textarea name="description" rows={2} defaultValue={defaults.description ?? ''} />
         </Field>
 
         <Field errors={errors.kind}>
           <Label>Tipo</Label>
           <Select name="kind" defaultValue={defaults.kind ?? 'DAYCARE'}>
-            <option value="DAYCARE">Guarderia de dia</option>
+            <option value="DAYCARE">Guardería de día</option>
             <option value="BOARDING">Hospedaje</option>
             <option value="ADDON">Adicional</option>
           </Select>
@@ -84,7 +84,7 @@ export function ServiceForm({
         </Field>
 
         <Field errors={errors.durationMinutes}>
-          <Label>Duracion (minutos)</Label>
+          <Label>Duración (minutos)</Label>
           <Input
             type="number"
             name="durationMinutes"
@@ -105,7 +105,7 @@ export function ServiceForm({
           />
           <Hint>
             Dejalo vacio si no hay limite. Con un cupo puesto, el flujo de reserva bloquea los
-            dias llenos.
+            días llenos.
           </Hint>
         </Field>
 

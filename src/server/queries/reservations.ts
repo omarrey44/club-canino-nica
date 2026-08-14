@@ -15,7 +15,7 @@ const statusesByFilter: Record<ClientReservationFilter, ReservationStatus[]> = {
 }
 
 export const clientFilterLabels: Record<ClientReservationFilter, string> = {
-  upcoming: 'Proximas',
+  upcoming: 'Próximas',
   active: 'Activas',
   past: 'Finalizadas',
   cancelled: 'Canceladas',
@@ -39,7 +39,7 @@ export async function getClientReservations(
 ) {
   return prisma.reservation.findMany({
     where: { clientId: user.id, status: { in: statusesByFilter[filter] } },
-    // Las proximas se leen de la mas cercana en adelante; el historial, al reves.
+    // Las próximas se leen de la mas cercana en adelante; el historial, al reves.
     orderBy: { startAt: filter === 'upcoming' || filter === 'active' ? 'asc' : 'desc' },
     take: 100,
     select: cardSelect,
@@ -47,7 +47,7 @@ export async function getClientReservations(
 }
 
 /**
- * Detalle de una reservacion.
+ * Detalle de una reservación.
  *
  * El filtro de propiedad va en el mismo `where` que el id: un cliente solo
  * alcanza las suyas, el personal las de su organizacion.

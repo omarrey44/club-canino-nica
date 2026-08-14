@@ -65,7 +65,7 @@ export function VaccinationSection({
 
         {vaccinations.length === 0 && !open && (
           <p className="text-sm text-ink-muted">
-            Aun no hay vacunas registradas. Manten el esquema al dia para que tu mascota
+            Aún no hay vacunas registradas. Manten el esquema al dia para que tu mascota
             pueda quedarse en el club.
           </p>
         )}

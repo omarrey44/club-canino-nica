@@ -51,7 +51,7 @@ export default async function NewReservationPage() {
         <EmptyState
           icon={PawPrint}
           title="No hay servicios disponibles"
-          description="El club aun no publica su catalogo. Escribenos y te ayudamos a reservar."
+          description="El club aún no publica su catalogo. Escribenos y te ayudamos a reservar."
         />
       ) : (
         <BookingStepper

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 
 /**
  * Punto de aterrizaje de los enlaces que Supabase envia por correo
- * (confirmacion de cuenta y restablecimiento de contrasena).
+ * (confirmación de cuenta y restablecimiento de contrasena).
  * Cambia el `code` por una sesion y redirige adentro de la app.
  */
 export async function GET(request: NextRequest) {

@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         <header className="hidden items-center justify-between gap-4 border-b border-line bg-surface px-7 py-3.5 lg:flex">
           <p className="text-sm text-ink-muted">
-            Sesion de <span className="font-medium text-ink">{user.fullName}</span>
+            Sesión de <span className="font-medium text-ink">{user.fullName}</span>
           </p>
           <LogoutButton />
         </header>

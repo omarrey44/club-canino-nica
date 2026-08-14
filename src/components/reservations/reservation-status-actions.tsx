@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { setReservationStatus } from '@/server/actions/reservations'
 
 /**
- * Acciones rapidas de recepcion. Solo aparecen las transiciones que el estado
+ * Acciones rapidas de recepción. Solo aparecen las transiciones que el estado
  * actual permite, para que nadie tenga que recordar cual aplica.
  */
 export function ReservationStatusActions({
@@ -50,7 +50,7 @@ export function ReservationStatusActions({
             onClick={() => run('CANCELLED')}
           >
             <X aria-hidden />
-            <span className="sr-only">Cancelar reservacion</span>
+            <span className="sr-only">Cancelar reservación</span>
           </Button>
         )}
       </div>

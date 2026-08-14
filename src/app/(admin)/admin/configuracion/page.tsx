@@ -8,10 +8,10 @@ import { business } from '@/config/business'
 import { getOrganization } from '@/server/organization'
 import { requireRole } from '@/server/auth/session'
 
-export const metadata: Metadata = { title: 'Configuracion' }
+export const metadata: Metadata = { title: 'Configuración' }
 
 export default async function AdminSettingsPage() {
-  // Configuracion del negocio: solo administradores, no todo el personal.
+  // Configuración del negocio: solo administradores, no todo el personal.
   await requireRole('ADMIN', 'SUPER_ADMIN')
   const organization = await getOrganization()
 
@@ -19,24 +19,24 @@ export default async function AdminSettingsPage() {
     ['Nombre', organization.name],
     ['Zona horaria', organization.timezone],
     ['Moneda', organization.currency],
-    ['Telefono', business.contact.phone],
+    ['Teléfono', business.contact.phone],
     ['Correo', business.contact.email],
     ['Direccion', business.contact.address],
-    ['Horario guarderia', `${business.hours.daycareOpen} – ${business.hours.daycareClose}`],
+    ['Horario guardería', `${business.hours.daycareOpen} – ${business.hours.daycareClose}`],
     ['Impuesto', `${business.billing.taxLabel} ${(business.billing.taxRate * 100).toFixed(0)}%`],
   ]
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Configuracion"
+        title="Configuración"
         description="Datos del negocio que usa toda la plataforma."
       />
 
       <Alert tone="warning">
         <span className="flex items-start gap-1.5">
           <AlertTriangle className="sr-only" aria-hidden />
-          Telefono, direccion, horarios e impuestos son valores <strong>DEMO</strong>. No son
+          Teléfono, direccion, horarios e impuestos son valores <strong>DEMO</strong>. No son
           datos oficiales de {business.name} y deben confirmarse antes de mostrar la
           plataforma a clientes reales.
         </span>

@@ -8,7 +8,7 @@ import type { SessionUser } from '@/server/auth/session'
  *
  * No registra lecturas ni cada guardado trivial: solo lo que alguien podria
  * necesitar reconstruir despues (cambios de reserva, pagos, datos medicos,
- * permisos de camara, estados de estancia).
+ * permisos de cámara, estados de estancia).
  *
  * `changes` guarda el delta, nunca el registro completo: un log de auditoria
  * lleno de datos personales duplicados es un problema, no una ayuda.

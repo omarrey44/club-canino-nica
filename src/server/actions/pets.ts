@@ -33,7 +33,7 @@ export async function createPet(_prev: ActionState, formData: FormData): Promise
   }
   if (!parsedMedical.success) {
     return errorState(
-      'Revisa la informacion de cuidado.',
+      'Revisa la información de cuidado.',
       parsedMedical.error.flatten().fieldErrors
     )
   }
@@ -79,7 +79,7 @@ export async function updatePet(
   }
   if (!parsedMedical.success) {
     return errorState(
-      'Revisa la informacion de cuidado.',
+      'Revisa la información de cuidado.',
       parsedMedical.error.flatten().fieldErrors
     )
   }

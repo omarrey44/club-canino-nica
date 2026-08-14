@@ -57,12 +57,12 @@ export default async function ClientHomePage() {
       ) : null}
 
       {nextReservation && (
-        <section className="space-y-3.5" aria-labelledby="proxima-reservacion">
+        <section className="space-y-3.5" aria-labelledby="próxima-reservación">
           <div className="flex items-center gap-3">
             <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-info-soft text-info">
               <CalendarPlus className="size-4.5" aria-hidden />
             </span>
-            <h2 id="proxima-reservacion" className="text-xl text-navy-900">
+            <h2 id="próxima-reservación" className="text-xl text-navy-900">
               Próxima reservación
             </h2>
           </div>

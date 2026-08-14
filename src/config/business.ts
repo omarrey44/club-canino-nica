@@ -1,20 +1,22 @@
 /**
- * Configuracion de negocio centralizada.
+ * Configuración de negocio centralizada.
  *
- * Regla: ningun componente escribe "Club Canino Nica" ni un telefono ni un precio
- * directamente. Todo pasa por aqui. Cuando la plataforma se venda a otra guarderia,
+ * Regla: ningun componente escribe "Club Canino Nica" ni un teléfono ni un precio
+ * directamente. Todo pasa por aquí. Cuando la plataforma se venda a otra guardería,
  * esto se lee de `Organization.settings` en base de datos y este archivo queda
  * solo como valores por defecto.
  *
  * IMPORTANTE: los campos marcados DEMO no son datos oficiales de Club Canino Nica.
- * Todavia no estan definidos por el negocio. Ver README > "Datos pendientes".
+ * Todavía no estan definidos por el negocio. Ver README > "Datos pendientes".
  */
 
 export const business = {
   name: 'Club Canino Nica',
   shortName: 'Club Canino',
   tagline: 'Cuidamos a tu mejor amigo, y te mantenemos al tanto.',
-  logoUrl: '/brand/logo.svg',
+  logoUrl: '/brand/logo-oficial.png',
+  appIconUrl: '/brand/logo-oficial-app.png',
+  maskableIconUrl: '/brand/logo-oficial-maskable.png',
 
   locale: 'es-NI',
   timezone: 'America/Managua',
@@ -30,7 +32,7 @@ export const business = {
     whatsapp: '+505 0000 0000',
   },
 
-  /** DEMO — horarios de operacion aun no definidos oficialmente. */
+  /** DEMO — horarios de operacion aún no definidos oficialmente. */
   hours: {
     isDemo: true,
     daycareOpen: '07:00',
@@ -45,7 +47,7 @@ export const business = {
     taxRate: 0.15,
     taxLabel: 'IVA',
     cancellationPolicy:
-      'Politica de cancelacion pendiente de definir. Este texto es de demostracion.',
+      'Politica de cancelación pendiente de definir. Este texto es de demostracion.',
   },
 } as const
 

@@ -41,7 +41,7 @@ export function PhotoUploader({
             type="file"
             name="photo"
             accept="image/jpeg,image/png,image/webp"
-            // `capture` no se fuerza: en movil el sistema ofrece camara y galeria.
+            // `capture` no se fuerza: en movil el sistema ofrece cámara y galeria.
             className="sr-only"
             disabled={pending}
             onChange={(event) => {

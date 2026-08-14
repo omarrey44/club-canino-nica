@@ -67,7 +67,7 @@ export function StepService({
                 {formatCurrency(service.basePrice)}
               </p>
               <p className="text-2xs text-ink-subtle">
-                {service.kind === 'BOARDING' ? 'por noche' : 'por dia'}
+                {service.kind === 'BOARDING' ? 'por noche' : 'por día'}
               </p>
             </div>
           }
@@ -98,7 +98,7 @@ export function StepDates({
   checking: boolean
   minDate: string
 }) {
-  // En guarderia la salida es el mismo dia: mostrar dos calendarios solo
+  // En guardería la salida es el mismo dia: mostrar dos calendarios solo
   // confundiria y permitiria rangos que el servicio no cubre.
   const isBoarding = service.kind === 'BOARDING'
 
@@ -172,8 +172,8 @@ export function StepDates({
         availability.remaining !== null && (
           <Alert tone={availability.remaining <= 3 ? 'warning' : 'success'}>
             {availability.remaining <= 3
-              ? `Quedan ${availability.remaining} lugares para ese dia.`
-              : 'Hay lugares disponibles para ese dia.'}
+              ? `Quedan ${availability.remaining} lugares para ese día.`
+              : 'Hay lugares disponibles para ese día.'}
           </Alert>
         )}
     </div>

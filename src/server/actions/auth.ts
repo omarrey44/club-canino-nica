@@ -48,7 +48,7 @@ export async function login(_prev: ActionState, formData: FormData): Promise<Act
 
   if (!user || !user.isActive) {
     await supabase.auth.signOut()
-    return errorState('Esta cuenta no esta activa. Contacta al equipo del club.')
+    return errorState('Esta cuenta no está activa. Contacta al equipo del club.')
   }
 
   // Solo rutas internas: un redirectTo absoluto seria un open redirect.
@@ -91,7 +91,7 @@ export async function register(_prev: ActionState, formData: FormData): Promise<
     return errorState('No pudimos crear tu cuenta. Intenta de nuevo en unos minutos.')
   }
 
-  // El rol se asigna aqui, no desde el formulario: registrarse siempre crea un
+  // El rol se asigna aquí, no desde el formulario: registrarse siempre crea un
   // CLIENT. Los roles internos los otorga un administrador.
   await prisma.user.upsert({
     where: { authUserId: data.user.id },
@@ -153,7 +153,7 @@ export async function resetPassword(
   } = await supabase.auth.getUser()
 
   // El enlace del correo deja una sesion de recuperacion activa. Sin ella,
-  // cualquiera podria cambiar contrasenas ajenas llamando esta accion.
+  // cualquiera podria cambiar contraseñas ajenas llamando esta accion.
   if (!user) {
     return errorState('El enlace expiro. Solicita uno nuevo desde "Olvide mi contrasena".')
   }

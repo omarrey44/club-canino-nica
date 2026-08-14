@@ -51,6 +51,13 @@ const cookie = `sb-${ref}-auth-token=base64-${Buffer.from(
   JSON.stringify(session.session)
 ).toString('base64')}`
 
+/**
+ * En desarrollo Next compila cada ruta la primera vez que se pide, y hasta
+ * entonces sus Server Actions no estan en el manifiesto. Hay que pedirla ya con
+ * sesion: sin ella el proxy redirige al login y la pagina no llega a compilarse.
+ */
+await fetch(`${BASE}/reservas/nueva`, { headers: { cookie } })
+
 // --- Datos de referencia -----------------------------------------------------
 
 const db = new Client({ connectionString: process.env.DIRECT_URL })

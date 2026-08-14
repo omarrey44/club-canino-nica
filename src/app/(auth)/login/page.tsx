@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { ChevronRight, PawPrint } from 'lucide-react'
 
 import { Alert } from '@/components/ui/alert'
 import { LoginForm } from './login-form'
@@ -19,13 +20,15 @@ export default async function LoginPage({
   const { redirectTo, error } = await searchParams
 
   return (
-    <div className="space-y-7">
-      <div className="space-y-2">
-        <p className="text-xs font-extrabold tracking-[0.15em] text-brand-600 uppercase">
+    <div className="space-y-8">
+      <div className="space-y-3">
+        <p className="text-[0.7rem] font-extrabold tracking-[0.2em] text-brand-600 uppercase lg:text-xs">
           Bienvenido de vuelta
         </p>
-        <h1 className="text-3xl leading-tight text-navy-900 sm:text-[2rem]">Qué gusto verte</h1>
-        <p className="leading-relaxed text-ink-muted">
+        <h1 className="font-sans text-[2.15rem] leading-[1.08] font-extrabold tracking-[-0.035em] text-navy-900 sm:text-[2.4rem] lg:text-[2.5rem]">
+          Qué gusto verte
+        </h1>
+        <p className="text-[1.05rem] leading-relaxed text-ink-muted">
           Entra para ver cómo está tu mascota y lo que ha hecho hoy.
         </p>
       </div>
@@ -34,12 +37,23 @@ export default async function LoginPage({
 
       <LoginForm redirectTo={redirectTo} />
 
-      <p className="border-t border-line pt-5 text-center text-sm text-ink-muted">
-        ¿Primera vez aquí?{' '}
-        <Link href="/registro" className="font-bold text-brand-700 underline-offset-4 hover:underline">
-          Crear cuenta
-        </Link>
-      </p>
+      <div className="space-y-4">
+        <div className="flex items-center gap-4" aria-hidden>
+          <span className="h-px flex-1 bg-brand-100" />
+          <PawPrint className="size-5 fill-brand-100 text-brand-100" />
+          <span className="h-px flex-1 bg-brand-100" />
+        </div>
+        <p className="flex flex-wrap items-center justify-center gap-x-2 text-center text-sm text-ink-muted">
+          <span>¿Primera vez aquí?</span>
+          <Link
+            href="/registro"
+            className="inline-flex min-h-11 items-center gap-1 font-extrabold text-brand-700 underline-offset-4 transition-colors hover:text-brand-800 hover:underline"
+          >
+            Crear cuenta
+            <ChevronRight className="size-4" aria-hidden />
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }

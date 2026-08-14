@@ -35,7 +35,7 @@ export default async function ProfilePage() {
               <dd className="text-right font-medium text-ink">{user.email}</dd>
             </div>
             <div className="flex justify-between gap-4 py-2.5">
-              <dt className="text-ink-muted">Telefono</dt>
+              <dt className="text-ink-muted">Teléfono</dt>
               <dd className="text-right font-medium text-ink">
                 {user.phone ?? 'Sin registrar'}
               </dd>

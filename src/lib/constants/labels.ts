@@ -81,15 +81,15 @@ export const paymentStatusTones: Record<PaymentStatus, Tone> = {
 
 export const activityTypeLabels: Record<ActivityType, string> = {
   CHECK_IN: 'Check-in',
-  FOOD: 'Alimentacion',
+  FOOD: 'Alimentación',
   WATER: 'Agua',
   PLAY: 'Juego',
   WALK: 'Paseo',
   REST: 'Descanso',
-  PHOTO: 'Fotografia',
+  PHOTO: 'Fotografía',
   MEDICATION: 'Medicamento',
-  GROOMING: 'Estetica',
-  NOTE: 'Observacion',
+  GROOMING: 'Estética',
+  NOTE: 'Observación',
   CHECK_OUT: 'Salida',
 }
 
@@ -99,7 +99,7 @@ export const petSexLabels: Record<PetSex, string> = {
 }
 
 export const petSizeLabels: Record<PetSize, string> = {
-  SMALL: 'Pequeno',
+  SMALL: 'Pequeño',
   MEDIUM: 'Mediano',
   LARGE: 'Grande',
   GIANT: 'Gigante',
@@ -133,18 +133,18 @@ export const moodLabels: Record<Mood, string> = {
 }
 
 export const notificationTypeLabels: Record<NotificationType, string> = {
-  RESERVATION_CONFIRMED: 'Reservacion confirmada',
+  RESERVATION_CONFIRMED: 'Reservación confirmada',
   PAYMENT_CONFIRMED: 'Pago confirmado',
   CHECK_IN: 'Ingreso registrado',
   NEW_ACTIVITY: 'Nueva actividad',
-  NEW_PHOTO: 'Nueva fotografia',
-  NEW_REPORT: 'Reporte del dia',
+  NEW_PHOTO: 'Nueva fotografía',
+  NEW_REPORT: 'Reporte del día',
   READY_FOR_PICKUP: 'Lista para recoger',
-  RESERVATION_REMINDER: 'Recordatorio de reservacion',
+  RESERVATION_REMINDER: 'Recordatorio de reservación',
   VACCINATION_DUE: 'Vacuna por vencer',
 }
 
-/** Estados de reservacion que el cliente ve bajo el filtro "proximas". */
+/** Estados de reservación que el cliente ve bajo el filtro "próximas". */
 export const upcomingReservationStatuses = ['PENDING', 'CONFIRMED'] as const
 
 /** Estados en los que la mascota esta fisicamente en el club. */
