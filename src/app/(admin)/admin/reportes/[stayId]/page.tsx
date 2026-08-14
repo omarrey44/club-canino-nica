@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, FileText } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -32,7 +32,7 @@ export default async function ReportEditorPage({ params }: Props) {
   const { stay, existing, suggestions } = context
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent mx-auto max-w-6xl space-y-4 sm:space-y-5">
       <Link
         href="/admin/reportes"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
@@ -45,12 +45,15 @@ export default async function ReportEditorPage({ params }: Props) {
         <PetAvatar name={stay.pet.name} photoUrl={stay.pet.photoUrl} size="lg" />
         <div className="min-w-0 flex-1">
           <PageHeader
+            eyebrow="Cierre del día"
+            icon={FileText}
             title={existing ? `Editar el reporte de ${stay.pet.name}` : `Reporte de ${stay.pet.name}`}
             description={`${stay.reservation.client.fullName} · ${stay.reservation.service.name} · entró ${formatTime(stay.checkInAt)}`}
           />
         </div>
       </header>
 
+      <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr] xl:items-start">
       <ReportForm
         stayId={stay.id}
         petName={stay.pet.name}
@@ -68,6 +71,7 @@ export default async function ReportEditorPage({ params }: Props) {
         }}
       />
 
+      <div className="space-y-4">
       {stay.activities.length > 0 && (
         <Card>
           <CardHeader>
@@ -89,6 +93,8 @@ export default async function ReportEditorPage({ params }: Props) {
           </CardContent>
         </Card>
       )}
+      </div>
+      </div>
     </div>
   )
 }

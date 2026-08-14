@@ -15,14 +15,16 @@ export const getUnreadCount = cache(async (userId: string): Promise<number> => {
   return prisma.notification.count({ where: { userId, readAt: null } })
 })
 
-export async function getNotifications(user: SessionUser, onlyUnread = false) {
+export const NOTIFICATIONS_PAGE_SIZE = 12
+
+export async function getNotifications(user: SessionUser, onlyUnread = false, page = 1) {
   return prisma.notification.findMany({
     where: { userId: user.id, ...(onlyUnread ? { readAt: null } : {}) },
     orderBy: { createdAt: 'desc' },
-    // Techo deliberado: nadie revisa más allá de esto, y evita traer el
-    // historial completo de un cliente con años de estancias.
-    // ponytail: límite fijo, paginar si alguien se queja de no ver más atrás.
-    take: 60,
+    skip: (Math.max(1, page) - 1) * NOTIFICATIONS_PAGE_SIZE,
+    // El registro adicional permite saber si existe una página siguiente
+    // sin ejecutar una segunda consulta de conteo.
+    take: NOTIFICATIONS_PAGE_SIZE + 1,
     select: {
       id: true,
       type: true,

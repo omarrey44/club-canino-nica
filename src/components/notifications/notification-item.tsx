@@ -84,14 +84,16 @@ export function NotificationItem({ notification }: { notification: NotificationI
             />
           )}
         </div>
-        <p className="mt-0.5 text-sm leading-relaxed text-ink-muted">{notification.body}</p>
+        <p className="mt-0.5 line-clamp-2 text-sm leading-relaxed text-ink-muted">
+          {notification.body}
+        </p>
         <p className="mt-1 text-2xs text-ink-subtle">{relativeTime(notification.createdAt)}</p>
       </div>
     </>
   )
 
   const classes = cn(
-    'flex w-full items-start gap-3.5 rounded-card border p-4 text-left transition-colors',
+    'flex w-full items-start gap-3 rounded-card border p-3 text-left transition-colors sm:gap-3.5 sm:p-4',
     unread ? 'border-brand-200 bg-brand-50/40' : 'border-line bg-surface',
     pending && 'opacity-60'
   )

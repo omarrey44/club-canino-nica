@@ -24,7 +24,7 @@ export function MobileBottomNav({ unreadCount = 0 }: { unreadCount?: number }) {
                 href={href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-14 flex-col items-center justify-center gap-0.5 text-[0.65rem] font-extrabold transition-colors',
+                  'flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-bold transition-colors',
                   active ? 'text-brand-700' : 'text-ink-muted'
                 )}
               >

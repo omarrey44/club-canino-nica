@@ -10,6 +10,7 @@ export type AdminDashboardStats = {
   pendingCheckIns: number
   pendingCheckOuts: number
   pendingReports: number
+  totalReservations: number
 }
 
 /**
@@ -24,7 +25,15 @@ export async function getAdminDashboardStats(
   const { start, end } = clubDayRange()
   const inOrg = { reservation: { organizationId } }
 
-  const [present, byKind, pendingCheckIns, pendingCheckOuts, staysToday, reportsToday] =
+  const [
+    present,
+    byKind,
+    pendingCheckIns,
+    pendingCheckOuts,
+    staysToday,
+    reportsToday,
+    totalReservations,
+  ] =
     await prisma.$transaction([
       prisma.stay.count({ where: { ...inOrg, status: { in: ['ACTIVE', 'READY_FOR_PICKUP'] } } }),
 
@@ -58,6 +67,10 @@ export async function getAdminDashboardStats(
         where: { reportDate: { gte: start, lt: end }, stay: inOrg },
         select: { stayId: true },
       }),
+
+      prisma.reservation.count({
+        where: { organizationId, startAt: { gte: start, lt: end } },
+      }),
     ])
 
   const reported = new Set(reportsToday.map((report) => report.stayId))
@@ -69,5 +82,25 @@ export async function getAdminDashboardStats(
     pendingCheckIns,
     pendingCheckOuts,
     pendingReports: staysToday.filter((stay) => !reported.has(stay.id)).length,
+    totalReservations,
   }
 }
+
+/** Últimos movimientos registrados por el equipo en las estancias del club. */
+export async function getRecentAdminActivity(organizationId: string) {
+  return prisma.petActivity.findMany({
+    where: { stay: { reservation: { organizationId } } },
+    orderBy: { occurredAt: 'desc' },
+    take: 3,
+    select: {
+      id: true,
+      type: true,
+      occurredAt: true,
+      description: true,
+      stayId: true,
+      pet: { select: { name: true } },
+    },
+  })
+}
+
+export type RecentAdminActivity = Awaited<ReturnType<typeof getRecentAdminActivity>>[number]

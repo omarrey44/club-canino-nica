@@ -48,7 +48,7 @@ export default async function StayDetailPage({ params }: Props) {
   const lastActivity = stay.activities[0]
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent space-y-4 sm:space-y-5">
       <Link
         href="/admin/estancias"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"

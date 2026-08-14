@@ -18,7 +18,7 @@ import type { ReservationStatus } from '@/generated/prisma/client'
 export const metadata: Metadata = { title: 'Reservaciones' }
 
 const RANGES: Array<{ value: AdminAgendaRange; label: string }> = [
-  { value: 'day', label: 'Dia' },
+  { value: 'day', label: 'Día' },
   { value: 'week', label: 'Semana' },
 ]
 
@@ -72,11 +72,12 @@ export default async function AdminReservationsPage({
       : formatDate(agenda.start)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
-        eyebrow="Operacion"
+        eyebrow="Operación"
+        icon={CalendarDays}
         title="Reservaciones"
-        description="Quien llega, quien sale y que falta confirmar."
+        description="Quién llega, quién sale y qué falta confirmar."
       />
 
       <div className="flex flex-wrap items-center gap-3">
@@ -84,14 +85,14 @@ export default async function AdminReservationsPage({
           <Link
             href={buildHref({ rango, fecha: shift(-stepDays), estado })}
             aria-label="Periodo anterior"
-            className="flex size-11 items-center justify-center rounded-field border border-line-strong bg-surface text-ink-muted hover:text-ink"
+            className="flex size-11 items-center justify-center rounded-field border border-line-strong bg-surface text-ink-muted transition-colors hover:border-navy-300 hover:text-ink"
           >
             <ChevronLeft className="size-4" aria-hidden />
           </Link>
           <Link
             href={buildHref({ rango, fecha: shift(stepDays), estado })}
             aria-label="Periodo siguiente"
-            className="flex size-11 items-center justify-center rounded-field border border-line-strong bg-surface text-ink-muted hover:text-ink"
+            className="flex size-11 items-center justify-center rounded-field border border-line-strong bg-surface text-ink-muted transition-colors hover:border-navy-300 hover:text-ink"
           >
             <ChevronRight className="size-4" aria-hidden />
           </Link>
@@ -106,7 +107,7 @@ export default async function AdminReservationsPage({
           Hoy
         </Link>
 
-        <div className="ml-auto flex gap-1.5">
+        <div className="flex gap-1.5 sm:ml-auto">
           {RANGES.map((option) => (
             <Link
               key={option.value}
@@ -129,7 +130,7 @@ export default async function AdminReservationsPage({
         </div>
       </div>
 
-      <nav aria-label="Filtrar por estado" className="flex gap-2 overflow-x-auto pb-1">
+      <nav aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
         <Link
           href={buildHref({ rango, fecha: anchorDate })}
           aria-current={!status ? 'page' : undefined}

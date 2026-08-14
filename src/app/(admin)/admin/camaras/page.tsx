@@ -24,9 +24,10 @@ export default async function AdminCamerasPage() {
   const isAdmin = user.role === 'ADMIN' || user.role === 'SUPER_ADMIN'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Transparencia"
+        icon={ShieldCheck}
         title="Cámaras"
         description="Qué cámaras existen y quién puede verlas ahora mismo."
       />

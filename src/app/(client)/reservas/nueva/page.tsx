@@ -1,4 +1,4 @@
-import { ArrowLeft, PawPrint } from 'lucide-react'
+import { ArrowLeft, CalendarPlus, PawPrint } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -21,7 +21,7 @@ export default async function NewReservationPage() {
   ])
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-4xl space-y-4 sm:space-y-5">
       <Link
         href="/reservas"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
@@ -32,8 +32,9 @@ export default async function NewReservationPage() {
 
       <PageHeader
         eyebrow="Nueva reserva"
+        icon={CalendarPlus}
         title="Aparta el lugar de tu mascota"
-        description="Son cinco pasos y puedes volver atras en cualquier momento."
+        description="Son cinco pasos y puedes volver atrás en cualquier momento."
       />
 
       {pets.length === 0 ? (

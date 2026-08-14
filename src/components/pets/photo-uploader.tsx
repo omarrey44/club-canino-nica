@@ -52,7 +52,7 @@ export function PhotoUploader({
         </label>
       </form>
 
-      {pending && <p className="text-sm text-ink-muted">Subiendo foto...</p>}
+      {pending && <p className="text-sm text-ink-muted">Subiendo foto…</p>}
       {state.status === 'error' && state.message && (
         <Alert tone="danger">{state.message}</Alert>
       )}

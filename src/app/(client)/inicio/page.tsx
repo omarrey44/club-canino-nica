@@ -35,17 +35,16 @@ export default async function ClientHomePage() {
   const hasRecentActivity = Boolean(activeStay?.activities.length)
 
   return (
-    <div className="space-y-4 md:relative md:left-1/2 md:w-[calc(100vw-20rem)] md:max-w-[90rem] md:-translate-x-1/2">
-      <header className="relative flex min-h-32 items-center overflow-hidden rounded-card border border-brand-100 bg-canvas-warm p-4 shadow-card sm:p-6 lg:min-h-36 lg:px-8">
-        <div className="relative z-10 max-w-2xl space-y-2 lg:max-w-[64%]">
+    <div className="space-y-4 sm:space-y-5">
+      <header className="relative flex min-h-28 items-center overflow-hidden rounded-card border border-brand-100 bg-canvas-warm p-4 shadow-card sm:p-5 lg:px-7">
+        <div className="relative z-10 max-w-2xl space-y-1.5 lg:max-w-[64%]">
           <p className="text-xs font-extrabold tracking-[0.15em] text-brand-700 uppercase">
             Tu espacio en el club
           </p>
-          <h1 className="text-2xl leading-tight text-navy-900 sm:text-4xl">
+          <h1 className="text-2xl leading-tight text-navy-900 sm:text-[2rem]">
             {greeting()}, {firstName(user.fullName)}
           </h1>
-          <span className="block h-1 w-10 rounded-pill bg-brand-500" aria-hidden />
-          <p className="max-w-xl leading-snug text-ink-muted">
+          <p className="max-w-xl text-sm leading-snug text-ink-muted sm:text-base">
             {activeStay
               ? `Así está ${activeStay.pet.name} hoy. Todo lo importante, en un solo lugar.`
               : petCount > 0
@@ -153,7 +152,7 @@ export default async function ClientHomePage() {
                 </span>
                 <h2 className="text-lg text-navy-900">Última foto</h2>
               </CardHeader>
-              <CardContent className="grid grid-cols-[5.5rem_minmax(0,1fr)] items-center gap-3">
+              <CardContent className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-3">
                 <div className="relative aspect-square overflow-hidden rounded-field bg-navy-50">
                   <Image
                     src={lastPhoto.url}
@@ -182,7 +181,7 @@ export default async function ClientHomePage() {
             </Card>
           )}
 
-          <Card className="h-full">
+          <Card className="hidden h-full md:block">
             <CardHeader className="flex-row items-center gap-2.5">
               <span className="flex size-9 items-center justify-center rounded-[0.7rem] bg-canvas-warm text-brand-700">
                 <Sparkles className="size-4.5" aria-hidden />
@@ -239,7 +238,7 @@ function QuickLink({
   return (
     <Link
       href={href}
-      className="group flex min-h-14 cursor-pointer items-center gap-2.5 rounded-field border border-line bg-canvas px-3 py-2 transition-[border-color,background-color] duration-200 hover:border-brand-200 hover:bg-canvas-warm"
+      className="group flex min-h-12 cursor-pointer items-center gap-2.5 rounded-field border border-line bg-canvas px-3 py-2 transition-[border-color,background-color] duration-200 hover:border-brand-200 hover:bg-canvas-warm"
     >
       <span
         className={cn(

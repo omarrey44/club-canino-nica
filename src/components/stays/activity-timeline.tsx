@@ -45,6 +45,20 @@ const activityIcons: Record<ActivityType, LucideIcon> = {
   CHECK_OUT: LogOut,
 }
 
+const activityTones: Record<ActivityType, string> = {
+  CHECK_IN: 'border-success/10 bg-success-soft text-success',
+  FOOD: 'border-warning/10 bg-warning-soft text-warning',
+  WATER: 'border-info/10 bg-info-soft text-info',
+  PLAY: 'border-brand-100 bg-brand-50 text-brand-700',
+  WALK: 'border-success/10 bg-success-soft text-success',
+  REST: 'border-navy-100 bg-navy-50 text-navy-700',
+  PHOTO: 'border-info/10 bg-info-soft text-info',
+  MEDICATION: 'border-brand-100 bg-brand-50 text-brand-700',
+  GROOMING: 'border-warning/10 bg-warning-soft text-warning',
+  NOTE: 'border-navy-100 bg-navy-50 text-navy-700',
+  CHECK_OUT: 'border-brand-100 bg-brand-50 text-brand-700',
+}
+
 /**
  * Linea de tiempo del día.
  *
@@ -76,14 +90,15 @@ export function ActivityTimeline({
             <div className="flex flex-col items-center">
               <span
                 className={cn(
-                  'flex shrink-0 items-center justify-center border border-brand-100 bg-brand-50 text-brand-700',
+                  'flex shrink-0 items-center justify-center border',
+                  activityTones[activity.type],
                   compact ? 'size-9 rounded-[0.7rem]' : 'size-10 rounded-[0.8rem]'
                 )}
                 aria-hidden
               >
                 <Icon className={compact ? 'size-4' : 'size-4.5'} />
               </span>
-              {!isLast && <span className="w-px flex-1 bg-brand-100" aria-hidden />}
+              {!isLast && <span className="w-px flex-1 bg-line-strong" aria-hidden />}
             </div>
 
             <div className={cn('min-w-0 flex-1', isLast ? 'pb-0' : compact ? 'pb-3.5' : 'pb-4')}>

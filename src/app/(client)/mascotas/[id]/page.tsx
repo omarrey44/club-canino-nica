@@ -29,9 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function Row({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null
   return (
-    <div className="flex justify-between gap-4 py-2.5">
-      <dt className="shrink-0 text-ink-muted">{label}</dt>
-      <dd className="text-right font-medium text-ink">{value}</dd>
+    <div className="grid gap-1 py-2.5 sm:grid-cols-[minmax(7rem,0.7fr)_minmax(0,1.3fr)] sm:gap-4">
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="min-w-0 break-words font-medium text-ink sm:text-right">{value}</dd>
     </div>
   )
 }
@@ -56,7 +56,7 @@ export default async function PetDetailPage({ params }: Props) {
   const hasVet = medical && (medical.vetName || medical.vetPhone || medical.vetClinic)
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent space-y-4 sm:space-y-5">
       <Link
         href="/mascotas"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-ink"

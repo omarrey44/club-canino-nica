@@ -30,7 +30,7 @@ export default async function PetHistoryPage({ params }: Props) {
   if (!pet) notFound()
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent space-y-4 sm:space-y-5">
       <Link
         href={`/mascotas/${pet.id}`}
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
@@ -41,6 +41,7 @@ export default async function PetHistoryPage({ params }: Props) {
 
       <PageHeader
         eyebrow="Historial"
+        icon={CalendarClock}
         title={`Estancias de ${pet.name}`}
         description="Cada visita, con sus actividades, fotos y reporte."
       />
@@ -52,7 +53,7 @@ export default async function PetHistoryPage({ params }: Props) {
           description={`Cuando ${pet.name} termine su primera visita, quedará guardada aquí con todo lo que hizo.`}
         />
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-3 xl:grid-cols-2">
           {history.map((stay) => {
             const sameDay =
               !stay.checkOutAt || formatDate(stay.checkInAt) === formatDate(stay.checkOutAt)

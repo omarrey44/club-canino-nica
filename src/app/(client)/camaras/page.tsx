@@ -17,9 +17,10 @@ export default async function CamerasPage() {
   const cameras = await getViewableCameras(user)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="En vivo"
+        icon={Video}
         title="Cámaras"
         description="Solo las áreas donde está tu mascota durante su estancia."
       />
@@ -36,7 +37,7 @@ export default async function CamerasPage() {
           }
         />
       ) : (
-        <ul className="space-y-5">
+        <ul className="grid gap-4 xl:grid-cols-2">
           {cameras.map((camera) => (
             <li key={camera.id}>
               <Card>

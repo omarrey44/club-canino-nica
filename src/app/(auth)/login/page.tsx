@@ -5,7 +5,7 @@ import { ChevronRight, PawPrint } from 'lucide-react'
 import { Alert } from '@/components/ui/alert'
 import { LoginForm } from './login-form'
 
-export const metadata: Metadata = { title: 'Iniciar sesion' }
+export const metadata: Metadata = { title: 'Iniciar sesión' }
 
 const linkErrors: Record<string, string> = {
   'enlace-invalido': 'Ese enlace no es valido. Solicita uno nuevo.',
@@ -22,7 +22,7 @@ export default async function LoginPage({
   return (
     <div className="space-y-5 2xl:space-y-6">
       <div className="space-y-2">
-        <p className="text-[0.65rem] font-extrabold tracking-[0.2em] text-brand-700 uppercase lg:text-[0.7rem]">
+        <p className="text-xs font-extrabold tracking-[0.16em] text-brand-700 uppercase">
           Bienvenido de vuelta
         </p>
         <h1 className="font-sans text-[2rem] leading-[1.05] font-extrabold tracking-[-0.035em] text-navy-900 lg:text-[2.25rem] 2xl:text-[2.4rem]">

@@ -36,8 +36,10 @@ export default async function AdminPetsPage({
   const pets = await searchPets(user.organizationId, { query: q?.trim() || undefined, filter })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
+        eyebrow="Comunidad"
+        icon={Dog}
         title="Mascotas"
         description={`${pets.length} ${pets.length === 1 ? 'mascota' : 'mascotas'} en el club.`}
       />
@@ -64,7 +66,7 @@ export default async function AdminPetsPage({
         </Button>
       </form>
 
-      <nav aria-label="Filtros" className="flex gap-2 overflow-x-auto">
+      <nav aria-label="Filtros" className="flex flex-wrap gap-2">
         {filters.map((option) => {
           const active = option.value === filter
           const params = new URLSearchParams()

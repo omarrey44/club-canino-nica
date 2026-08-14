@@ -262,7 +262,7 @@ function GrantSelect({
       className="h-11 w-full rounded-field border border-line-strong bg-surface px-3.5 text-sm text-ink"
     >
       <option value="" disabled>
-        {busy ? 'Autorizando...' : 'Autorizar una estancia...'}
+        {busy ? 'Autorizando…' : 'Autorizar una estancia…'}
       </option>
       {stays.map((stay) => (
         <option key={stay.id} value={stay.id}>

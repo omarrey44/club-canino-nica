@@ -1,4 +1,4 @@
-import { Camera, Clock3, LogIn, LogOut, MapPin, Waypoints } from 'lucide-react'
+import { Camera, LogIn, LogOut, MapPin, Waypoints } from 'lucide-react'
 import Image from 'next/image'
 
 import { LinkButton } from '@/components/ui/button'
@@ -24,7 +24,10 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
       className="overflow-hidden rounded-[1.5rem] border border-line bg-surface shadow-raised"
     >
       <div className="lg:grid lg:grid-cols-[minmax(20rem,0.95fr)_minmax(0,1.15fr)]">
-        <div className="relative aspect-video w-full bg-brand-50 lg:aspect-auto lg:min-h-[18rem]">
+        {/* El alto minimo solo existe para que la foto no quede como una franja
+            cuando la columna de datos es corta; por encima de eso manda el
+            contenido, no la imagen. */}
+        <div className="relative aspect-video w-full bg-brand-50 lg:aspect-auto lg:min-h-[16rem]">
           {stay.pet.photoUrl ? (
             <Image
               src={stay.pet.photoUrl}
@@ -41,9 +44,18 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
           )}
         </div>
 
-        <div className="flex min-w-0 flex-col justify-center gap-4 p-4 sm:p-5 lg:gap-3.5">
+        <div className="flex min-w-0 flex-col justify-center gap-3.5 p-4 sm:p-5 lg:gap-3">
           <div className="space-y-1.5">
-            <p className="text-xs font-extrabold tracking-[0.14em] text-brand-700 uppercase">Ahora en el club</p>
+            {/* La hora de la ultima actualizacion viaja en el epigrafe: como
+                linea propia costaba una fila entera para cuatro palabras. */}
+            <p className="text-xs font-extrabold tracking-[0.14em] text-brand-700 uppercase">
+              Ahora en el club
+              <span className="font-bold text-ink-subtle normal-case tracking-normal">
+                {' · '}
+                <span className="sr-only">Última actualización </span>
+                {relativeTime(lastUpdate)}
+              </span>
+            </p>
             <div className="flex flex-wrap items-center gap-2">
               <h2 id="mascota-activa" className="text-2xl leading-none text-navy-900 sm:text-3xl">
                 {stay.pet.name}
@@ -87,11 +99,6 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               </dd>
             </div>
           </dl>
-
-          <p className="flex items-center gap-2 text-sm font-semibold text-ink-muted">
-            <Clock3 className="size-4 text-ink-subtle" aria-hidden />
-            Última actualización: {relativeTime(lastUpdate)}
-          </p>
 
           <div className="grid grid-cols-2 gap-2">
             <LinkButton size="sm" href="/mi-mascota" className="px-3">

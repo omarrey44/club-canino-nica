@@ -36,9 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function Row({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null
   return (
-    <div className="flex justify-between gap-4 py-2.5">
-      <dt className="shrink-0 text-ink-muted">{label}</dt>
-      <dd className="text-right font-semibold text-ink">{value}</dd>
+    <div className="grid gap-1 py-2.5 sm:grid-cols-[minmax(8rem,0.7fr)_minmax(0,1.3fr)] sm:gap-4">
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="min-w-0 break-words font-semibold text-ink sm:text-right">{value}</dd>
     </div>
   )
 }
@@ -60,7 +60,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
     reservation.payment.status !== 'REFUNDED'
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent mx-auto max-w-6xl space-y-4 sm:space-y-5">
       <Link
         href="/reservas"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
@@ -100,6 +100,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
         </div>
       </header>
 
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
       <Card>
         <CardHeader>
           <CardTitle>Cuando</CardTitle>
@@ -200,6 +201,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
           )}
         </CardContent>
       </Card>
+      </div>
 
       {reservation.status === 'CANCELLED' && reservation.cancellationReason && (
         <Card>

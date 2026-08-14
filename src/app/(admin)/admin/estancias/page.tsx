@@ -19,9 +19,10 @@ export default async function AdminStaysPage() {
   const stays = await getActiveStays(user.organizationId)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
-        eyebrow="Operacion"
+        eyebrow="Operación"
+        icon={Dog}
         title="Estancias"
         description={`${stays.length} ${stays.length === 1 ? 'mascota' : 'mascotas'} en el club ahora.`}
         action={

@@ -39,10 +39,13 @@ async function PetList() {
     )
   }
 
+  // `min-w-0` en cada `li`: un item de reja mide por su contenido minimo, y la
+  // linea de raza lleva `truncate` (nowrap), asi que sin eso la fila empuja la
+  // pagina a lo ancho en 375px en vez de recortar el texto.
   return (
-    <ul className="space-y-3">
+    <ul className="grid gap-3 lg:grid-cols-2">
       {pets.map((pet) => (
-        <li key={pet.id}>
+        <li key={pet.id} className="min-w-0">
           <PetCard pet={pet} />
         </li>
       ))}
@@ -52,9 +55,10 @@ async function PetList() {
 
 export default function MyPetsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Tu familia"
+        icon={PawPrint}
         title="Mis mascotas"
         description="Su información, salud y cuidados siempre actualizados."
         action={

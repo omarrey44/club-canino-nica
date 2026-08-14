@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Sparkles } from 'lucide-react'
 
 import { Alert } from '@/components/ui/alert'
 import { PageHeader } from '@/components/ui/page-header'
@@ -15,9 +16,10 @@ export default async function AdminServicesPage() {
   const services = await getAllServices(user.organizationId)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
-        eyebrow="Catalogo"
+        eyebrow="Catálogo"
+        icon={Sparkles}
         title="Servicios"
         description="Precios, duración y cupos. Lo que se cambia aquí aplica a las reservas nuevas."
       />

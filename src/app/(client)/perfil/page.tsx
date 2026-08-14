@@ -16,14 +16,16 @@ export default async function ProfilePage() {
   const user = await requireUser()
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Tu cuenta"
+        icon={ShieldCheck}
         title="Mi perfil"
         description="Tus datos y accesos del Club Canino."
         action={<LogoutButton />}
       />
 
+      <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
       <Card>
         <CardHeader>
           <CardTitle>{user.fullName}</CardTitle>
@@ -76,6 +78,7 @@ export default async function ProfilePage() {
           </Link>
         </CardContent>
       </Card>
+      </div>
 
       <p className="text-center text-xs text-ink-subtle">
         {business.name} · Datos de contacto y horarios pendientes de confirmar

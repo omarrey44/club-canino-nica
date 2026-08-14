@@ -57,24 +57,24 @@ export function ClientSidebar({ unreadCount = 0 }: { unreadCount?: number }) {
   }
 
   return (
-    <aside className="hidden w-68 shrink-0 border-r border-line bg-surface md:block">
-      <div className="sticky top-0 flex h-dvh flex-col p-5">
+    <aside className="hidden w-64 shrink-0 border-r border-line bg-surface md:block">
+      <div className="sticky top-0 flex h-dvh flex-col p-4">
         <Link href="/inicio" className="mx-auto flex rounded-field" aria-label="Ir al inicio">
-          <BrandLogo decorative priority sizes="160px" className="w-40" />
+          <BrandLogo decorative priority sizes="144px" className="w-36" />
         </Link>
 
-        <nav aria-label="Navegación principal" className="mt-5 flex-1">
+        <nav aria-label="Navegación principal" className="mt-4 flex-1">
           <div>
-            <p className="px-3.5 text-[0.65rem] font-extrabold tracking-[0.15em] text-ink-subtle uppercase">Tu club</p>
+            <p className="px-3.5 text-2xs font-extrabold tracking-[0.14em] text-ink-subtle uppercase">Tu club</p>
             <ul className="mt-2 space-y-1">{renderItems(primaryItems)}</ul>
           </div>
-          <div className="mt-7 border-t border-line pt-6">
-            <p className="px-3.5 text-[0.65rem] font-extrabold tracking-[0.15em] text-ink-subtle uppercase">Tu cuenta</p>
+          <div className="mt-5 border-t border-line pt-5">
+            <p className="px-3.5 text-2xs font-extrabold tracking-[0.14em] text-ink-subtle uppercase">Tu cuenta</p>
             <ul className="mt-2 space-y-1">{renderItems(accountItems)}</ul>
           </div>
         </nav>
 
-        <div className="rounded-card border border-brand-100 bg-canvas-warm p-4">
+        <div className="rounded-card border border-brand-100 bg-canvas-warm p-3.5">
           <p className="text-sm font-extrabold text-navy-900">Todo sobre tu mascota</p>
           <p className="mt-1 text-xs leading-relaxed text-ink-muted">Fotos, avisos y reservas, siempre a la mano.</p>
         </div>

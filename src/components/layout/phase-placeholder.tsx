@@ -15,22 +15,18 @@ export function PhasePlaceholder({
   icon,
   emptyTitle,
   emptyDescription,
-  phase,
 }: {
   title: string
   description: string
   icon: LucideIcon
   emptyTitle: string
   emptyDescription: string
-  phase: string
 }) {
   return (
-    <div className="space-y-6">
-      <PageHeader title={title} description={description} />
+    <div className="space-y-4 sm:space-y-5">
+      <PageHeader eyebrow="Próximamente" icon={icon} title={title} description={description} />
       <EmptyState icon={icon} title={emptyTitle} description={emptyDescription} />
-      <p className="text-center text-xs text-ink-subtle">
-        Modulo en construccion · {phase}
-      </p>
+      <p className="text-center text-xs text-ink-subtle">Estamos preparando este módulo.</p>
     </div>
   )
 }

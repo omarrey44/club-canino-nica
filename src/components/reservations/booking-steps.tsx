@@ -151,7 +151,7 @@ export function StepDates({
         horarios son de demostracion y estan pendientes de confirmar.
       </Hint>
 
-      {checking && <p className="text-sm text-ink-muted">Consultando disponibilidad...</p>}
+      {checking && <p className="text-sm text-ink-muted">Consultando disponibilidad…</p>}
 
       {!checking && availability?.fullDays.length ? (
         <Alert tone="danger">

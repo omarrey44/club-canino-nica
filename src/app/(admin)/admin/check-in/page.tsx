@@ -15,9 +15,10 @@ export default async function CheckInPage() {
   const candidates = await getCheckInCandidates(user.organizationId)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Recepción"
+        icon={LogIn}
         title="Entradas de hoy"
         description="Reservaciones confirmadas que todavía no ingresan."
       />

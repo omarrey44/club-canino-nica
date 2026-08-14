@@ -1,4 +1,5 @@
 import { ClientSidebar } from '@/components/layout/client-sidebar'
+import { ClientDesktopHeader } from '@/components/layout/client-desktop-header'
 import { ClientMobileHeader } from '@/components/layout/client-mobile-header'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { getUnreadCount } from '@/server/queries/notifications'
@@ -17,14 +18,19 @@ export default async function ClientLayout({ children }: { children: React.React
   const unreadCount = await getUnreadCount(user.id)
 
   return (
-    <div className="flex min-h-dvh bg-canvas">
+    <div className="app-background app-background-standard flex min-h-dvh">
       <ClientSidebar unreadCount={unreadCount} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <ClientMobileHeader />
+        <ClientMobileHeader fullName={user.fullName} unreadCount={unreadCount} />
+        <ClientDesktopHeader
+          fullName={user.fullName}
+          email={user.email}
+          unreadCount={unreadCount}
+        />
         {/* Reserva solo el espacio real de la barra flotante en movil. */}
         <main
           id="main-content"
-          className="mx-auto w-full max-w-4xl flex-1 px-4 pt-4 pb-24 sm:px-6 sm:pt-5 md:py-6"
+          className="mx-auto w-full max-w-7xl flex-1 px-4 pt-4 pb-24 sm:px-6 sm:pt-5 md:py-5 lg:px-7 lg:py-6"
         >
           {children}
         </main>

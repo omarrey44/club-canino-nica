@@ -57,7 +57,7 @@ export function PaymentReturnNotice({
 }) {
   const [state, setState] = useState<{ tone: 'info' | 'success' | 'warning'; text: string }>(
     outcome === 'verificando'
-      ? { tone: 'info', text: 'Confirmando tu pago con el proveedor...' }
+      ? { tone: 'info', text: 'Confirmando tu pago con el proveedor…' }
       : outcome === 'listo'
         ? { tone: 'success', text: 'Listo, recibimos tu pago. Tu reservación está confirmada.' }
         : outcome === 'fallido'

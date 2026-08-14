@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, PawPrint } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -13,7 +13,7 @@ export default async function NewPetPage() {
   await requireUser()
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-6xl space-y-4 sm:space-y-5">
       <Link
         href="/mascotas"
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-ink"
@@ -23,8 +23,10 @@ export default async function NewPetPage() {
       </Link>
 
       <PageHeader
+        eyebrow="Nueva ficha"
+        icon={PawPrint}
         title="Registrar mascota"
-        description="Solo el nombre y el sexo son obligatorios. Lo demas lo puedes completar despues."
+        description="Solo el nombre y el sexo son obligatorios. Lo demás lo puedes completar después."
       />
 
       <PetForm action={createPet} submitLabel="Registrar mascota" />

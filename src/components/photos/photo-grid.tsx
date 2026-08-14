@@ -17,16 +17,23 @@ export function PhotoGrid({
   photos,
   petName,
   className,
+  variant = 'square',
 }: {
   photos: GalleryPhoto[]
   petName: string
   className?: string
+  variant?: 'square' | 'wide'
 }) {
   return (
     <ul className={cn('grid grid-cols-2 gap-3 sm:grid-cols-3', className)}>
       {photos.map((photo) => (
         <li key={photo.id} className="space-y-1.5">
-          <div className="relative aspect-square overflow-hidden rounded-field bg-navy-50">
+          <div
+            className={cn(
+              'relative overflow-hidden rounded-field bg-navy-50',
+              variant === 'wide' ? 'aspect-[4/3]' : 'aspect-square'
+            )}
+          >
             <Image
               src={photo.url}
               alt={photo.caption ?? `Foto de ${petName}`}
@@ -45,7 +52,7 @@ export function PhotoGrid({
             )}
           </div>
 
-          {photo.caption && <p className="text-sm text-ink-muted">{photo.caption}</p>}
+          {photo.caption && <p className="line-clamp-2 text-sm text-ink-muted">{photo.caption}</p>}
           <p className="text-2xs text-ink-subtle tabular-nums">{formatTime(photo.takenAt)}</p>
         </li>
       ))}

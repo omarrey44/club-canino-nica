@@ -63,7 +63,7 @@ async function ReservationList({ filter }: { filter: ClientReservationFilter }) 
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="grid gap-3 xl:grid-cols-2">
       {reservations.map((reservation) => (
         <li key={reservation.id}>
           <Link
@@ -89,9 +89,10 @@ export default async function ReservationsPage({
     : 'upcoming'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Tus estancias"
+        icon={CalendarDays}
         title="Mis reservaciones"
         description="Próximas, activas y finalizadas."
         action={
@@ -102,7 +103,7 @@ export default async function ReservationsPage({
         }
       />
 
-      <nav aria-label="Filtrar reservaciones" className="flex gap-2 overflow-x-auto pb-1">
+      <nav aria-label="Filtrar reservaciones" className="flex flex-wrap gap-2">
         {FILTERS.map((option) => {
           const active = option === filter
           return (

@@ -18,18 +18,18 @@ export function ResetPasswordForm() {
       )}
 
       <Field errors={state.fieldErrors?.password}>
-        <Label>Nueva contrasena</Label>
+        <Label>Nueva contraseña</Label>
         <Input name="password" type="password" autoComplete="new-password" required />
-        <Hint>Minimo 8 caracteres.</Hint>
+        <Hint>Mínimo 8 caracteres.</Hint>
       </Field>
 
       <Field errors={state.fieldErrors?.confirmPassword}>
-        <Label>Confirmar contrasena</Label>
+        <Label>Confirmar contraseña</Label>
         <Input name="confirmPassword" type="password" autoComplete="new-password" required />
       </Field>
 
       <Button type="submit" size="lg" block loading={pending} loadingLabel="Guardando">
-        Guardar contrasena
+        Guardar contraseña
       </Button>
     </form>
   )

@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, History } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -38,7 +38,7 @@ export default async function PastStayPage({ params }: Props) {
     !stay.checkOutAt || formatDate(stay.checkInAt) === formatDate(stay.checkOutAt)
 
   return (
-    <div className="space-y-6">
+    <div className="app-section-accent space-y-4 sm:space-y-5">
       <Link
         href={`/mascotas/${stay.pet.id}/historial`}
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink-muted hover:text-ink"
@@ -49,6 +49,7 @@ export default async function PastStayPage({ params }: Props) {
 
       <PageHeader
         eyebrow={stay.reservation.service.name}
+        icon={History}
         title={
           sameDay
             ? formatDate(stay.checkInAt)
@@ -66,6 +67,7 @@ export default async function PastStayPage({ params }: Props) {
         />
       ))}
 
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
       {stay.activities.length > 0 && (
         <Card>
           <CardHeader>
@@ -136,6 +138,7 @@ export default async function PastStayPage({ params }: Props) {
           </dl>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

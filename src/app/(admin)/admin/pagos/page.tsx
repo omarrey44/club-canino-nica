@@ -53,9 +53,10 @@ export default async function AdminPaymentsPage({
   const totalOf = (value: PaymentStatus) => totals.find((row) => row.status === value)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Cobros"
+        icon={CreditCard}
         title="Pagos"
         description="Qué está cobrado, qué falta y qué se reembolsó."
       />
@@ -109,7 +110,7 @@ export default async function AdminPaymentsPage({
         </Button>
       </form>
 
-      <nav aria-label="Filtrar por estado" className="flex gap-2 overflow-x-auto pb-1">
+      <nav aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
         <Link
           href={buildHref({ q })}
           aria-current={!status ? 'page' : undefined}

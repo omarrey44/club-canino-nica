@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -26,7 +26,7 @@ export default async function EditPetPage({ params }: { params: Promise<{ id: st
   const medical = pet.medicalInfo
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-6xl space-y-4 sm:space-y-5">
       <Link
         href={`/mascotas/${pet.id}`}
         className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-ink"
@@ -35,7 +35,7 @@ export default async function EditPetPage({ params }: { params: Promise<{ id: st
         {pet.name}
       </Link>
 
-      <PageHeader title={`Editar a ${pet.name}`} />
+      <PageHeader eyebrow="Ficha de mascota" icon={Pencil} title={`Editar a ${pet.name}`} />
 
       <PetForm
         action={updatePet.bind(null, pet.id)}

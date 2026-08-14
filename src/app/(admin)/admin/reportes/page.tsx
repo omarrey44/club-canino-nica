@@ -27,9 +27,10 @@ export default async function AdminReportsPage({
   ])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <PageHeader
         eyebrow="Cierre del día"
+        icon={FileText}
         title="Reportes diarios"
         description="El resumen que recibe cada propietario al final del día."
       />
