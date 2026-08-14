@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { deleteFile, uploadActivityPhoto } from '@/server/providers/storage'
 import { recordAudit } from '@/server/audit'
 import { requireStaff } from '@/server/auth/session'
@@ -71,8 +72,7 @@ export async function uploadStayPhotos(
       })),
     })
 
-    await tx.notification.create({
-      data: {
+    await notify({
         organizationId: user.organizationId,
         userId: stay.reservation.clientId,
         petId: stay.petId,
@@ -83,8 +83,7 @@ export async function uploadStayPhotos(
             : `Tenemos ${uploaded.length} fotos nuevas de ${stay.pet.name}`,
         body: caption ?? `Asi va el dia de ${stay.pet.name}.`,
         linkUrl: '/mi-mascota',
-      },
-    })
+      }, tx)
   })
 
   revalidatePath(`/admin/estancias/${stay.id}`)

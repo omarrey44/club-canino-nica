@@ -7,6 +7,7 @@ import { business } from '@/config/business'
 import { clubDateTime, formatDate } from '@/lib/datetime'
 import { fromCents, quote } from '@/lib/pricing'
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { reservationStatusLabels } from '@/lib/constants/labels'
 import { recordAudit } from '@/server/audit'
 import { requireStaff, requireUser } from '@/server/auth/session'
@@ -178,8 +179,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     return errorState('No fue posible completar la reservación. Intenta de nuevo.')
   }
 
-  await prisma.notification.create({
-    data: {
+  await notify({
       organizationId: user.organizationId,
       userId: user.id,
       petId: pet.id,
@@ -187,8 +187,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
       title: 'Recibimos tu reservación',
       body: `${pet.name} tiene lugar apartado para el ${formatDate(startAt)}. Te confirmamos en breve.`,
       linkUrl: `/reservas/${created.id}`,
-    },
-  })
+    })
 
   await recordAudit(user, {
     action: 'RESERVATION_CREATED',
@@ -283,8 +282,7 @@ export async function setReservationStatus(
   })
 
   if (nextStatus === 'CONFIRMED') {
-    await prisma.notification.create({
-      data: {
+    await notify({
         organizationId: user.organizationId,
         userId: reservation.clientId,
         petId: reservation.petId,
@@ -292,8 +290,7 @@ export async function setReservationStatus(
         title: 'Tu reservación esta confirmada',
         body: `Te esperamos el ${formatDate(reservation.startAt)}.`,
         linkUrl: `/reservas/${reservation.id}`,
-      },
-    })
+      })
   }
 
   await recordAudit(user, {

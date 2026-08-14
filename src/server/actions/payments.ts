@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import type { Route } from 'next'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { toCents } from '@/lib/pricing'
 import { recordAudit } from '@/server/audit'
 import { requireRole, requireStaff, requireUser } from '@/server/auth/session'
@@ -151,8 +152,7 @@ async function markPaid(
       data: { status: 'CONFIRMED' },
     })
 
-    await tx.notification.create({
-      data: {
+    await notify({
         organizationId: reservation.organizationId,
         userId: reservation.clientId,
         petId: reservation.petId,
@@ -160,8 +160,7 @@ async function markPaid(
         title: 'Recibimos tu pago',
         body: `Tu reservación ${reservation.code} está confirmada.`,
         linkUrl: `/reservas/${reservation.id}`,
-      },
-    })
+      }, tx)
   })
 }
 

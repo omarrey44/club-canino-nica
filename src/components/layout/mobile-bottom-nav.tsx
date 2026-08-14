@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { clientNavItems } from './client-nav-items'
 import { cn } from '@/lib/utils'
 
-export function MobileBottomNav() {
+export function MobileBottomNav({ unreadCount = 0 }: { unreadCount?: number }) {
   const pathname = usePathname()
 
   return (
@@ -28,10 +28,18 @@ export function MobileBottomNav() {
                   active ? 'text-brand-700' : 'text-ink-muted'
                 )}
               >
-                <span className={cn('flex size-8 items-center justify-center rounded-full transition-colors', active && 'bg-brand-500 text-white shadow-[0_5px_12px_rgb(249_115_22_/_0.24)]')}>
+                <span className={cn('relative flex size-8 items-center justify-center rounded-full transition-colors', active && 'bg-brand-500 text-white shadow-[0_5px_12px_rgb(249_115_22_/_0.24)]')}>
                   <Icon className={cn('size-[1.15rem]', active && 'stroke-[2.4]')} aria-hidden />
+                  {href === '/notificaciones' && unreadCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 flex min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[0.6rem] leading-4 font-extrabold text-white ring-2 ring-surface">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
                 </span>
                 {label}
+                {href === '/notificaciones' && unreadCount > 0 && (
+                  <span className="sr-only">{unreadCount} sin leer</span>
+                )}
               </Link>
             </li>
           )

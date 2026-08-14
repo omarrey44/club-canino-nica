@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { clubDayRange } from '@/lib/datetime'
 import { recordAudit } from '@/server/audit'
 import { requireStaff } from '@/server/auth/session'
@@ -59,8 +60,7 @@ export async function saveDailyReport(
   // sonarle el telefono al propietario.
   const isFirstPublish = report.createdAt.getTime() === report.updatedAt.getTime()
   if (isFirstPublish) {
-    await prisma.notification.create({
-      data: {
+    await notify({
         organizationId: user.organizationId,
         userId: stay.reservation.clientId,
         petId: stay.petId,
@@ -68,8 +68,7 @@ export async function saveDailyReport(
         title: `El reporte de ${stay.pet.name} esta listo`,
         body: `Ya puedes ver como le fue hoy a ${stay.pet.name}.`,
         linkUrl: '/mi-mascota',
-      },
-    })
+      })
   }
 
   await recordAudit(user, {

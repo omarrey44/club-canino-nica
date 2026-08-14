@@ -1,6 +1,7 @@
 import { ClientSidebar } from '@/components/layout/client-sidebar'
 import { ClientMobileHeader } from '@/components/layout/client-mobile-header'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+import { getUnreadCount } from '@/server/queries/notifications'
 import { requireUser } from '@/server/auth/session'
 
 /**
@@ -10,11 +11,14 @@ import { requireUser } from '@/server/auth/session'
  * manipule el proxy, sin sesion no se renderiza nada.
  */
 export default async function ClientLayout({ children }: { children: React.ReactNode }) {
-  await requireUser()
+  const user = await requireUser()
+  // Una sola consulta para las dos barras: `getUnreadCount` está memoizada por
+  // petición, así que pedirla dos veces no cuesta dos viajes a la base.
+  const unreadCount = await getUnreadCount(user.id)
 
   return (
     <div className="flex min-h-dvh bg-canvas">
-      <ClientSidebar />
+      <ClientSidebar unreadCount={unreadCount} />
       <div className="flex min-w-0 flex-1 flex-col">
         <ClientMobileHeader />
         {/* Reserva solo el espacio real de la barra flotante en movil. */}
@@ -25,7 +29,7 @@ export default async function ClientLayout({ children }: { children: React.React
           {children}
         </main>
       </div>
-      <MobileBottomNav />
+      <MobileBottomNav unreadCount={unreadCount} />
     </div>
   )
 }

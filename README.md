@@ -39,7 +39,8 @@ usarse de pie, con el celular en la mano.
 | Historial por mascota, con actividades, fotos, reporte y cobro | Listo |
 | Camaras con permisos por estancia y modo demostracion | Listo |
 | Cobro en linea con proveedor demo, webhook firmado y reembolsos | Listo |
-| Notificaciones | Por fases |
+| Notificaciones in-app, con contador de no leidas | Listo |
+| Pulido final: responsive, accesibilidad, pruebas | Por fases |
 
 ---
 
@@ -204,6 +205,9 @@ npm run check:booking   # la Server Action de reserva, de punta a punta
 npm run check:stay      # el ciclo de estancia en un navegador real
 npm run check:camera    # la cadena de autorizacion de camaras
 npm run check:payment   # el camino del dinero
+npm run check:notification
+
+npm run check:all       # todas, en orden
 ```
 
 `check:booking` localiza el id de la Server Action en el manifiesto de Next y
@@ -360,8 +364,8 @@ El panel administrativo los muestra con una advertencia visible en
 | 5 | Fotografias, reportes diarios, historial | Completada |
 | 6 | Camaras, permisos, player demo | Completada |
 | 7 | Pagos con Stripe sandbox | Completada |
-| 8 | Notificaciones | Siguiente |
-| 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | |
+| 8 | Notificaciones | Completada |
+| 9 | Pulido de UI/UX, responsive, accesibilidad, pruebas | Siguiente |
 
 ---
 
@@ -375,5 +379,9 @@ El panel administrativo los muestra con una advertencia visible en
   otras guarderias.
 - Toda **Server Action** verifica sesion y permisos por su cuenta. El
   `proxy.ts` es una primera barrera, no la unica.
+- Los **avisos** nacen en un solo lugar, `notify()` en `src/server/notifications.ts`,
+  y se escriben dentro de la misma transaccion que el cambio que los provoca:
+  si el cambio se revierte, el cliente no queda con un aviso de algo que no
+  ocurrio. Ese es tambien el punto donde se enganchara el push.
 - Ninguna vista queda en blanco: `loading`, `empty` y `error` siempre tienen
   tratamiento.

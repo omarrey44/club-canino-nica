@@ -14,6 +14,8 @@
     "check:stay": "node scripts/check-stay.mjs",
     "check:camera": "node scripts/check-camera.mjs",
     "check:payment": "node scripts/check-payment.mjs",
+    "check:notification": "node scripts/check-notification.mjs",
+    "check:all": "npm run check:pricing && npm run smoke && npm run check:booking && npm run check:stay && npm run check:camera && npm run check:payment && npm run check:notification",
     "storage:init": "node scripts/init-storage.mjs",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

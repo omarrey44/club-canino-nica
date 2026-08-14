@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
  * Navegacion lateral en escritorio. No es la barra inferior estirada:
  * aprovecha el espacio para mostrar marca y etiquetas completas.
  */
-export function ClientSidebar() {
+export function ClientSidebar({ unreadCount = 0 }: { unreadCount?: number }) {
   const pathname = usePathname()
   const primaryItems = clientNavItems.slice(0, 4)
   const accountItems = clientNavItems.slice(4)
@@ -41,7 +41,15 @@ export function ClientSidebar() {
               <Icon className="size-4.5" aria-hidden />
             </span>
             {label}
-            {active && <span className="ml-auto size-1.5 rounded-full bg-brand-500" aria-hidden />}
+            {href === '/notificaciones' && unreadCount > 0 && (
+              <span className="ml-auto flex min-w-5 items-center justify-center rounded-full bg-danger px-1.5 text-[0.65rem] leading-5 font-extrabold text-white">
+                {unreadCount > 99 ? '99+' : unreadCount}
+                <span className="sr-only"> sin leer</span>
+              </span>
+            )}
+            {active && href !== '/notificaciones' && (
+              <span className="ml-auto size-1.5 rounded-full bg-brand-500" aria-hidden />
+            )}
           </Link>
         </li>
       )

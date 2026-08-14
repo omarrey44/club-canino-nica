@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { verifyWebhookSignature } from '@/server/providers/payment'
 
 /**
@@ -52,17 +53,17 @@ export async function POST(request: NextRequest) {
     case 'checkout.session.async_payment_succeeded': {
       if (payment.status === 'PAID') break
 
-      await prisma.$transaction([
-        prisma.payment.update({
+      await prisma.$transaction(async (tx) => {
+        await tx.payment.update({
           where: { id: payment.id },
           data: { status: 'PAID', paidAt: new Date(), failureReason: null },
-        }),
-        prisma.reservation.updateMany({
+        })
+        await tx.reservation.updateMany({
           where: { id: payment.reservation.id, status: 'PENDING' },
           data: { status: 'CONFIRMED' },
-        }),
-        prisma.notification.create({
-          data: {
+        })
+        await notify(
+          {
             organizationId: payment.reservation.organizationId,
             userId: payment.reservation.clientId,
             petId: payment.reservation.petId,
@@ -71,8 +72,9 @@ export async function POST(request: NextRequest) {
             body: `Tu reservación ${payment.reservation.code} está confirmada.`,
             linkUrl: `/reservas/${payment.reservation.id}`,
           },
-        }),
-      ])
+          tx
+        )
+      })
       break
     }
 

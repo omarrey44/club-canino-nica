@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { formatTime } from '@/lib/datetime'
 import { recordAudit } from '@/server/audit'
 import { requireStaff } from '@/server/auth/session'
@@ -84,8 +85,7 @@ export async function checkIn(_prev: ActionState, formData: FormData): Promise<A
       },
     })
 
-    await tx.notification.create({
-      data: {
+    await notify({
         organizationId: user.organizationId,
         userId: reservation.clientId,
         petId: reservation.petId,
@@ -93,8 +93,7 @@ export async function checkIn(_prev: ActionState, formData: FormData): Promise<A
         title: `${reservation.pet.name} ya está en el club`,
         body: `Ingreso a las ${formatTime(now)}. Te vamos contando como le va.`,
         linkUrl: '/mi-mascota',
-      },
-    })
+      }, tx)
 
     return created
   })
@@ -127,24 +126,25 @@ export async function markReadyForPickup(stayId: string): Promise<ActionState> {
   })
   if (!stay) return errorState('Esa estancia no está activa.')
 
-  await prisma.$transaction([
-    prisma.stay.update({ where: { id: stay.id }, data: { status: 'READY_FOR_PICKUP' } }),
-    prisma.reservation.update({
+  await prisma.$transaction(async (tx) => {
+    await tx.stay.update({ where: { id: stay.id }, data: { status: 'READY_FOR_PICKUP' } })
+    await tx.reservation.update({
       where: { id: stay.reservation.id },
       data: { status: 'READY_FOR_PICKUP' },
-    }),
-    prisma.notification.create({
-      data: {
+    })
+    await notify(
+      {
         organizationId: user.organizationId,
         userId: stay.reservation.clientId,
         petId: stay.petId,
         type: 'READY_FOR_PICKUP',
         title: `${stay.pet.name} está listo`,
-        body: `${stay.pet.name} termino su día y te esta esperando.`,
+        body: `${stay.pet.name} terminó su día y te está esperando.`,
         linkUrl: '/mi-mascota',
       },
-    }),
-  ])
+      tx
+    )
+  })
 
   await recordAudit(user, {
     action: 'STAY_READY_FOR_PICKUP',

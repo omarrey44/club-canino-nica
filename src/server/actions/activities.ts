@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { prisma } from '@/lib/prisma'
+import { notify } from '@/server/notifications'
 import { clubDateInput, clubDateTime } from '@/lib/datetime'
 import { activityTypeLabels } from '@/lib/constants/labels'
 import { recordAudit } from '@/server/audit'
@@ -93,8 +94,7 @@ export async function logActivity(
     }
 
     if (isVisibleToOwner && NOTIFIES.has(type)) {
-      await tx.notification.create({
-        data: {
+      await notify({
           organizationId: user.organizationId,
           userId: stay.reservation.clientId,
           petId: stay.petId,
@@ -105,8 +105,7 @@ export async function logActivity(
               : `${stay.pet.name} termino su comida`,
           body: description ?? `${activityTypeLabels[type]} registrada.`,
           linkUrl: '/mi-mascota',
-        },
-      })
+        }, tx)
     }
   })
 
