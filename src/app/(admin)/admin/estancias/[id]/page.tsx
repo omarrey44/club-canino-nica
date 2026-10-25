@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LinkButton } from '@/components/ui/button'
 import { StayPhotoManager } from '@/components/photos/stay-photo-manager'
 import { PetAvatar } from '@/components/ui/pet-avatar'
+import { CheckOutTime } from '@/components/stays/check-out-time'
 import { QuickActivityForm } from '@/components/stays/quick-activity-form'
 import { StatusBadge } from '@/components/ui/status-badge'
 import {
@@ -75,7 +76,7 @@ export default async function StayDetailPage({ params }: Props) {
 
           <p className="text-sm text-ink-muted tabular-nums">
             Entrada {formatTime(stay.checkInAt)} · Salida prevista{' '}
-            {formatTime(stay.expectedCheckOutAt)}
+            <CheckOutTime date={stay.expectedCheckOutAt} />
             {lastActivity && ` · Último registro ${relativeTime(lastActivity.occurredAt)}`}
           </p>
         </div>

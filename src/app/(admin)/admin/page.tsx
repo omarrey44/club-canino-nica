@@ -35,6 +35,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { business } from '@/config/business'
 import { activityTypeLabels, stayStatusLabels, stayStatusTones } from '@/lib/constants/labels'
+import { CheckOutTime } from '@/components/stays/check-out-time'
 import { formatTime, greeting } from '@/lib/datetime'
 import { cn } from '@/lib/utils'
 import {
@@ -150,8 +151,12 @@ function MetricsGrid({ stats }: { stats: AdminDashboardStats }) {
         label="Salidas pendientes"
         value={stats.pendingCheckOuts}
         icon={LogOut}
-        hint="Estancias que terminan hoy"
-        tone="warning"
+        hint={
+          stats.overdueCheckOuts > 0
+            ? `${stats.overdueCheckOuts} con la salida atrasada`
+            : 'Estancias que terminan hoy'
+        }
+        tone={stats.overdueCheckOuts > 0 ? 'danger' : 'warning'}
         href="/admin/estancias"
       />
       <MetricCard
@@ -188,7 +193,9 @@ function MobileStayList({ stays }: { stays: ActiveStayRow[] }) {
               </span>
               <span className="mt-1 flex gap-3 text-xs text-ink-muted tabular-nums">
                 <span>Entrada {formatTime(stay.checkInAt)}</span>
-                <span>Salida {formatTime(stay.expectedCheckOutAt)}</span>
+                <span>
+                  Salida <CheckOutTime date={stay.expectedCheckOutAt} />
+                </span>
               </span>
             </span>
             <ChevronRight className="size-4 shrink-0 text-ink-muted" aria-hidden />
@@ -245,7 +252,7 @@ function DesktopStayTable({ stays }: { stays: ActiveStayRow[] }) {
                 </span>
               </td>
               <td className="px-3 py-3.5 text-sm text-ink-muted tabular-nums">
-                {formatTime(stay.expectedCheckOutAt)}
+                <CheckOutTime date={stay.expectedCheckOutAt} />
               </td>
               <td className="px-3 py-3.5 text-center">
                 <Link
@@ -367,7 +374,7 @@ function TodaySummary({ stats }: { stats: AdminDashboardStats }) {
   const rows = [
     ['Reservaciones del día', stats.totalReservations],
     ['Estancias activas', stats.petsPresent],
-    ['Finalizan hoy', stats.pendingCheckOuts],
+    ['Salidas pendientes', stats.pendingCheckOuts],
   ] as const
 
   return (

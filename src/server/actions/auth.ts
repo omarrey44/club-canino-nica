@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import type { Route } from 'next'
@@ -7,10 +8,11 @@ import type { Route } from 'next'
 import { prisma } from '@/lib/prisma'
 import { createClient } from '@/lib/supabase/server'
 import { getOrganization } from '@/server/organization'
-import { isStaff } from '@/server/auth/session'
+import { isStaff, requireUser } from '@/server/auth/session'
 import {
   forgotPasswordSchema,
   loginSchema,
+  profileSchema,
   registerSchema,
   resetPasswordSchema,
 } from '@/validations/auth'
@@ -171,4 +173,23 @@ export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirect('/login')
+}
+
+/** Nombre y teléfono de la cuenta propia. Lo usan clientes y personal por igual. */
+export async function updateProfile(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const user = await requireUser()
+
+  const parsed = profileSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return errorState('Revisa los datos.', parsed.error.flatten().fieldErrors)
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { fullName: parsed.data.fullName, phone: parsed.data.phone || null },
+  })
+
+  // El nombre aparece en las cabeceras de los dos portales, no solo en el perfil.
+  revalidatePath('/', 'layout')
+  return successState('Tus datos quedaron guardados.')
 }

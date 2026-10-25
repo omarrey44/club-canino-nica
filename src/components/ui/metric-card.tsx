@@ -23,7 +23,7 @@ export function MetricCard({
   icon: LucideIcon
   hint?: string
   emphasis?: boolean
-  tone?: 'brand' | 'navy' | 'info' | 'success' | 'warning'
+  tone?: 'brand' | 'navy' | 'info' | 'success' | 'warning' | 'danger'
   href?: Route
 }) {
   const iconTones = {
@@ -32,6 +32,7 @@ export function MetricCard({
     info: 'bg-info-soft text-info',
     success: 'bg-success-soft text-success',
     warning: 'bg-warning-soft text-warning',
+    danger: 'bg-danger-soft text-danger',
   }
 
   const content = (

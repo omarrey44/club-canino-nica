@@ -2,6 +2,7 @@ import { PawPrint, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
+import { ProfileForm } from '@/components/account/profile-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogoutButton } from '@/components/layout/logout-button'
 import { PageHeader } from '@/components/ui/page-header'
@@ -28,19 +29,15 @@ export default async function ProfilePage() {
       <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
       <Card>
         <CardHeader>
-          <CardTitle>{user.fullName}</CardTitle>
+          <CardTitle>Tus datos</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <dl className="divide-y divide-line text-sm">
+        <CardContent className="space-y-4">
+          <ProfileForm fullName={user.fullName} phone={user.phone} />
+
+          <dl className="divide-y divide-line border-t border-line text-sm">
             <div className="flex justify-between gap-4 py-2.5">
               <dt className="text-ink-muted">Correo</dt>
               <dd className="text-right font-medium text-ink">{user.email}</dd>
-            </div>
-            <div className="flex justify-between gap-4 py-2.5">
-              <dt className="text-ink-muted">Teléfono</dt>
-              <dd className="text-right font-medium text-ink">
-                {user.phone ?? 'Sin registrar'}
-              </dd>
             </div>
             <div className="flex items-center justify-between gap-4 py-2.5">
               <dt className="text-ink-muted">Rol</dt>

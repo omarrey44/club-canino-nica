@@ -26,7 +26,7 @@ import { PetAvatar } from '@/components/ui/pet-avatar'
 import { PhotoGrid } from '@/components/photos/photo-grid'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { business } from '@/config/business'
-import { formatDate, formatTime, relativeTime } from '@/lib/datetime'
+import { formatDate, formatTime, formatTimeOrDate, relativeTime } from '@/lib/datetime'
 import { cn } from '@/lib/utils'
 import { getPublishedReport } from '@/server/queries/reports'
 import { getMyActiveStay, getMyLastStay } from '@/server/queries/stays'
@@ -215,7 +215,7 @@ export default async function PetTodayPage() {
             <StayFact
               icon={LogOut}
               label="Salida"
-              value={formatTime(stay.expectedCheckOutAt)}
+              value={formatTimeOrDate(stay.expectedCheckOutAt)}
               detail="Programada"
               tone="bg-warning-soft text-warning"
             />

@@ -4,7 +4,17 @@ const email = z
   .string()
   .trim()
   .min(1, 'Escribe tu correo.')
-  .email('Ese correo no parece valido.')
+  .email('Ese correo no parece válido.')
+
+const fullName = z.string().trim().min(2, 'Escribe tu nombre completo.').max(120)
+
+const phone = z
+  .string()
+  .trim()
+  .min(8, 'El teléfono necesita al menos 8 dígitos.')
+  .max(20)
+  .optional()
+  .or(z.literal(''))
 
 const password = z
   .string()
@@ -19,15 +29,9 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
-    fullName: z.string().trim().min(2, 'Escribe tu nombre completo.').max(120),
+    fullName,
     email,
-    phone: z
-      .string()
-      .trim()
-      .min(8, 'El teléfono necesita al menos 8 digitos.')
-      .max(20)
-      .optional()
-      .or(z.literal('')),
+    phone,
     password,
     confirmPassword: z.string(),
   })
@@ -35,6 +39,9 @@ export const registerSchema = z
     message: 'Las contraseñas no coinciden.',
     path: ['confirmPassword'],
   })
+
+/** El correo no entra: es la credencial de Supabase y cambiarlo exige confirmarlo. */
+export const profileSchema = z.object({ fullName, phone })
 
 export const forgotPasswordSchema = z.object({ email })
 

@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { LinkButton } from '@/components/ui/button'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { formatTime, relativeTime } from '@/lib/datetime'
+import { formatTime, formatTimeOrDate, relativeTime } from '@/lib/datetime'
 import { stayStatusLabels, stayStatusTones } from '@/lib/constants/labels'
 import type { ActiveStay } from '@/server/queries/client-home'
 
@@ -95,7 +95,7 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
               <LogOut className="row-span-2 size-4 shrink-0 text-navy-400" aria-hidden />
               <dt className="text-xs font-bold text-ink-muted">Salida estimada</dt>
               <dd className="font-extrabold text-navy-900 tabular-nums">
-                {formatTime(stay.expectedCheckOutAt)}
+                {formatTimeOrDate(stay.expectedCheckOutAt)}
               </dd>
             </div>
           </dl>

@@ -44,6 +44,15 @@ export function formatDateTime(date: Date): string {
   return `${formatDate(date)}, ${formatTime(date)}`
 }
 
+/** Solo la hora si cae hoy en el club; si no, con fecha, para que una salida vieja no parezca de hoy. */
+export function formatTimeOrDate(date: Date, now: Date = new Date()): string {
+  return clubDayIndex(date) === clubDayIndex(now) ? formatTime(date) : formatDateTime(date)
+}
+
+export function isPast(date: Date, now: Date = new Date()): boolean {
+  return date.getTime() < now.getTime()
+}
+
 /** "Hace 4 minutos", para la ultima actualización de la mascota. */
 export function relativeTime(date: Date, now: Date = new Date()): string {
   const seconds = Math.round((now.getTime() - date.getTime()) / 1000)

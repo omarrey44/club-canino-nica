@@ -9,6 +9,7 @@ export type AdminDashboardStats = {
   boarding: number
   pendingCheckIns: number
   pendingCheckOuts: number
+  overdueCheckOuts: number
   pendingReports: number
   totalReservations: number
 }
@@ -22,14 +23,17 @@ export type AdminDashboardStats = {
 export async function getAdminDashboardStats(
   organizationId: string
 ): Promise<AdminDashboardStats> {
-  const { start, end } = clubDayRange()
+  const now = new Date()
+  const { start, end } = clubDayRange(now)
   const inOrg = { reservation: { organizationId } }
+  const stillInClub = { ...inOrg, status: { in: ['ACTIVE' as const, 'READY_FOR_PICKUP' as const] } }
 
   const [
     present,
     byKind,
     pendingCheckIns,
     pendingCheckOuts,
+    overdueCheckOuts,
     staysToday,
     reportsToday,
     totalReservations,
@@ -50,13 +54,10 @@ export async function getAdminDashboardStats(
         },
       }),
 
-      prisma.stay.count({
-        where: {
-          ...inOrg,
-          status: { in: ['ACTIVE', 'READY_FOR_PICKUP'] },
-          expectedCheckOutAt: { gte: start, lt: end },
-        },
-      }),
+      // Sin limite inferior: una salida de ayer que nadie registro sigue pendiente.
+      prisma.stay.count({ where: { ...stillInClub, expectedCheckOutAt: { lt: end } } }),
+
+      prisma.stay.count({ where: { ...stillInClub, expectedCheckOutAt: { lt: now } } }),
 
       prisma.stay.findMany({
         where: { ...inOrg, checkInAt: { gte: start, lt: end } },
@@ -81,6 +82,7 @@ export async function getAdminDashboardStats(
     boarding: byKind.filter((stay) => stay.reservation.service.kind === 'BOARDING').length,
     pendingCheckIns,
     pendingCheckOuts,
+    overdueCheckOuts,
     pendingReports: staysToday.filter((stay) => !reported.has(stay.id)).length,
     totalReservations,
   }

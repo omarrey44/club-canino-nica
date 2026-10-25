@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/ui/page-header'
 import { PetAvatar } from '@/components/ui/pet-avatar'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { activityTypeLabels, stayStatusLabels, stayStatusTones } from '@/lib/constants/labels'
+import { CheckOutTime } from '@/components/stays/check-out-time'
 import { formatTime, relativeTime } from '@/lib/datetime'
 import { getActiveStays } from '@/server/queries/stays'
 import { requireStaff } from '@/server/auth/session'
@@ -75,7 +76,7 @@ export default async function AdminStaysPage() {
                     </p>
 
                     <p className="text-sm text-ink-muted tabular-nums">
-                      {formatTime(stay.checkInAt)} a {formatTime(stay.expectedCheckOutAt)} ·{' '}
+                      {formatTime(stay.checkInAt)} a <CheckOutTime date={stay.expectedCheckOutAt} /> ·{' '}
                       {stay._count.activities}{' '}
                       {stay._count.activities === 1 ? 'registro' : 'registros'}
                     </p>
