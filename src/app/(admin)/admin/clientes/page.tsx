@@ -12,7 +12,7 @@ export default function AdminClientsPage() {
       title="Clientes"
       description="Contacto, mascotas, reservaciones e historial de pagos."
       emptyTitle="Aún no hay clientes registrados"
-      emptyDescription="Cada cliente mostrara sus mascotas, sus reservaciones y su historial en un solo lugar."
+      emptyDescription="Cada cliente mostrará sus mascotas, sus reservaciones y su historial en un solo lugar."
     />
   )
 }

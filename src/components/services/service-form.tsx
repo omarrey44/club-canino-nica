@@ -65,7 +65,7 @@ export function ServiceForm({
         <Field errors={errors.priceUnit}>
           <Label>Se cobra</Label>
           <Select name="priceUnit" defaultValue={defaults.priceUnit ?? 'DAY'}>
-            <option value="DAY">Por dia o noche</option>
+            <option value="DAY">Por día o noche</option>
             <option value="UNIT">Por servicio</option>
           </Select>
         </Field>
@@ -104,7 +104,7 @@ export function ServiceForm({
             defaultValue={defaults.dailyCapacity ?? ''}
           />
           <Hint>
-            Dejalo vacio si no hay limite. Con un cupo puesto, el flujo de reserva bloquea los
+            Déjalo vacío si no hay límite. Con un cupo puesto, el flujo de reserva bloquea los
             días llenos.
           </Hint>
         </Field>

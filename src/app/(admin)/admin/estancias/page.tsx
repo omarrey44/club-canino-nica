@@ -82,7 +82,7 @@ export default async function AdminStaysPage() {
 
                     {last && (
                       <p className="text-sm text-ink-subtle">
-                        Ultimo: {activityTypeLabels[last.type]} · {relativeTime(last.occurredAt)}
+                        Último: {activityTypeLabels[last.type]} · {relativeTime(last.occurredAt)}
                       </p>
                     )}
                   </div>

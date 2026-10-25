@@ -65,7 +65,7 @@ export async function saveDailyReport(
         userId: stay.reservation.clientId,
         petId: stay.petId,
         type: 'NEW_REPORT',
-        title: `El reporte de ${stay.pet.name} esta listo`,
+        title: `El reporte de ${stay.pet.name} está listo`,
         body: `Ya puedes ver como le fue hoy a ${stay.pet.name}.`,
         linkUrl: '/mi-mascota',
       })

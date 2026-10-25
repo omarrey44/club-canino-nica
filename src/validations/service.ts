@@ -40,7 +40,7 @@ export const serviceSchema = z.object({
     .or(z.literal(''))
     .transform((value) => (value ? Number(value) : null))
     .refine((n) => n === null || (Number.isInteger(n) && n > 0 && n <= 500), {
-      message: 'El cupo va entre 1 y 500. Dejalo vacio si no hay limite.',
+      message: 'El cupo va entre 1 y 500. Déjalo vacío si no hay límite.',
     }),
 
   isActive: z

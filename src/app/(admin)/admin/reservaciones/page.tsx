@@ -166,7 +166,7 @@ export default async function AdminReservationsPage({
         <EmptyState
           icon={CalendarDays}
           title="Sin reservaciones en este periodo"
-          description="Cambia de fecha o quita el filtro de estado para ver mas."
+          description="Cambia de fecha o quita el filtro de estado para ver más."
         />
       ) : (
         <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface">

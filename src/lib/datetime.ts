@@ -54,7 +54,7 @@ export function relativeTime(date: Date, now: Date = new Date()): string {
   const hours = Math.round(minutes / 60)
   if (hours < 24) return `Hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`
   const days = Math.round(hours / 24)
-  if (days < 7) return `Hace ${days} ${days === 1 ? 'dia' : 'días'}`
+  if (days < 7) return `Hace ${days} ${days === 1 ? 'día' : 'días'}`
   return formatDate(date)
 }
 

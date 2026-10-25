@@ -148,7 +148,7 @@ export function StepDates({
 
       <Hint>
         Horario del club: {business.hours.daycareOpen} a {business.hours.daycareClose}. Estos
-        horarios son de demostracion y estan pendientes de confirmar.
+        horarios son de demostración y están pendientes de confirmar.
       </Hint>
 
       {checking && <p className="text-sm text-ink-muted">Consultando disponibilidad…</p>}

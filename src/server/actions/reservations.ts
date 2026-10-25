@@ -60,7 +60,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
       kind: { not: 'ADDON' },
     },
   })
-  if (!service) return errorState('Ese servicio no esta disponible.')
+  if (!service) return errorState('Ese servicio no está disponible.')
 
   const startAt = clubDateTime(startDate, startTime)
   const endAt = clubDateTime(endDate, endTime)
@@ -87,7 +87,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     : []
 
   if (extraServices.length !== requestedExtras.length) {
-    return errorState('Alguno de los servicios adicionales ya no esta disponible.')
+    return errorState('Alguno de los servicios adicionales ya no está disponible.')
   }
 
   const fullDays = await findFullDays(service.id, user.organizationId, startAt, endAt)
@@ -287,7 +287,7 @@ export async function setReservationStatus(
         userId: reservation.clientId,
         petId: reservation.petId,
         type: 'RESERVATION_CONFIRMED',
-        title: 'Tu reservación esta confirmada',
+        title: 'Tu reservación está confirmada',
         body: `Te esperamos el ${formatDate(reservation.startAt)}.`,
         linkUrl: `/reservas/${reservation.id}`,
       })

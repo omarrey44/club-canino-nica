@@ -1,9 +1,13 @@
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+
 import { ClientSidebar } from '@/components/layout/client-sidebar'
 import { ClientDesktopHeader } from '@/components/layout/client-desktop-header'
 import { ClientMobileHeader } from '@/components/layout/client-mobile-header'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { getUnreadCount } from '@/server/queries/notifications'
-import { requireUser } from '@/server/auth/session'
+import { roleLabels } from '@/lib/constants/labels'
+import { isStaff, requireUser } from '@/server/auth/session'
 
 /**
  * Shell del portal del cliente.
@@ -27,6 +31,23 @@ export default async function ClientLayout({ children }: { children: React.React
           email={user.email}
           unreadCount={unreadCount}
         />
+        {/* El personal puede abrir el portal (perfil, vista previa); sin este
+            aviso parece una cuenta de cliente vacía. */}
+        {isStaff(user.role) && (
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 bg-navy-900 px-4 py-2 text-sm text-navy-100 sm:px-6 lg:px-7">
+            <p>
+              Estás viendo el portal de clientes con tu cuenta de{' '}
+              <span className="font-bold text-white">{roleLabels[user.role]}</span>.
+            </p>
+            <Link
+              href="/admin"
+              className="inline-flex min-h-11 items-center gap-1.5 font-bold text-brand-300 hover:text-white"
+            >
+              <ArrowLeft className="size-4" aria-hidden />
+              Volver al panel
+            </Link>
+          </div>
+        )}
         {/* Reserva solo el espacio real de la barra flotante en movil. */}
         <main
           id="main-content"

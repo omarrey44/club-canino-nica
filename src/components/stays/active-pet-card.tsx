@@ -67,7 +67,7 @@ export function ActivePetCard({ stay }: { stay: ActiveStay }) {
 
             <p className="leading-snug text-ink-muted">
               {isReady
-                ? `${stay.pet.name} termino su día y te esta esperando.`
+                ? `${stay.pet.name} terminó su día y te está esperando.`
                 : `${stay.pet.name} está disfrutando su ${stay.reservation.service.name.toLowerCase()}.`}
             </p>
           </div>

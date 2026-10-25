@@ -8,7 +8,7 @@ export function LogoutButton() {
     <form action={logout}>
       <Button type="submit" variant="outline" size="sm">
         <LogOut aria-hidden />
-        Cerrar sesion
+        Cerrar sesión
       </Button>
     </form>
   )

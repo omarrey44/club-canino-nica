@@ -17,15 +17,15 @@ export const dailyReportSchema = z.object({
 
   walkCount: z.coerce
     .number()
-    .int('Escribe un numero entero.')
+    .int('Escribe un número entero.')
     .min(0, 'No puede ser negativo.')
     .max(20, 'Maximo 20 paseos.'),
 
   restMinutes: z.coerce
     .number()
-    .int('Escribe un numero entero.')
+    .int('Escribe un número entero.')
     .min(0, 'No puede ser negativo.')
-    .max(1440, 'No puede pasar de un dia.'),
+    .max(1440, 'No puede pasar de un día.'),
 
   activitiesSummary: z
     .string()

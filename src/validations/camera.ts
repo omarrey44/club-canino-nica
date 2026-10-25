@@ -10,7 +10,7 @@ const optional = (max: number) =>
     .transform((value) => (value ? value : null))
 
 export const cameraSchema = z.object({
-  name: z.string().trim().min(2, 'Escribe el nombre de la camara.').max(80),
+  name: z.string().trim().min(2, 'Escribe el nombre de la cámara.').max(80),
   area: z.string().trim().min(2, 'Escribe el area que cubre.').max(80),
   description: optional(240),
 
@@ -23,10 +23,10 @@ export const cameraSchema = z.object({
   providerRef: z
     .string()
     .trim()
-    .min(1, 'Escribe el identificador de la camara.')
+    .min(1, 'Escribe el identificador de la cámara.')
     .max(200)
     .refine((value) => !value.includes('@'), {
-      message: 'No pegues credenciales aqui. Usa solo el identificador de la camara.',
+      message: 'No pegues credenciales aquí. Usa solo el identificador de la cámara.',
     })
     .refine((value) => !/^[a-z]+:\/\//i.test(value), {
       message: 'Escribe solo el identificador, no la URL completa del stream.',

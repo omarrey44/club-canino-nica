@@ -8,12 +8,12 @@ const email = z
 
 const password = z
   .string()
-  .min(8, 'La contrasena necesita al menos 8 caracteres.')
-  .max(72, 'La contrasena es demasiado larga.')
+  .min(8, 'La contraseña necesita al menos 8 caracteres.')
+  .max(72, 'La contraseña es demasiado larga.')
 
 export const loginSchema = z.object({
   email,
-  password: z.string().min(1, 'Escribe tu contrasena.'),
+  password: z.string().min(1, 'Escribe tu contraseña.'),
   redirectTo: z.string().optional(),
 })
 

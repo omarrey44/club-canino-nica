@@ -38,5 +38,5 @@ export function formatAge(birthDate: Date | null, now: Date = new Date()): strin
   if (months < 24) return `${months} ${months === 1 ? 'mes' : 'meses'}`
 
   const years = Math.floor(months / 12)
-  return `${years} ${years === 1 ? 'ano' : 'anos'}`
+  return `${years} ${years === 1 ? 'año' : 'años'}`
 }

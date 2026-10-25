@@ -78,7 +78,8 @@ export async function requireUser(): Promise<SessionUser> {
  */
 export async function requireRole(...roles: Role[]): Promise<SessionUser> {
   const user = await requireUser()
-  if (!roles.includes(user.role)) redirect('/inicio')
+  // Al personal sin permiso se le devuelve a su panel, no al portal de clientes.
+  if (!roles.includes(user.role)) redirect(isStaff(user.role) ? '/admin' : '/inicio')
   return user
 }
 

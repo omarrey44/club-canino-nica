@@ -38,7 +38,7 @@ export async function login(_prev: ActionState, formData: FormData): Promise<Act
 
   if (error || !data.user) {
     // Mensaje deliberadamente ambiguo: no revelar si el correo existe.
-    return errorState('Correo o contrasena incorrectos.')
+    return errorState('Correo o contraseña incorrectos.')
   }
 
   const user = await prisma.user.findUnique({
@@ -85,7 +85,7 @@ export async function register(_prev: ActionState, formData: FormData): Promise<
 
   if (error || !data.user) {
     if (error?.message.toLowerCase().includes('already')) {
-      return errorState('Ya existe una cuenta con ese correo. Inicia sesion.')
+      return errorState('Ya existe una cuenta con ese correo. Inicia sesión.')
     }
     console.error('[auth.register] signUp fallo:', error)
     return errorState('No pudimos crear tu cuenta. Intenta de nuevo en unos minutos.')
@@ -134,7 +134,7 @@ export async function requestPasswordReset(
 
   // Respuesta identica exista o no la cuenta, para no filtrar correos registrados.
   return successState(
-    'Si ese correo tiene una cuenta, te enviamos las instrucciones para restablecer tu contrasena.'
+    'Si ese correo tiene una cuenta, te enviamos las instrucciones para restablecer tu contraseña.'
   )
 }
 
@@ -155,13 +155,13 @@ export async function resetPassword(
   // El enlace del correo deja una sesion de recuperacion activa. Sin ella,
   // cualquiera podria cambiar contraseñas ajenas llamando esta accion.
   if (!user) {
-    return errorState('El enlace expiro. Solicita uno nuevo desde "Olvide mi contrasena".')
+    return errorState('El enlace expiró. Solicita uno nuevo desde "Olvidé mi contraseña".')
   }
 
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password })
   if (error) {
     console.error('[auth.resetPassword]', error)
-    return errorState('No pudimos actualizar tu contrasena. Intenta de nuevo.')
+    return errorState('No pudimos actualizar tu contraseña. Intenta de nuevo.')
   }
 
   redirect('/inicio')

@@ -98,7 +98,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
                   <p className="mt-0.5 text-xs text-ink-muted">
                     {service.dailyCapacity
                       ? `Cupo ${service.dailyCapacity} por día`
-                      : 'Sin cupo maximo configurado'}
+                      : 'Sin cupo máximo configurado'}
                     {service.reservationCount > 0 &&
                       ` · ${service.reservationCount} reservaciones`}
                   </p>

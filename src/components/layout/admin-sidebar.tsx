@@ -6,7 +6,9 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 import { BrandLogo } from '@/components/ui/brand-logo'
-import { adminNavGroups, adminNavItems } from './admin-nav-items'
+import { adminNavGroupsFor, adminNavItems } from './admin-nav-items'
+import type { Role } from '@/generated/prisma/client'
+import { roleLabels } from '@/lib/constants/labels'
 import { cn } from '@/lib/utils'
 
 function useActiveHref() {
@@ -16,8 +18,9 @@ function useActiveHref() {
 }
 
 /** Sidebar de escritorio. Navy oscuro: separa visualmente operacion de portal. */
-export function AdminSidebar() {
+export function AdminSidebar({ role }: { role: Role }) {
   const isActive = useActiveHref()
+  const navGroups = adminNavGroupsFor(role)
 
   return (
     <aside className="hidden w-64 shrink-0 bg-navy-900 lg:block">
@@ -28,7 +31,7 @@ export function AdminSidebar() {
 
         <nav aria-label="Navegación del panel" className="mt-2 min-h-0 flex-1 overflow-y-auto">
           <div className="space-y-4">
-            {adminNavGroups.map((group) => (
+            {navGroups.map((group) => (
               <div key={group.label}>
                 <p className="px-3 text-2xs font-extrabold tracking-[0.14em] text-navy-300 uppercase">
                   {group.label}
@@ -72,12 +75,15 @@ export function AdminSidebar() {
  */
 export function AdminMobileNav({
   userName,
+  role,
   footer,
 }: {
   userName: string
+  role: Role
   footer: ReactNode
 }) {
   const isActive = useActiveHref()
+  const navGroups = adminNavGroupsFor(role)
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -209,7 +215,7 @@ export function AdminMobileNav({
 
           <nav aria-label="Navegación del panel" className="min-h-0 flex-1 overflow-y-auto p-4">
             <div className="space-y-5">
-              {adminNavGroups.map((group) => (
+              {navGroups.map((group) => (
                 <div key={group.label}>
                   <p className="px-3 text-2xs font-extrabold tracking-[0.14em] text-navy-300 uppercase">
                     {group.label}
@@ -244,7 +250,8 @@ export function AdminMobileNav({
           </nav>
 
           <div className="border-t border-white/10 p-4 safe-bottom">
-            <p className="mb-3 truncate text-sm font-bold text-navy-200">{userName}</p>
+            <p className="truncate text-sm font-bold text-navy-200">{userName}</p>
+            <p className="mb-3 text-xs font-semibold text-brand-300">{roleLabels[role]}</p>
             <div className="[&_button]:w-full [&_button]:border-white/15 [&_button]:bg-white/5 [&_button]:text-white [&_form]:w-full">
               {footer}
             </div>

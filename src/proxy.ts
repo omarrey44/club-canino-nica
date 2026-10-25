@@ -62,9 +62,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // El proxy no conoce el rol (vive en Postgres): la raiz decide entre /admin e /inicio.
   if (user && (pathname === '/login' || pathname === '/registro')) {
     const url = request.nextUrl.clone()
-    url.pathname = '/inicio'
+    url.pathname = '/'
     url.search = ''
     return NextResponse.redirect(url)
   }

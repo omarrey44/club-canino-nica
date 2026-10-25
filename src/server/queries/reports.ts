@@ -131,7 +131,7 @@ function buildSummary(counts: Partial<Record<ActivityType, number>>): string {
       return `${n} ${activityTypeLabels[type].toLowerCase()}${n > 1 ? 's' : ''}`
     })
 
-  return parts.length ? `Durante el dia: ${parts.join(', ')}.` : ''
+  return parts.length ? `Durante el día: ${parts.join(', ')}.` : ''
 }
 
 /** El reporte que ve el propietario. Solo se devuelve si esta publicado. */

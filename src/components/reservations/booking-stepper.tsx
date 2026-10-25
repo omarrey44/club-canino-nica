@@ -200,7 +200,7 @@ export function BookingStepper({
       <Card>
         <CardHeader>
           <CardTitle>
-            {step === 0 && 'Para quien es la reserva'}
+            {step === 0 && 'Para quién es la reserva'}
             {step === 1 && 'Que servicio necesitas'}
             {step === 2 && 'Cuando'}
             {step === 3 && 'Servicios adicionales'}

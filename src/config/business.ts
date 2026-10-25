@@ -28,7 +28,7 @@ export const business = {
     isDemo: true,
     phone: '+505 0000 0000',
     email: 'hola@clubcaninonica.com',
-    address: 'Direccion pendiente de confirmar, Managua, Nicaragua',
+    address: 'Dirección pendiente de confirmar, Managua, Nicaragua',
     whatsapp: '+505 0000 0000',
   },
 
@@ -47,7 +47,7 @@ export const business = {
     taxRate: 0.15,
     taxLabel: 'IVA',
     cancellationPolicy:
-      'Politica de cancelación pendiente de definir. Este texto es de demostracion.',
+      'Política de cancelación pendiente de definir. Este texto es de demostración.',
   },
 } as const
 

@@ -137,7 +137,7 @@ async function main() {
   const admin = await upsertUser({
     organizationId: org.id,
     email: 'admin@clubcaninonica.com',
-    fullName: 'Direccion Club Canino',
+    fullName: 'Dirección Club Canino',
     phone: '+505 0000 0001',
     role: 'ADMIN',
   })
@@ -177,7 +177,7 @@ async function main() {
   const serviceSeed = [
     {
       slug: 'guarderia-dia',
-      name: 'Guarderia de dia',
+      name: 'Guardería de día',
       description: 'Cuidado, juego y descanso durante la jornada.',
       kind: 'DAYCARE' as const,
       basePrice: '450.00',
@@ -188,7 +188,7 @@ async function main() {
     {
       slug: 'hospedaje',
       name: 'Hospedaje',
-      description: 'Estancia con pernocta, alimentacion y rutina supervisada.',
+      description: 'Estancia con pernocta, alimentación y rutina supervisada.',
       kind: 'BOARDING' as const,
       basePrice: '750.00',
       priceUnit: 'DAY',
@@ -197,8 +197,8 @@ async function main() {
     },
     {
       slug: 'bano',
-      name: 'Bano',
-      description: 'Bano completo con secado.',
+      name: 'Baño',
+      description: 'Baño completo con secado.',
       kind: 'ADDON' as const,
       basePrice: '250.00',
       priceUnit: 'UNIT',
@@ -207,7 +207,7 @@ async function main() {
     {
       slug: 'paseo-adicional',
       name: 'Paseo adicional',
-      description: 'Un paseo extra fuera de la rutina del dia.',
+      description: 'Un paseo extra fuera de la rutina del día.',
       kind: 'ADDON' as const,
       basePrice: '150.00',
       priceUnit: 'UNIT',
@@ -260,7 +260,7 @@ async function main() {
       isSterilized: true,
       vetName: 'Dra. Sofia Lopez (DEMO)',
       vetPhone: '+505 0000 0004',
-      vetClinic: 'Clinica veterinaria DEMO',
+      vetClinic: 'Clínica veterinaria DEMO',
       specialNotes: 'Se pone nervioso con truenos. Buscar espacio techado.',
     },
     update: {},
@@ -295,7 +295,7 @@ async function main() {
 
   // --- Camaras --------------------------------------------------------------
   const cameraSeed = [
-    { name: 'Area de juegos', area: 'Patio principal', providerRef: 'demo-play-area' },
+    { name: 'Área de juegos', area: 'Patio principal', providerRef: 'demo-play-area' },
     { name: 'Zona de descanso', area: 'Interior climatizado', providerRef: 'demo-rest-area' },
   ]
 
@@ -310,7 +310,7 @@ async function main() {
         data: {
           ...camera,
           organizationId: org.id,
-          description: 'Transmision de demostracion. No es una camara real.',
+          description: 'Transmisión de demostración. No es una cámara real.',
           provider: 'demo',
           protocol: 'DEMO',
           status: 'ONLINE',
@@ -361,10 +361,10 @@ async function main() {
       checkInAt: todayAt(8, 3),
       expectedCheckOutAt: todayAt(18),
       checkedInById: employee.id,
-      currentLocation: 'Area de juegos',
-      checkInNotes: 'Llego tranquilo, con correa y cobija.',
+      currentLocation: 'Área de juegos',
+      checkInNotes: 'Llegó tranquilo, con correa y cobija.',
     },
-    update: { status: 'ACTIVE', currentLocation: 'Area de juegos' },
+    update: { status: 'ACTIVE', currentLocation: 'Área de juegos' },
   })
 
   for (const cameraId of cameras) {
@@ -376,11 +376,11 @@ async function main() {
   }
 
   const activities = [
-    { type: 'CHECK_IN' as const, at: todayAt(8, 3), text: 'Rocky llego a Club Canino.' },
-    { type: 'FOOD' as const, at: todayAt(9, 5), text: 'Desayuno completo. Comio todo.' },
+    { type: 'CHECK_IN' as const, at: todayAt(8, 3), text: 'Rocky llegó a Club Canino.' },
+    { type: 'FOOD' as const, at: todayAt(9, 5), text: 'Desayuno completo. Comió todo.' },
     { type: 'PLAY' as const, at: todayAt(10, 20), text: 'Juego grupal en el patio.' },
-    { type: 'PHOTO' as const, at: todayAt(10, 35), text: 'Nueva fotografia del dia.' },
-    { type: 'WATER' as const, at: todayAt(11, 10), text: 'Hidratacion normal.' },
+    { type: 'PHOTO' as const, at: todayAt(10, 35), text: 'Nueva fotografía del día.' },
+    { type: 'WATER' as const, at: todayAt(11, 10), text: 'Hidratación normal.' },
     { type: 'REST' as const, at: todayAt(12, 20), text: 'Siesta en la zona techada.' },
     { type: 'WALK' as const, at: todayAt(14, 10), text: 'Paseo por el sendero.' },
     { type: 'NOTE' as const, at: todayAt(16, 0), text: 'Todo marcha muy bien con Rocky.' },
@@ -407,7 +407,7 @@ async function main() {
           petId: rocky.id,
           storageKey: 'demo/rocky-juego.jpg',
           url: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=1200&q=80&auto=format&fit=crop',
-          caption: 'Rocky corriendo en el area de juegos.',
+          caption: 'Rocky corriendo en el área de juegos.',
           takenAt: todayAt(10, 35),
           isFeatured: true,
           uploadedById: employee.id,
@@ -417,7 +417,7 @@ async function main() {
           petId: rocky.id,
           storageKey: 'demo/rocky-descanso.jpg',
           url: 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=1200&q=80&auto=format&fit=crop',
-          caption: 'Momento de descanso despues del juego.',
+          caption: 'Momento de descanso después del juego.',
           takenAt: todayAt(12, 25),
           uploadedById: employee.id,
         },
@@ -492,7 +492,7 @@ async function main() {
         walkCount: 2,
         restMinutes: 90,
         activitiesSummary: 'Juego grupal, dos paseos y descanso en zona techada.',
-        caregiverNotes: 'Rocky tuvo un dia excelente. Comio todo y jugo sin problemas.',
+        caregiverNotes: 'Rocky tuvo un día excelente. Comió todo y jugó sin problemas.',
         authorId: employee.id,
         publishedAt: daysAgo(item.days, 18),
       },
@@ -540,7 +540,7 @@ async function main() {
           userId: camila.id,
           petId: rocky.id,
           type: 'CHECK_IN',
-          title: 'Rocky ya esta en el club',
+          title: 'Rocky ya está en el club',
           body: 'Rocky acaba de ingresar a Club Canino.',
           linkUrl: '/mi-mascota',
           createdAt: todayAt(8, 4),
@@ -550,8 +550,8 @@ async function main() {
           userId: camila.id,
           petId: rocky.id,
           type: 'NEW_ACTIVITY',
-          title: 'Rocky termino su comida',
-          body: 'Desayuno completo. Comio todo.',
+          title: 'Rocky terminó su comida',
+          body: 'Desayuno completo. Comió todo.',
           linkUrl: '/mi-mascota',
           createdAt: todayAt(9, 6),
         },
@@ -561,7 +561,7 @@ async function main() {
           petId: rocky.id,
           type: 'NEW_PHOTO',
           title: 'Tenemos una nueva foto de Rocky',
-          body: 'Rocky corriendo en el area de juegos.',
+          body: 'Rocky corriendo en el área de juegos.',
           linkUrl: '/mi-mascota',
           createdAt: todayAt(10, 36),
         },

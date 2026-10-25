@@ -49,7 +49,7 @@ export const activitySchema = z.object({
   time: z
     .string()
     .trim()
-    .regex(/^\d{2}:\d{2}$/, 'Hora invalida.')
+    .regex(/^\d{2}:\d{2}$/, 'Hora inválida.')
     .optional()
     .or(z.literal(''))
     .transform((value) => (value ? value : null)),

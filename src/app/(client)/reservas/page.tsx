@@ -27,7 +27,7 @@ const emptyCopy: Record<ClientReservationFilter, { title: string; description: s
   },
   active: {
     title: 'Ninguna mascota en el club ahora',
-    description: 'Cuando tu mascota ingrese, su estancia aparecera en esta pestana.',
+    description: 'Cuando tu mascota ingrese, su estancia aparecerá en esta pestaña.',
   },
   past: {
     title: 'Todavía no hay estancias finalizadas',

@@ -46,7 +46,7 @@ export async function checkIn(_prev: ActionState, formData: FormData): Promise<A
   // Cubre tanto una reservación inexistente como una que ya ingreso: en ambos
   // casos el mensaje util es el mismo.
   if (!reservation) {
-    return errorState('Esa reservación ya ingreso o no esta confirmada para hoy.')
+    return errorState('Esa reservación ya ingresó o no está confirmada para hoy.')
   }
 
   const now = new Date()

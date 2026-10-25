@@ -41,7 +41,7 @@ export async function uploadStayPhotos(
 
   if (files.length === 0) return errorState('Elige al menos una imagen.')
   if (files.length > MAX_PER_UPLOAD) {
-    return errorState(`Sube maximo ${MAX_PER_UPLOAD} fotos a la vez.`)
+    return errorState(`Sube máximo ${MAX_PER_UPLOAD} fotos a la vez.`)
   }
 
   const caption = String(formData.get('caption') ?? '').trim() || null
@@ -81,7 +81,7 @@ export async function uploadStayPhotos(
           uploaded.length === 1
             ? `Tenemos una nueva foto de ${stay.pet.name}`
             : `Tenemos ${uploaded.length} fotos nuevas de ${stay.pet.name}`,
-        body: caption ?? `Asi va el dia de ${stay.pet.name}.`,
+        body: caption ?? `Así va el día de ${stay.pet.name}.`,
         linkUrl: '/mi-mascota',
       }, tx)
   })

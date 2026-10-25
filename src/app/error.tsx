@@ -21,7 +21,7 @@ export default function GlobalError({
     <main className="flex min-h-dvh items-center justify-center px-6">
       <div className="max-w-sm space-y-4 text-center">
         <h1 className="text-xl font-semibold text-navy-800">
-          Algo no cargo como esperabamos
+          Algo no cargó como esperábamos
         </h1>
         <p className="text-ink-muted">
           Ya estamos al tanto. Intenta de nuevo en un momento.

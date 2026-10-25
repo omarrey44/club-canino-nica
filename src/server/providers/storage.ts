@@ -33,8 +33,8 @@ const BUCKET = process.env.SUPABASE_STORAGE_BUCKET ?? 'club-canino'
  * vuelve a validar del lado del servidor.
  */
 function validateImage(file: File): string | null {
-  if (file.size === 0) return 'El archivo esta vacio.'
-  if (file.size > MAX_BYTES) return 'La imagen no puede pesar mas de 8 MB.'
+  if (file.size === 0) return 'El archivo está vacío.'
+  if (file.size > MAX_BYTES) return 'La imagen no puede pesar más de 8 MB.'
   if (!ALLOWED.includes(file.type)) return 'Sube una imagen JPG, PNG o WEBP.'
   return null
 }

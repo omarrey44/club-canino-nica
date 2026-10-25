@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: 'Iniciar sesión' }
 
 const linkErrors: Record<string, string> = {
   'enlace-invalido': 'Ese enlace no es valido. Solicita uno nuevo.',
-  'enlace-expirado': 'El enlace expiro. Solicita uno nuevo.',
+  'enlace-expirado': 'El enlace expiró. Solicita uno nuevo.',
 }
 
 export default async function LoginPage({

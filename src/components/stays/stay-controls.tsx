@@ -24,11 +24,11 @@ export function StayLocationForm({
       <input type="hidden" name="stayId" value={stayId} />
 
       <Field errors={state.fieldErrors?.currentLocation} className="min-w-48 flex-1">
-        <Label>Donde esta ahora</Label>
+        <Label>Dónde está ahora</Label>
         <Input
           name="currentLocation"
           defaultValue={currentLocation ?? ''}
-          placeholder="Area de juegos"
+          placeholder="Área de juegos"
           maxLength={80}
         />
       </Field>
