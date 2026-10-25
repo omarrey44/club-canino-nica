@@ -2,6 +2,7 @@ import { Mail, MapPin, PawPrint, Phone, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
+import { PasswordForm } from '@/components/account/password-form'
 import { ProfileForm } from '@/components/account/profile-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogoutButton } from '@/components/layout/logout-button'
@@ -63,6 +64,15 @@ export default async function ProfilePage() {
       </Card>
 
       <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Contraseña</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PasswordForm />
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Mis mascotas</CardTitle>

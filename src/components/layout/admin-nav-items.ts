@@ -7,6 +7,7 @@ import {
   LogIn,
   Settings,
   Sparkles,
+  UserCog,
   Users,
   Video,
 } from 'lucide-react'
@@ -38,6 +39,7 @@ export const adminNavGroups: AdminNavGroup[] = [
     items: [
       { href: '/admin/mascotas', label: 'Mascotas', icon: Dog },
       { href: '/admin/clientes', label: 'Clientes', icon: Users },
+      { href: '/admin/personal', label: 'Personal', icon: UserCog, roles: ADMIN_ONLY },
     ],
   },
   {

@@ -193,3 +193,29 @@ export async function updateProfile(_prev: ActionState, formData: FormData): Pro
   revalidatePath('/', 'layout')
   return successState('Tus datos quedaron guardados.')
 }
+
+/**
+ * Cambio de contraseña con la sesión abierta, sin pasar por el correo. Es como
+ * el personal reemplaza la contraseña temporal que le entrega un administrador.
+ */
+export async function changePassword(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  await requireUser()
+
+  const parsed = resetPasswordSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return errorState('Revisa los datos.', parsed.error.flatten().fieldErrors)
+  }
+
+  const supabase = await createClient()
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password })
+  if (error) {
+    console.error('[auth.changePassword]', error)
+    return errorState(
+      error.code === 'same_password'
+        ? 'La contraseña nueva tiene que ser distinta de la actual.'
+        : 'No pudimos cambiar tu contraseña. Intenta de nuevo.'
+    )
+  }
+
+  return successState('Contraseña actualizada.')
+}
