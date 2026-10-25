@@ -9,7 +9,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="space-y-5 2xl:space-y-6">
       <div className="space-y-2">
-        <p className="text-xs font-extrabold tracking-[0.15em] text-brand-700 uppercase">Recupera tu acceso</p>
+        <p className="text-xs font-extrabold tracking-[0.15em] text-navy-500 uppercase">Recupera tu acceso</p>
         <h1 className="text-2xl leading-tight text-navy-900 sm:text-3xl">¿Olvidaste tu contraseña?</h1>
         <p className="leading-relaxed text-ink-muted">
           Escribe tu correo y te enviamos un enlace para crear una nueva.

@@ -87,7 +87,7 @@ function WelcomeBanner() {
         </span>
 
         <div>
-          <p className="text-2xs font-extrabold tracking-[0.2em] text-brand-700 uppercase">
+          <p className="text-2xs font-extrabold tracking-[0.2em] text-navy-500 uppercase">
             Resumen operativo
           </p>
           <div className="mt-1 flex items-center gap-2">

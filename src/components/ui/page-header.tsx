@@ -27,7 +27,8 @@ export function PageHeader({
     >
       <div className="min-w-0 space-y-1">
         {eyebrow && (
-          <div className="flex items-center gap-2 text-xs font-extrabold tracking-[0.13em] text-brand-700 uppercase">
+          // El naranja queda en el icono; el texto en navy para que el acento no se diluya.
+          <div className="flex items-center gap-2 text-xs font-extrabold tracking-[0.13em] text-navy-500 uppercase">
             {Icon && (
               <span className="flex size-6 items-center justify-center rounded-[0.45rem] bg-brand-50 text-brand-700" aria-hidden>
                 <Icon className="size-3.5" />

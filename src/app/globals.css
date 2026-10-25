@@ -66,7 +66,11 @@
 
   /* --- Tipografia --------------------------------------------------------- */
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-varela), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fredoka), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+
+  /* Nunito Sans es variable: 750 en vez de 800 baja el ruido de las muchas
+     etiquetas en extrabold sin perder la jerarquia frente a `bold`. */
+  --font-weight-extrabold: 750;
 
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
@@ -77,7 +81,7 @@
   --radius-pill: 999px;
 
   /* --- Sombras: discretas, nunca elevaciones dramaticas -------------------- */
-  --shadow-card: 0 1px 2px rgb(13 38 57 / 0.04), 0 6px 18px rgb(13 38 57 / 0.045);
+  --shadow-card: 0 1px 2px rgb(13 38 57 / 0.05), 0 8px 22px rgb(13 38 57 / 0.06);
   --shadow-raised: 0 12px 30px rgb(13 38 57 / 0.1);
   --shadow-overlay: 0 24px 64px rgb(13 38 57 / 0.18);
 }
@@ -110,9 +114,9 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 600;
     text-wrap: balance;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.01em;
   }
 
   p {

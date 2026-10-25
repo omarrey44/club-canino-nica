@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Nunito_Sans, Varela_Round } from 'next/font/google'
+import { Fredoka, Nunito_Sans } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/toaster'
 import { business } from '@/config/business'
@@ -11,10 +11,11 @@ const nunito = Nunito_Sans({
   display: 'swap',
 })
 
-const varela = Varela_Round({
+// Redondeada como el logo, pero con pesos: Varela Round solo tenia 400 y los
+// titulos quedaban mas delgados que las etiquetas en negrita que los rodean.
+const fredoka = Fredoka({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-varela',
+  variable: '--font-fredoka',
   display: 'swap',
 })
 
@@ -41,7 +42,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${nunito.variable} ${varela.variable}`}>
+    <html lang="es" className={`${nunito.variable} ${fredoka.variable}`}>
       <body className="antialiased">
         <a
           href="#main-content"

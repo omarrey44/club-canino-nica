@@ -39,7 +39,7 @@ export default async function ClientHomePage() {
     <div className="stagger-enter space-y-4 sm:space-y-5">
       <header className="relative flex min-h-28 items-center overflow-hidden rounded-card border border-brand-100 bg-canvas-warm p-4 shadow-card sm:p-5 lg:px-7">
         <div className="relative z-10 max-w-2xl space-y-1.5 lg:max-w-[64%]">
-          <p className="text-xs font-extrabold tracking-[0.15em] text-brand-700 uppercase">
+          <p className="text-xs font-extrabold tracking-[0.15em] text-navy-500 uppercase">
             Tu espacio en el club
           </p>
           <h1 className="text-2xl leading-tight text-navy-900 sm:text-[2rem]">
