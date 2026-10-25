@@ -77,10 +77,12 @@ export function AdminMobileNav({
   userName,
   role,
   footer,
+  bell,
 }: {
   userName: string
   role: Role
   footer: ReactNode
+  bell: ReactNode
 }) {
   const isActive = useActiveHref()
   const navGroups = adminNavGroupsFor(role)
@@ -163,6 +165,8 @@ export function AdminMobileNav({
             <span className="block truncate text-sm font-extrabold text-white">{current?.label ?? 'Dashboard'}</span>
           </span>
         </Link>
+        <div className="flex items-center gap-2">
+        {bell}
         <button
           ref={triggerRef}
           type="button"
@@ -174,6 +178,7 @@ export function AdminMobileNav({
         >
           <Menu className="size-5" aria-hidden />
         </button>
+        </div>
         </div>
       </header>
 

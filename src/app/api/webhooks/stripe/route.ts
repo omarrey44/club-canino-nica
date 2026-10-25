@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import { notify } from '@/server/notifications'
+import { notify, notifyStaff } from '@/server/notifications'
 import { verifyWebhookSignature } from '@/server/providers/payment'
 
 /**
@@ -71,6 +71,17 @@ export async function POST(request: NextRequest) {
             title: 'Recibimos tu pago',
             body: `Tu reservación ${payment.reservation.code} está confirmada.`,
             linkUrl: `/reservas/${payment.reservation.id}`,
+          },
+          tx
+        )
+        await notifyStaff(
+          {
+            organizationId: payment.reservation.organizationId,
+            petId: payment.reservation.petId,
+            type: 'PAYMENT_CONFIRMED',
+            title: 'Pago recibido',
+            body: `Se pagó la reservación ${payment.reservation.code}.`,
+            linkUrl: '/admin/pagos',
           },
           tx
         )

@@ -6,6 +6,13 @@ import { prisma } from '@/lib/prisma'
 import { requireUser } from '@/server/auth/session'
 import { successState, type ActionState } from './types'
 
+/** El contador de no leidos vive en los layouts de ambos portales. */
+function revalidateNotifications() {
+  revalidatePath('/notificaciones')
+  revalidatePath('/inicio')
+  revalidatePath('/admin', 'layout')
+}
+
 /**
  * Marca una notificación como leída.
  *
@@ -21,8 +28,7 @@ export async function markNotificationRead(notificationId: string): Promise<Acti
     data: { readAt: new Date() },
   })
 
-  revalidatePath('/notificaciones')
-  revalidatePath('/inicio')
+  revalidateNotifications()
   return successState()
 }
 
@@ -34,7 +40,6 @@ export async function markAllNotificationsRead(): Promise<ActionState> {
     data: { readAt: new Date() },
   })
 
-  revalidatePath('/notificaciones')
-  revalidatePath('/inicio')
+  revalidateNotifications()
   return successState(count === 0 ? 'No tenías avisos sin leer.' : 'Listo, todo al día.')
 }

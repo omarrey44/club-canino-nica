@@ -7,7 +7,7 @@ import { business } from '@/config/business'
 import { clubDateTime, formatDate } from '@/lib/datetime'
 import { fromCents, quote } from '@/lib/pricing'
 import { prisma } from '@/lib/prisma'
-import { notify } from '@/server/notifications'
+import { notify, notifyStaff } from '@/server/notifications'
 import { reservationStatusLabels } from '@/lib/constants/labels'
 import { recordAudit } from '@/server/audit'
 import { isStaff, requireStaff, requireUser } from '@/server/auth/session'
@@ -219,6 +219,17 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     changes: { code: created.code, serviceId: service.id, petId: pet.id, atCounter },
   })
 
+  if (!atCounter) {
+    await notifyStaff({
+      organizationId: user.organizationId,
+      petId: pet.id,
+      type: 'RESERVATION_CONFIRMED',
+      title: 'Nueva reserva por confirmar',
+      body: `${user.fullName} reservó ${service.name} para ${pet.name}, el ${formatDate(startAt)}.`,
+      linkUrl: '/admin/reservaciones',
+    })
+  }
+
   revalidatePath('/reservas')
   revalidatePath('/inicio')
   if (atCounter) {
@@ -237,7 +248,7 @@ export async function cancelReservation(input: unknown): Promise<ActionState> {
 
   const reservation = await prisma.reservation.findFirst({
     where: { id: parsed.data.reservationId, clientId: user.id },
-    select: { id: true, status: true, code: true },
+    select: { id: true, status: true, code: true, petId: true, pet: { select: { name: true } } },
   })
   if (!reservation) return errorState('No encontramos esa reservación.')
 
@@ -263,6 +274,15 @@ export async function cancelReservation(input: unknown): Promise<ActionState> {
     entityType: 'Reservation',
     entityId: reservation.id,
     changes: { code: reservation.code, from: reservation.status },
+  })
+
+  await notifyStaff({
+    organizationId: user.organizationId,
+    petId: reservation.petId,
+    type: 'RESERVATION_CONFIRMED',
+    title: 'Reserva cancelada por el cliente',
+    body: `${user.fullName} canceló ${reservation.code} (${reservation.pet.name}).`,
+    linkUrl: '/admin/reservaciones',
   })
 
   revalidatePath('/reservas')

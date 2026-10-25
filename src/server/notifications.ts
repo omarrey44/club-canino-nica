@@ -51,3 +51,31 @@ export async function notify(input: NotifyInput, db: Db = prisma): Promise<void>
   // mandar el mensaje y marcar `sentAt`. Debe hacerse despues de confirmar la
   // transaccion, no dentro: un push no se puede deshacer.
 }
+
+/**
+ * Aviso para todo el personal activo de la organizacion: reservas nuevas,
+ * cancelaciones y pagos. Una fila por persona, para que cada quien lleve su
+ * propio "leido".
+ */
+export async function notifyStaff(
+  input: Omit<NotifyInput, 'userId'>,
+  db: Db = prisma
+): Promise<void> {
+  const staff = await db.user.findMany({
+    where: { organizationId: input.organizationId, role: { not: 'CLIENT' }, isActive: true },
+    select: { id: true },
+  })
+  if (staff.length === 0) return
+
+  await db.notification.createMany({
+    data: staff.map((member) => ({
+      organizationId: input.organizationId,
+      userId: member.id,
+      petId: input.petId ?? null,
+      type: input.type,
+      title: input.title,
+      body: input.body,
+      linkUrl: input.linkUrl ?? null,
+    })),
+  })
+}
