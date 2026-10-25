@@ -23,7 +23,7 @@ const INTOCABLES = new Set(['_prisma_migrations'])
 if (!process.argv.includes(CONFIRMACION)) {
   console.error(
     `Esto borra todos los datos y todas las cuentas, sin vuelta atras.\n` +
-      `Si es lo que quieres:  npm run db:reset -- ${CONFIRMACION}`
+      `Si es lo que quieres:  npm run db:wipe -- ${CONFIRMACION}`
   )
   process.exit(1)
 }
@@ -72,5 +72,5 @@ for (const user of data.users) {
 
 console.log(
   `\nBase vacia y ${data.users.length} cuentas borradas. ` +
-    `Siguiente paso: npm run db:seed`
+    `Siguiente paso: npm run db:seed (demo) o npm run db:seed:base (sin datos demo)`
 )

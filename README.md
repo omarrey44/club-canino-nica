@@ -151,6 +151,7 @@ crearse en Supabase Auth y eso no se puede hacer por SQL.
 npm run db:migrate     # crear/aplicar migraciones en desarrollo
 npm run db:deploy      # aplicar migraciones en produccion
 npm run db:seed        # datos demo (idempotente)
+npm run db:seed:base   # solo organizacion + cuenta del dueno, sin datos demo
 npm run db:studio      # explorador visual
 npm run db:reset       # BORRA todo y vuelve a migrar + sembrar
 npm run db:wipe        # BORRA los datos y las cuentas, sin tocar el esquema
@@ -158,7 +159,12 @@ npm run db:wipe        # BORRA los datos y las cuentas, sin tocar el esquema
 
 `db:wipe` vacia todas las tablas y borra todos los usuarios de Supabase Auth,
 que `db:reset` no toca porque viven fuera de Postgres. Exige confirmacion
-explicita: `npm run db:wipe -- --si-borrar-todo`. Despues, `npm run db:seed`.
+explicita: `npm run db:wipe -- --si-borrar-todo`. Despues, `npm run db:seed`
+para la demo o `npm run db:seed:base` para una instalacion real.
+
+`db:seed:base` exige `SEED_OWNER_EMAIL`: sin dueno nadie podria entrar al panel.
+La contrasena inicial del dueno es `SEED_DEMO_PASSWORD`. La app no arranca sin
+la fila de la organizacion, asi que tras un `db:wipe` siempre va uno de los dos.
 
 Las URLs de conexion viven en `prisma.config.ts`, no en `schema.prisma`
 (Prisma 7 movio la configuracion de datasource fuera del schema).

@@ -11,8 +11,15 @@
  * del negocio.
  *
  *   npm run db:seed
+ *
+ * Con `--solo-base` crea solo la organizacion y la cuenta del dueno: el punto
+ * de partida de una instalacion real, sin clientes ni mascotas inventados.
+ *
+ *   npm run db:seed:base
  */
 
+// `prisma db seed` ya carga el .env; esto cubre `db:seed:base`, que corre sin Prisma.
+import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { createClient } from '@supabase/supabase-js'
 
@@ -38,6 +45,8 @@ const DEMO_PASSWORD = requireEnv('SEED_DEMO_PASSWORD')
  */
 const OWNER_EMAIL = process.env.SEED_OWNER_EMAIL?.trim()
 const OWNER_NAME = process.env.SEED_OWNER_NAME?.trim() || 'Administrador'
+
+const BASE_ONLY = process.argv.includes('--solo-base')
 
 const supabaseAdmin = createClient(
   requireEnv('NEXT_PUBLIC_SUPABASE_URL'),
@@ -118,7 +127,12 @@ async function upsertUser(input: {
 }
 
 async function main() {
-  console.log('Sembrando datos demo...\n')
+  if (BASE_ONLY && !OWNER_EMAIL) {
+    // Sin dueno, una base vacia no tiene a nadie que pueda entrar al panel.
+    throw new Error('--solo-base necesita SEED_OWNER_EMAIL en el .env.')
+  }
+
+  console.log(BASE_ONLY ? 'Sembrando la base minima...\n' : 'Sembrando datos demo...\n')
 
   // --- Organizacion ---------------------------------------------------------
   const org = await prisma.organization.upsert({
@@ -132,6 +146,17 @@ async function main() {
     },
     update: {},
   })
+
+  if (BASE_ONLY) {
+    await upsertUser({
+      organizationId: org.id,
+      email: OWNER_EMAIL!,
+      fullName: OWNER_NAME,
+      role: 'ADMIN',
+    })
+    console.log(`Listo. Administrador ${OWNER_EMAIL} (contrasena: la de SEED_DEMO_PASSWORD).`)
+    return
+  }
 
   // --- Personas -------------------------------------------------------------
   const admin = await upsertUser({
