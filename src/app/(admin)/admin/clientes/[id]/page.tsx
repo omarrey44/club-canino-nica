@@ -9,7 +9,7 @@ import { EmptyState } from '@/components/ui/empty-state'
 import { PageHeader } from '@/components/ui/page-header'
 import { PetAvatar } from '@/components/ui/pet-avatar'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { ActiveToggle } from '@/components/users/user-controls'
+import { ActiveToggle, ResetPasswordButton } from '@/components/users/user-controls'
 import { formatCurrency } from '@/config/business'
 import {
   paymentStatusLabels,
@@ -88,7 +88,8 @@ export default async function AdminClientPage({ params }: { params: Promise<{ id
                 {client.email}
               </a>
               {canManage && (
-                <div className="border-t border-line pt-3">
+                <div className="flex flex-wrap gap-2 border-t border-line pt-3">
+                  <ResetPasswordButton userId={client.id} email={client.email} />
                   <ActiveToggle userId={client.id} active={client.isActive} name={client.fullName} />
                 </div>
               )}

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { StaffForm } from '@/components/users/staff-form'
-import { ActiveToggle, RoleSelect } from '@/components/users/user-controls'
+import { ActiveToggle, ResetPasswordButton, RoleSelect } from '@/components/users/user-controls'
 import { roleLabels } from '@/lib/constants/labels'
 import { requireRole } from '@/server/auth/session'
 import { getStaff } from '@/server/queries/admin-users'
@@ -61,6 +61,7 @@ export default async function AdminStaffPage() {
               ) : (
                 <div className="flex flex-wrap items-center gap-2">
                   <RoleSelect userId={member.id} role={member.role} name={member.fullName} />
+                  <ResetPasswordButton userId={member.id} email={member.email} />
                   <ActiveToggle userId={member.id} active={member.isActive} name={member.fullName} />
                 </div>
               )}

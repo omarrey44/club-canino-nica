@@ -1,8 +1,11 @@
 import { z } from 'zod'
 
+// En minusculas: Supabase ya las compara asi, y `users.email` es unico sensible
+// a mayusculas, asi que "Ana@" y "ana@" serian dos perfiles para una cuenta.
 const email = z
   .string()
   .trim()
+  .toLowerCase()
   .min(1, 'Escribe tu correo.')
   .email('Ese correo no parece válido.')
 

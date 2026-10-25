@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,15 @@ import { idleState } from '@/server/actions/types'
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(register, idleState)
+  // Controlados: si el registro vuelve con error (correo repetido, por ejemplo),
+  // React vaciaria los campos libres y habria que escribirlos de nuevo.
+  const [values, setValues] = useState({ fullName: '', email: '', phone: '' })
+  const bind = (name: keyof typeof values) => ({
+    name,
+    value: values[name],
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setValues((current) => ({ ...current, [name]: event.target.value })),
+  })
 
   if (state.status === 'success') {
     return <Alert tone="success">{state.message}</Alert>
@@ -26,14 +35,14 @@ export function RegisterForm() {
 
       <Field errors={state.fieldErrors?.fullName}>
         <Label>Nombre completo</Label>
-        <Input name="fullName" autoComplete="name" placeholder="Camila Ruiz" required />
+        <Input {...bind('fullName')} autoComplete="name" placeholder="Camila Ruiz" required />
       </Field>
 
       <div className="grid gap-3.5 sm:grid-cols-2">
         <Field errors={state.fieldErrors?.email}>
           <Label>Correo</Label>
           <Input
-            name="email"
+            {...bind('email')}
             type="email"
             autoComplete="email"
             inputMode="email"
@@ -44,7 +53,7 @@ export function RegisterForm() {
 
         <Field errors={state.fieldErrors?.phone}>
           <Label>Teléfono</Label>
-          <Input name="phone" type="tel" autoComplete="tel" inputMode="tel" />
+          <Input {...bind('phone')} type="tel" autoComplete="tel" inputMode="tel" />
         </Field>
       </div>
 

@@ -1,13 +1,14 @@
 'use client'
 
-import { UserCheck, UserX } from 'lucide-react'
+import { KeyRound, UserCheck, UserX } from 'lucide-react'
 import { useState, useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toaster'
+import { TempPasswordNotice } from '@/components/users/temp-password-notice'
 import type { Role } from '@/generated/prisma/client'
 import { roleLabels } from '@/lib/constants/labels'
-import { setUserActive, setUserRole } from '@/server/actions/users'
+import { resetUserPassword, setUserActive, setUserRole } from '@/server/actions/users'
 import type { ActionState } from '@/server/actions/types'
 import { ASSIGNABLE_STAFF_ROLES } from '@/validations/users'
 
@@ -44,6 +45,57 @@ export function RoleSelect({ userId, role, name }: { userId: string; role: Role;
       ))}
       <option value="CLIENT">Quitar del equipo (cliente)</option>
     </select>
+  )
+}
+
+/**
+ * Contraseña temporal sin correo, para quien olvidó la suya. Se confirma porque
+ * la actual deja de servir en ese momento.
+ */
+export function ResetPasswordButton({ userId, email }: { userId: string; email: string }) {
+  const [pending, startTransition] = useTransition()
+  const [confirming, setConfirming] = useState(false)
+  const [password, setPassword] = useState<string | null>(null)
+
+  if (password) {
+    return (
+      <div className="w-full">
+        <TempPasswordNotice email={email} password={password} />
+      </div>
+    )
+  }
+
+  if (!confirming) {
+    return (
+      <Button size="sm" variant="ghost" onClick={() => setConfirming(true)}>
+        <KeyRound aria-hidden />
+        Contraseña temporal
+      </Button>
+    )
+  }
+
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2">
+      <span className="text-sm text-ink-muted">Su contraseña actual dejará de funcionar.</span>
+      <Button
+        size="sm"
+        loading={pending}
+        loadingLabel="Generando"
+        onClick={() =>
+          startTransition(async () => {
+            const result = await resetUserPassword(userId)
+            if (result.tempPassword) setPassword(result.tempPassword)
+            else report(result)
+            setConfirming(false)
+          })
+        }
+      >
+        Generar
+      </Button>
+      <Button size="sm" variant="ghost" onClick={() => setConfirming(false)}>
+        No
+      </Button>
+    </span>
   )
 }
 

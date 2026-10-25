@@ -99,6 +99,7 @@ Prisma). Nunca se sube al repositorio. La plantilla completa esta en
 | `STORAGE_PROVIDER` | `supabase` o `cloudinary`. |
 | `CAMERA_PROVIDER` | `demo`, `hls` o `webrtc`. |
 | `PAYMENT_PROVIDER` | `demo` o `stripe`. |
+| `AUTH_EMAILS_ENABLED` | `true` solo con SMTP propio en Supabase. En `false` (por defecto) el registro no envia correo y un administrador da contrasenas temporales. |
 | `SEED_DEMO_PASSWORD` | Contrasena de las cuentas demo. |
 
 Donde encontrar los valores en Supabase:

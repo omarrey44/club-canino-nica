@@ -5,7 +5,8 @@ import { revalidatePath } from 'next/cache'
 import type { Role } from '@/generated/prisma/client'
 import { roleLabels } from '@/lib/constants/labels'
 import { prisma } from '@/lib/prisma'
-import { createAccount } from '@/server/accounts'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { createAccount, generateTempPassword } from '@/server/accounts'
 import { recordAudit } from '@/server/audit'
 import { requireRole, requireStaff, type SessionUser } from '@/server/auth/session'
 import {
@@ -132,7 +133,7 @@ export async function createClientAccount(
 async function loadTarget(actor: SessionUser, userId: string) {
   const target = await prisma.user.findFirst({
     where: { id: userId, organizationId: actor.organizationId },
-    select: { id: true, fullName: true, role: true, isActive: true },
+    select: { id: true, authUserId: true, fullName: true, role: true, isActive: true },
   })
   if (!target) return { target: null, error: 'No encontramos a esa persona.' }
   // Evita quedarse sin acceso al panel por accidente.
@@ -197,4 +198,31 @@ export async function setUserActive(userId: string, active: boolean): Promise<Ac
       ? `${target.fullName} puede volver a entrar.`
       : `${target.fullName} ya no puede entrar. Su historial se conserva.`
   )
+}
+
+/**
+ * Contrasena temporal para alguien que olvido la suya, sin pasar por correo.
+ * Mientras no haya SMTP es la unica forma de recuperar el acceso. La propia se
+ * cambia en Mi perfil, por eso `loadTarget` rechaza la cuenta de quien llama.
+ */
+export async function resetUserPassword(
+  userId: string
+): Promise<ActionState & { tempPassword?: string }> {
+  const actor = await requireRole('ADMIN', 'SUPER_ADMIN')
+
+  const { target, error } = await loadTarget(actor, userId)
+  if (!target) return errorState(error)
+
+  const tempPassword = generateTempPassword()
+  const { error: authError } = await createAdminClient().auth.admin.updateUserById(
+    target.authUserId,
+    { password: tempPassword }
+  )
+  if (authError) {
+    console.error('[users.resetUserPassword]', authError)
+    return errorState('No pudimos cambiar la contraseña. Intenta de nuevo.')
+  }
+
+  await recordAudit(actor, { action: 'USER_PASSWORD_RESET', entityType: 'User', entityId: target.id })
+  return { ...successState(`Nueva contraseña temporal para ${target.fullName}.`), tempPassword }
 }

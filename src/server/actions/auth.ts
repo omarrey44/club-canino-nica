@@ -7,6 +7,7 @@ import type { Route } from 'next'
 
 import { prisma } from '@/lib/prisma'
 import { createClient } from '@/lib/supabase/server'
+import { authEmailsEnabled, createAccount } from '@/server/accounts'
 import { getOrganization } from '@/server/organization'
 import { isStaff, requireUser } from '@/server/auth/session'
 import {
@@ -76,6 +77,36 @@ export async function register(_prev: ActionState, formData: FormData): Promise<
   const organization = await getOrganization()
   const supabase = await createClient()
 
+  // Sin correos (demo): la cuenta nace confirmada y la sesion se abre aqui mismo.
+  if (!authEmailsEnabled()) {
+    const taken = await prisma.user.findUnique({ where: { email }, select: { id: true } })
+    if (taken) return errorState('Ya existe una cuenta con ese correo. Inicia sesión.')
+
+    const account = await createAccount({
+      organizationId: organization.id,
+      email,
+      fullName,
+      phone,
+      role: 'CLIENT',
+      password,
+    })
+    if ('error' in account) {
+      return errorState(
+        account.code === 'exists'
+          ? 'Ya existe una cuenta con ese correo. Inicia sesión.'
+          : 'No pudimos crear tu cuenta. Intenta de nuevo en unos minutos.'
+      )
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      // La cuenta ya existe: en el peor caso entra a mano desde el login.
+      console.error('[auth.register] inicio de sesion tras el alta fallo:', error)
+      redirect('/login')
+    }
+    redirect('/inicio')
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -125,6 +156,10 @@ export async function requestPasswordReset(
   const parsed = forgotPasswordSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) {
     return errorState('Revisa los datos.', parsed.error.flatten().fieldErrors)
+  }
+
+  if (!authEmailsEnabled()) {
+    return errorState('Por ahora no enviamos correos. Pide al club una contraseña temporal.')
   }
 
   const supabase = await createClient()

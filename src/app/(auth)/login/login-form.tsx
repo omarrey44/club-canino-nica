@@ -13,6 +13,9 @@ import { idleState } from '@/server/actions/types'
 export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, action, pending] = useActionState(login, idleState)
   const [showPassword, setShowPassword] = useState(false)
+  // Controlado a proposito: React vacia los campos libres al terminar la accion,
+  // incluso cuando vuelve con error, y obligaria a reescribir el correo.
+  const [email, setEmail] = useState('')
 
   return (
     <form action={action} className="space-y-4 2xl:space-y-5" noValidate>
@@ -29,6 +32,8 @@ export function LoginForm({ redirectTo }: { redirectTo?: string }) {
           <Input
             name="email"
             type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
             inputMode="email"
             placeholder="tu@correo.com"
