@@ -1,21 +1,14 @@
 import {
   AlertTriangle,
-  BadgeDollarSign,
   Building2,
   CalendarClock,
   Camera,
   CheckCircle2,
   ChevronRight,
-  Clock3,
-  Database,
   Eye,
   FileText,
-  Mail,
-  MapPin,
   Palette,
   PawPrint,
-  Phone,
-  ReceiptText,
   Settings2,
   ShieldCheck,
   Store,
@@ -27,10 +20,11 @@ import type { Metadata } from 'next'
 import { BrandLogo } from '@/components/ui/brand-logo'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { PageHeader } from '@/components/ui/page-header'
-import { business, hasDemoBusinessData } from '@/config/business'
+import { BusinessSettingsForm } from '@/components/settings/business-settings-form'
+import { business } from '@/config/business'
 import { formatDate } from '@/lib/datetime'
 import { requireRole } from '@/server/auth/session'
-import { getOrganization } from '@/server/organization'
+import { getBusinessSettings, getOrganization } from '@/server/organization'
 import { getAllServices } from '@/server/queries/services'
 import { cn } from '@/lib/utils'
 
@@ -38,34 +32,14 @@ export const metadata: Metadata = { title: 'Configuración' }
 
 export default async function AdminSettingsPage() {
   const user = await requireRole('ADMIN', 'SUPER_ADMIN')
-  const [organization, services] = await Promise.all([
+  const [organization, settings, services] = await Promise.all([
     getOrganization(),
+    getBusinessSettings(),
     getAllServices(user.organizationId),
   ])
 
   const activeServices = services.filter((service) => service.isActive)
-  const generalRows: SettingRowData[] = [
-    { label: 'Nombre del negocio', value: organization.name, icon: Store, source: 'database' },
-    { label: 'Dirección', value: business.contact.address, icon: MapPin, source: 'demo' },
-    { label: 'Zona horaria', value: organization.timezone, icon: Clock3, source: 'database' },
-    {
-      label: 'Moneda',
-      value:
-        organization.currency === 'NIO'
-          ? 'NIO · Córdoba nicaragüense'
-          : organization.currency,
-      icon: BadgeDollarSign,
-      source: 'database',
-    },
-    { label: 'Teléfono', value: business.contact.phone, icon: Phone, source: 'demo' },
-    { label: 'Correo electrónico', value: business.contact.email, icon: Mail, source: 'demo' },
-    {
-      label: 'Impuesto',
-      value: `${business.billing.taxLabel} ${(business.billing.taxRate * 100).toFixed(0)}%`,
-      icon: ReceiptText,
-      source: 'demo',
-    },
-  ]
+  const hasDemoData = settings.contact.isDemo || settings.hours.isDemo || settings.billing.isDemo
 
   const readinessChecks = [
     Boolean(organization.name),
@@ -73,9 +47,9 @@ export default async function AdminSettingsPage() {
     Boolean(organization.currency),
     Boolean(business.logoUrl),
     activeServices.length > 0,
-    !business.contact.isDemo,
-    !business.hours.isDemo,
-    !business.billing.isDemo,
+    !settings.contact.isDemo,
+    !settings.hours.isDemo,
+    !settings.billing.isDemo,
   ]
   const completedChecks = readinessChecks.filter(Boolean).length
   const completion = Math.round((completedChecks / readinessChecks.length) * 100)
@@ -98,7 +72,7 @@ export default async function AdminSettingsPage() {
         }
       />
 
-      {hasDemoBusinessData && (
+      {hasDemoData && (
         <section
           className="relative overflow-hidden rounded-card border border-brand-200 bg-canvas-warm"
           aria-labelledby="aviso-configuracion"
@@ -113,7 +87,7 @@ export default async function AdminSettingsPage() {
                   Información importante
                 </h2>
                 <p className="mt-0.5 text-sm leading-snug text-ink-muted">
-                  Teléfono, dirección, horarios e impuestos siguen marcados como DEMO. Verifícalos antes de mostrarlos a clientes reales.
+                  Hay datos marcados como DEMO. Corrígelos abajo y guarda: desde ese momento son los oficiales.
                 </p>
               </div>
             </div>
@@ -122,7 +96,7 @@ export default async function AdminSettingsPage() {
                 Entorno de demostración
               </p>
               <p className="mt-1 max-w-xl text-sm leading-snug text-ink-muted">
-                Teléfono, dirección, horarios e impuestos todavía no son datos oficiales del negocio.
+                Mientras sigan en DEMO, el impuesto y los horarios de las reservas son los de prueba.
               </p>
             </div>
           </div>
@@ -139,7 +113,7 @@ export default async function AdminSettingsPage() {
       >
         <ul className="grid grid-cols-3 lg:grid-cols-5">
           <li><SectionShortcut href="#informacion" label="Información general" icon={Store} active /></li>
-          <li><SectionShortcut href="#horarios" label="Horario y cobros" icon={CalendarClock} /></li>
+          <li><SectionShortcut href="#informacion" label="Horario y cobros" icon={CalendarClock} /></li>
           <li>
             <Link
               href="/admin/servicios"
@@ -165,20 +139,17 @@ export default async function AdminSettingsPage() {
               <p className="text-sm text-ink-muted">Datos usados en el panel y el portal del cliente.</p>
             </div>
           </CardHeader>
-          <CardContent className="pt-0">
-            <dl className="divide-y divide-line">
-              {generalRows.map((row) => <SettingRow key={row.label} {...row} />)}
+          <CardContent className="pt-5">
+            <BusinessSettingsForm settings={settings} />
+            <dl className="mt-5 grid grid-cols-2 gap-3 rounded-field bg-canvas px-3.5 py-3 text-sm sm:grid-cols-4">
+              <Fact label="Zona horaria" value={organization.timezone} />
+              <Fact
+                label="Moneda"
+                value={organization.currency === 'NIO' ? 'NIO · Córdoba' : organization.currency}
+              />
+              <Fact label="Identificador" value={organization.slug} />
+              <Fact label="Creada" value={formatDate(organization.createdAt)} />
             </dl>
-            <div className="mt-3 flex flex-wrap items-end justify-between gap-3 rounded-field bg-canvas px-3.5 py-3 text-sm">
-              <div>
-                <p className="text-xs font-bold text-ink-subtle">Identificador</p>
-                <p className="mt-0.5 font-extrabold text-navy-900">{organization.slug}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs font-bold text-ink-subtle">Organización creada</p>
-                <p className="mt-0.5 font-extrabold text-navy-900">{formatDate(organization.createdAt)}</p>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
@@ -200,7 +171,7 @@ export default async function AdminSettingsPage() {
                   <CheckCircle2 className="size-3.5" aria-hidden />
                   Logo oficial activo
                 </span>
-                <p className="mt-2 max-w-xs text-sm leading-snug text-ink-muted">{business.tagline}</p>
+                <p className="mt-2 max-w-xs text-sm leading-snug text-ink-muted">{settings.tagline}</p>
               </div>
 
               <div className="mt-4 border-t border-line pt-4">
@@ -247,7 +218,7 @@ export default async function AdminSettingsPage() {
                   complete={activeServices.length > 0}
                   label={`${activeServices.length} servicio${activeServices.length === 1 ? '' : 's'} activo${activeServices.length === 1 ? '' : 's'}`}
                 />
-                <StatusLine complete={!hasDemoBusinessData} label="Datos comerciales confirmados" />
+                <StatusLine complete={!hasDemoData} label="Datos comerciales confirmados" />
               </ul>
               <p className="mt-3 border-t border-line pt-3 text-xs leading-snug text-ink-subtle">
                 Acceso limitado a administradores · Última actualización {formatDate(organization.updatedAt)}
@@ -256,30 +227,6 @@ export default async function AdminSettingsPage() {
           </Card>
         </div>
       </div>
-
-      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.4fr]">
-        <Card id="horarios" className="scroll-mt-24">
-          <CardHeader className="flex-row items-center gap-3 border-b border-line">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-[0.8rem] bg-info-soft text-info">
-              <CalendarClock className="size-5" aria-hidden />
-            </span>
-            <div>
-              <h2 className="text-lg text-navy-900">Horario y cobros</h2>
-              <p className="text-sm text-ink-muted">Valores operativos actuales.</p>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <dl className="divide-y divide-line text-sm">
-              <CompactRow label="Guardería" value={`${business.hours.daycareOpen} – ${business.hours.daycareClose}`} />
-              <CompactRow label="Entrada hospedaje" value={business.hours.boardingCheckIn} />
-              <CompactRow label="Salida hospedaje" value={business.hours.boardingCheckOut} />
-              <CompactRow label="Impuesto" value={`${business.billing.taxLabel} ${(business.billing.taxRate * 100).toFixed(0)}%`} />
-            </dl>
-            <p className="mt-3 rounded-field bg-warning-soft px-3 py-2.5 text-xs leading-snug text-navy-800">
-              Horarios y cobros continúan marcados como datos de demostración.
-            </p>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader className="flex-row items-center gap-3 border-b border-line">
@@ -292,7 +239,7 @@ export default async function AdminSettingsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
               <QuickAction href="/inicio" icon={Eye} title="Ver como cliente" description="Previsualiza el portal familiar" tone="brand" />
               <QuickAction href="/admin/servicios" icon={Settings2} title="Administrar servicios" description={`${services.length} configurados`} tone="success" />
               <QuickAction href="/admin/camaras" icon={Camera} title="Revisar cámaras" description="Estado y accesos en vivo" tone="info" />
@@ -300,38 +247,7 @@ export default async function AdminSettingsPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
     </div>
-  )
-}
-
-type SettingRowData = {
-  label: string
-  value: string
-  icon: LucideIcon
-  source: 'database' | 'demo'
-}
-
-function SettingRow({ label, value, icon: Icon, source }: SettingRowData) {
-  return (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 py-3 sm:grid-cols-[minmax(10rem,0.75fr)_minmax(0,1.25fr)_auto] sm:items-center sm:gap-4">
-      <dt className="flex items-center gap-2.5 text-sm font-bold text-navy-800">
-        <Icon className="size-4 shrink-0 text-navy-500" aria-hidden />
-        {label}
-      </dt>
-      <dd className="col-span-2 row-start-2 min-w-0 break-words text-sm font-semibold text-ink sm:col-span-1 sm:row-auto">{value}</dd>
-      <dd className="col-start-2 row-start-1 justify-self-end sm:col-auto sm:row-auto"><SourceBadge source={source} /></dd>
-    </div>
-  )
-}
-
-function SourceBadge({ source }: { source: SettingRowData['source'] }) {
-  const database = source === 'database'
-  return (
-    <span className={cn('inline-flex items-center gap-1 rounded-pill px-2.5 py-1 text-xs font-extrabold', database ? 'bg-info-soft text-navy-700' : 'bg-warning-soft text-navy-800')}>
-      {database ? <Database className="size-3" aria-hidden /> : <AlertTriangle className="size-3" aria-hidden />}
-      {database ? 'Base de datos' : 'DEMO'}
-    </span>
   )
 }
 
@@ -370,11 +286,11 @@ function StatusLine({ complete, label }: { complete: boolean; label: string }) {
   )
 }
 
-function CompactRow({ label, value }: { label: string; value: string }) {
+function Fact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2.5">
-      <dt className="text-ink-muted">{label}</dt>
-      <dd className="text-right font-extrabold text-navy-900 tabular-nums">{value}</dd>
+    <div className="min-w-0">
+      <dt className="text-xs font-bold text-ink-subtle">{label}</dt>
+      <dd className="mt-0.5 truncate font-extrabold text-navy-900">{value}</dd>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PetAvatar } from '@/components/ui/pet-avatar'
-import { business, formatCurrency } from '@/config/business'
+import { formatCurrency } from '@/config/business'
 import { clubDateInput, clubDateTime, formatDate, formatTime } from '@/lib/datetime'
 import { fromCents, quote as computeQuote } from '@/lib/pricing'
 import { cn } from '@/lib/utils'
@@ -85,7 +85,7 @@ export function BookingStepper({
           })),
         startAt,
         endAt,
-        taxRate: business.billing.taxRate,
+        taxRate: defaults.taxRate,
       })
     : null
 
@@ -228,6 +228,7 @@ export function BookingStepper({
               availability={availability}
               checking={checking}
               minDate={today}
+              defaults={defaults}
             />
           )}
 
@@ -259,7 +260,7 @@ export function BookingStepper({
 
               <StepNotes value={notes} onChange={setNotes} />
 
-              <BookingSummary quote={quote} taxLabel={business.billing.taxLabel} />
+              <BookingSummary quote={quote} taxLabel={defaults.taxLabel} />
 
               <Alert tone="info">
                 <span className="flex items-start gap-1.5">

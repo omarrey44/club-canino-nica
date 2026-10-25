@@ -6,18 +6,19 @@ import { BookingStepper } from '@/components/reservations/booking-stepper'
 import { EmptyState } from '@/components/ui/empty-state'
 import { LinkButton } from '@/components/ui/button'
 import { PageHeader } from '@/components/ui/page-header'
-import { business } from '@/config/business'
 import { getBookableServices } from '@/server/queries/services'
 import { getMyPets } from '@/server/queries/pets'
 import { requireUser } from '@/server/auth/session'
+import { getBusinessSettings } from '@/server/organization'
 
 export const metadata: Metadata = { title: 'Reservar estancia' }
 
 export default async function NewReservationPage() {
   const user = await requireUser()
-  const [pets, catalog] = await Promise.all([
+  const [pets, catalog, { hours, billing }] = await Promise.all([
     getMyPets(user),
     getBookableServices(user.organizationId),
+    getBusinessSettings(),
   ])
 
   return (
@@ -81,10 +82,13 @@ export default async function NewReservationPage() {
             dailyCapacity: service.dailyCapacity,
           }))}
           defaults={{
-            daycareOpen: business.hours.daycareOpen,
-            daycareClose: business.hours.daycareClose,
-            boardingCheckIn: business.hours.boardingCheckIn,
-            boardingCheckOut: business.hours.boardingCheckOut,
+            daycareOpen: hours.daycareOpen,
+            daycareClose: hours.daycareClose,
+            boardingCheckIn: hours.boardingCheckIn,
+            boardingCheckOut: hours.boardingCheckOut,
+            hoursAreDemo: hours.isDemo,
+            taxRate: billing.taxRate,
+            taxLabel: billing.taxLabel,
           }}
         />
       )}

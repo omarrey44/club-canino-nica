@@ -29,4 +29,7 @@ export type BookingDefaults = {
   daycareClose: string
   boardingCheckIn: string
   boardingCheckOut: string
+  hoursAreDemo: boolean
+  taxRate: number
+  taxLabel: string
 }

@@ -1,4 +1,4 @@
-import { PawPrint, ShieldCheck } from 'lucide-react'
+import { Mail, MapPin, PawPrint, Phone, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -7,14 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogoutButton } from '@/components/layout/logout-button'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { business } from '@/config/business'
 import { roleLabels } from '@/lib/constants/labels'
 import { isStaff, requireUser } from '@/server/auth/session'
+import { getBusinessSettings } from '@/server/organization'
 
 export const metadata: Metadata = { title: 'Mi perfil' }
 
 export default async function ProfilePage() {
   const user = await requireUser()
+  const { name, contact } = await getBusinessSettings()
 
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-5">
@@ -61,6 +62,7 @@ export default async function ProfilePage() {
         </CardContent>
       </Card>
 
+      <div className="space-y-4">
       <Card>
         <CardHeader>
           <CardTitle>Mis mascotas</CardTitle>
@@ -75,11 +77,37 @@ export default async function ProfilePage() {
           </Link>
         </CardContent>
       </Card>
-      </div>
 
-      <p className="text-center text-xs text-ink-subtle">
-        {business.name} · Datos de contacto y horarios pendientes de confirmar
-      </p>
+      {/* Con datos DEMO no se muestra nada: un teléfono falso es peor que ninguno. */}
+      {!contact.isDemo && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Contacto de {name}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1 text-sm">
+            <a
+              href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+              className="flex min-h-11 items-center gap-2 font-semibold text-brand-700 hover:underline"
+            >
+              <Phone className="size-4" aria-hidden />
+              {contact.phone}
+            </a>
+            <a
+              href={`mailto:${contact.email}`}
+              className="flex min-h-11 items-center gap-2 font-semibold text-brand-700 hover:underline"
+            >
+              <Mail className="size-4" aria-hidden />
+              {contact.email}
+            </a>
+            <p className="flex items-start gap-2 py-2 text-ink-muted">
+              <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
+              {contact.address}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+      </div>
+      </div>
     </div>
   )
 }

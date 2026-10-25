@@ -9,11 +9,12 @@ import { DailyReportCard } from '@/components/reports/daily-report-card'
 import { PageHeader } from '@/components/ui/page-header'
 import { PhotoGrid } from '@/components/photos/photo-grid'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { business, formatCurrency } from '@/config/business'
+import { formatCurrency } from '@/config/business'
 import { formatDate, formatDateTime } from '@/lib/datetime'
 import { getPastStay } from '@/server/queries/history'
 import { paymentStatusLabels, paymentStatusTones } from '@/lib/constants/labels'
 import { requireUser } from '@/server/auth/session'
+import { getBusinessSettings } from '@/server/organization'
 
 type Props = { params: Promise<{ id: string; stayId: string }> }
 
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PastStayPage({ params }: Props) {
   const { id, stayId } = await params
   const user = await requireUser()
-  const stay = await getPastStay(stayId, user)
+  const [stay, { billing }] = await Promise.all([getPastStay(stayId, user), getBusinessSettings()])
 
   // Tambien cubre pedir una estancia que no es de esta mascota.
   if (!stay || stay.pet.id !== id) notFound()
@@ -117,7 +118,7 @@ export default async function PastStayPage({ params }: Props) {
               </div>
             )}
             <div className="flex justify-between gap-4 py-2.5">
-              <dt className="text-ink-muted">{business.billing.taxLabel}</dt>
+              <dt className="text-ink-muted">{billing.taxLabel}</dt>
               <dd className="text-right font-semibold text-ink tabular-nums">
                 {formatCurrency(String(stay.reservation.taxes))}
               </dd>

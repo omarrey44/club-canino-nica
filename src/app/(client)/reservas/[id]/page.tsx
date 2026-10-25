@@ -8,7 +8,7 @@ import { CancelReservationButton } from '@/components/reservations/cancel-reserv
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PetAvatar } from '@/components/ui/pet-avatar'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { business, formatCurrency } from '@/config/business'
+import { formatCurrency } from '@/config/business'
 import { formatDate, formatDateTime, formatTime } from '@/lib/datetime'
 import {
   paymentStatusLabels,
@@ -20,6 +20,7 @@ import { PayButton, PaymentReturnNotice } from '@/components/payments/pay-button
 import { getReservationDetail } from '@/server/queries/reservations'
 import { isDemoPayments } from '@/server/providers/payment'
 import { requireUser } from '@/server/auth/session'
+import { getBusinessSettings } from '@/server/organization'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -47,7 +48,10 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
   const { id } = await params
   const { nueva, pago } = await searchParams
   const user = await requireUser()
-  const reservation = await getReservationDetail(id, user)
+  const [reservation, { billing }] = await Promise.all([
+    getReservationDetail(id, user),
+    getBusinessSettings(),
+  ])
 
   if (!reservation) notFound()
 
@@ -156,7 +160,7 @@ export default async function ReservationDetailPage({ params, searchParams }: Pr
 
             {Number(reservation.taxes) > 0 && (
               <div className="flex justify-between gap-4 border-t border-line pt-2">
-                <dt className="text-ink-muted">{business.billing.taxLabel}</dt>
+                <dt className="text-ink-muted">{billing.taxLabel}</dt>
                 <dd className="font-semibold text-ink tabular-nums">
                   {formatCurrency(String(reservation.taxes))}
                 </dd>

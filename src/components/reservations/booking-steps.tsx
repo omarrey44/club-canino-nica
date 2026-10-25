@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button'
 import { Field, Hint, Input, Label, Textarea } from '@/components/ui/field'
 import { OptionCard } from '@/components/ui/option-card'
 import { PetAvatar } from '@/components/ui/pet-avatar'
-import { business, formatCurrency } from '@/config/business'
+import { formatCurrency } from '@/config/business'
 import { formatDate } from '@/lib/datetime'
 import type { AvailabilityAnswer } from '@/server/actions/availability'
-import type { BookingPet, BookingService } from './booking-types'
+import type { BookingDefaults, BookingPet, BookingService } from './booking-types'
 
 export function StepPet({
   pets,
@@ -87,6 +87,7 @@ export function StepDates({
   availability,
   checking,
   minDate,
+  defaults,
 }: {
   service: BookingService
   startDate: string
@@ -97,6 +98,7 @@ export function StepDates({
   availability: AvailabilityAnswer | null
   checking: boolean
   minDate: string
+  defaults: BookingDefaults
 }) {
   // En guardería la salida es el mismo dia: mostrar dos calendarios solo
   // confundiria y permitiria rangos que el servicio no cubre.
@@ -147,8 +149,8 @@ export function StepDates({
       </div>
 
       <Hint>
-        Horario del club: {business.hours.daycareOpen} a {business.hours.daycareClose}. Estos
-        horarios son de demostración y están pendientes de confirmar.
+        Horario del club: {defaults.daycareOpen} a {defaults.daycareClose}.
+        {defaults.hoursAreDemo && ' Estos horarios son de demostración y están pendientes de confirmar.'}
       </Hint>
 
       {checking && <p className="text-sm text-ink-muted">Consultando disponibilidad…</p>}

@@ -2,12 +2,11 @@
  * Configuración de negocio centralizada.
  *
  * Regla: ningun componente escribe "Club Canino Nica" ni un teléfono ni un precio
- * directamente. Todo pasa por aquí. Cuando la plataforma se venda a otra guardería,
- * esto se lee de `Organization.settings` en base de datos y este archivo queda
- * solo como valores por defecto.
+ * directamente. Todo pasa por aquí.
  *
- * IMPORTANTE: los campos marcados DEMO no son datos oficiales de Club Canino Nica.
- * Todavía no estan definidos por el negocio. Ver README > "Datos pendientes".
+ * Contacto, horarios y cobros se editan en /admin/configuracion y viven en
+ * `Organization.settings`; `getBusinessSettings()` los combina con estos
+ * valores, que solo aplican mientras nadie los haya guardado (y salen como DEMO).
  */
 
 export const business = {
@@ -52,10 +51,6 @@ export const business = {
 } as const
 
 export type Business = typeof business
-
-/** Bandera global: hay datos de negocio sin confirmar visibles en la UI. */
-export const hasDemoBusinessData =
-  business.contact.isDemo || business.hours.isDemo || business.billing.isDemo
 
 export function formatCurrency(amount: number | string): string {
   const value = typeof amount === 'string' ? Number(amount) : amount

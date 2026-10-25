@@ -12,6 +12,7 @@ import { reservationStatusLabels } from '@/lib/constants/labels'
 import { recordAudit } from '@/server/audit'
 import { requireStaff, requireUser } from '@/server/auth/session'
 import { findFullDays } from '@/server/queries/availability'
+import { getBusinessSettings } from '@/server/organization'
 import {
   cancelReservationSchema,
   createReservationSchema,
@@ -120,7 +121,7 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     }),
     startAt,
     endAt,
-    taxRate: business.billing.taxRate,
+    taxRate: (await getBusinessSettings()).billing.taxRate,
   })
 
   // Reintenta si el código aleatorio ya existia. Con 32^5 combinaciones la
