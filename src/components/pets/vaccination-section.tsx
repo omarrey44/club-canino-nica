@@ -3,11 +3,11 @@
 import { FileText, Plus, Trash2 } from 'lucide-react'
 import { useActionState, useState } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, Hint, Input, Label, Textarea } from '@/components/ui/field'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { useActionToast } from '@/components/ui/toaster'
 import { formatDate } from '@/lib/datetime'
 import { deleteVaccination } from '@/server/actions/vaccinations'
 import { idleState, type ActionState } from '@/server/actions/types'
@@ -40,6 +40,7 @@ export function VaccinationSection({
 }) {
   const [open, setOpen] = useState(false)
   const [state, formAction, pending] = useActionState(addAction, idleState)
+  useActionToast(state)
   const errors = state.fieldErrors ?? {}
 
   // El formulario queda abierto tras guardar, porque casi nunca se registra una
@@ -59,10 +60,6 @@ export function VaccinationSection({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {state.status === 'success' && state.message && (
-          <Alert tone="success">{state.message}</Alert>
-        )}
-
         {vaccinations.length === 0 && !open && (
           <p className="text-sm text-ink-muted">
             Aún no hay vacunas registradas. Mantén el esquema al día para que tu mascota
@@ -131,10 +128,6 @@ export function VaccinationSection({
             className="space-y-4 rounded-field bg-canvas p-4"
             noValidate
           >
-            {state.status === 'error' && state.message && (
-              <Alert tone="danger">{state.message}</Alert>
-            )}
-
             <Field errors={errors.name}>
               <Label>Vacuna</Label>
               <Input name="name" placeholder="Rabia" required autoFocus />

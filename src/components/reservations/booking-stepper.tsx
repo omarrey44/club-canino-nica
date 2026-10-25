@@ -200,15 +200,16 @@ export function BookingStepper({
       <Card>
         <CardHeader>
           <CardTitle>
-            {step === 0 && 'Para quién es la reserva'}
-            {step === 1 && 'Que servicio necesitas'}
-            {step === 2 && 'Cuando'}
+            {step === 0 && '¿Para quién es la reserva?'}
+            {step === 1 && '¿Qué servicio necesitas?'}
+            {step === 2 && '¿Cuándo?'}
             {step === 3 && 'Servicios adicionales'}
             {step === 4 && 'Revisa y confirma'}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        {/* La key remonta el contenido en cada paso para que entre con animacion. */}
+        <CardContent key={step} className="route-enter space-y-4">
           {error && <Alert tone="danger">{error}</Alert>}
 
           {step === 0 && <StepPet pets={pets} value={petId} onChange={setPetId} />}

@@ -8,6 +8,7 @@ import {
   PawPrint,
   Plus,
   Sparkles,
+  UserRound,
   type LucideIcon,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -35,7 +36,7 @@ export default async function ClientHomePage() {
   const hasRecentActivity = Boolean(activeStay?.activities.length)
 
   return (
-    <div className="space-y-4 sm:space-y-5">
+    <div className="stagger-enter space-y-4 sm:space-y-5">
       <header className="relative flex min-h-28 items-center overflow-hidden rounded-card border border-brand-100 bg-canvas-warm p-4 shadow-card sm:p-5 lg:px-7">
         <div className="relative z-10 max-w-2xl space-y-1.5 lg:max-w-[64%]">
           <p className="text-xs font-extrabold tracking-[0.15em] text-brand-700 uppercase">
@@ -189,10 +190,10 @@ export default async function ClientHomePage() {
               <h2 className="text-lg text-navy-900">Accesos rápidos</h2>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="stagger-enter grid gap-2 sm:grid-cols-2">
                 <QuickLink href="/reservas" label="Reservas" icon={CalendarPlus} tone="info" />
                 <QuickLink
-                  href="/mascotas"
+                  href={petCount > 0 ? '/mascotas' : '/mascotas/nueva'}
                   label={petCount > 0 ? 'Mis mascotas' : 'Registrar mascota'}
                   icon={PawPrint}
                   tone="brand"
@@ -206,7 +207,7 @@ export default async function ClientHomePage() {
                     tone="success"
                   />
                 ) : (
-                  <QuickLink href="/mascotas/nueva" label="Nueva mascota" icon={Plus} tone="success" />
+                  <QuickLink href="/perfil" label="Mi perfil" icon={UserRound} tone="success" />
                 )}
               </div>
             </CardContent>
@@ -230,7 +231,7 @@ function QuickLink({
   icon: Icon,
   tone,
 }: {
-  href: '/reservas' | '/mascotas' | '/notificaciones' | '/mi-mascota' | '/mascotas/nueva'
+  href: '/reservas' | '/mascotas' | '/notificaciones' | '/mi-mascota' | '/mascotas/nueva' | '/perfil'
   label: string
   icon: LucideIcon
   tone: keyof typeof quickLinkTones

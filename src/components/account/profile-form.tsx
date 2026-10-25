@@ -3,21 +3,18 @@
 import { Save } from 'lucide-react'
 import { useActionState } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Input, Label } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { updateProfile } from '@/server/actions/auth'
 import { idleState } from '@/server/actions/types'
 
 export function ProfileForm({ fullName, phone }: { fullName: string; phone: string | null }) {
   const [state, formAction, pending] = useActionState(updateProfile, idleState)
+  useActionToast(state)
 
   return (
     <form action={formAction} className="space-y-4">
-      {state.message && (
-        <Alert tone={state.status === 'error' ? 'danger' : 'success'}>{state.message}</Alert>
-      )}
-
       <Field errors={state.fieldErrors?.fullName}>
         <Label>Nombre completo</Label>
         <Input name="fullName" defaultValue={fullName} autoComplete="name" required maxLength={120} />

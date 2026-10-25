@@ -14,9 +14,9 @@ import {
 } from 'lucide-react'
 import { useActionState, useState } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Hint, Input, Label, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { activityTypeLabels } from '@/lib/constants/labels'
 import { logActivity } from '@/server/actions/activities'
 import { idleState } from '@/server/actions/types'
@@ -53,6 +53,7 @@ export function QuickActivityForm({ stayId }: { stayId: string }) {
     logActivity.bind(null, stayId),
     idleState
   )
+  useActionToast(state)
   const [type, setType] = useState<StaffActivityType | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
@@ -63,13 +64,6 @@ export function QuickActivityForm({ stayId }: { stayId: string }) {
 
   return (
     <div className="space-y-3">
-      {state.status === 'success' && state.message && (
-        <Alert tone="success">{state.message}</Alert>
-      )}
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
-
       <fieldset>
         <legend className="mb-2 text-sm font-bold text-ink">Qué pasó</legend>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">

@@ -4,9 +4,9 @@ import { Images, Star, Trash2, Upload } from 'lucide-react'
 import Image from 'next/image'
 import { useActionState, useState, useTransition } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Hint, Input, Label } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { formatTime } from '@/lib/datetime'
 import {
   deleteStayPhoto,
@@ -37,18 +37,12 @@ export function StayPhotoManager({
     uploadStayPhotos.bind(null, stayId),
     idleState
   )
+  useActionToast(state)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [, startTransition] = useTransition()
 
   return (
     <div className="space-y-4">
-      {state.status === 'success' && state.message && (
-        <Alert tone="success">{state.message}</Alert>
-      )}
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
-
       {canEdit && (
         // La `key` cambia al subir y remonta el formulario ya vacío.
         <form key={photos.length} action={formAction} className="space-y-3 rounded-card bg-canvas p-4">

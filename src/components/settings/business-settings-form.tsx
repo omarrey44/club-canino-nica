@@ -3,24 +3,21 @@
 import { Save } from 'lucide-react'
 import { useActionState, type ReactNode } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Input, Label, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { saveBusinessSettings } from '@/server/actions/settings'
 import { idleState } from '@/server/actions/types'
 import type { BusinessSettings } from '@/server/organization'
 
 export function BusinessSettingsForm({ settings }: { settings: BusinessSettings }) {
   const [state, formAction, pending] = useActionState(saveBusinessSettings, idleState)
+  useActionToast(state)
   const errors = state.fieldErrors ?? {}
   const { contact, hours, billing } = settings
 
   return (
     <form action={formAction} className="space-y-6">
-      {state.message && (
-        <Alert tone={state.status === 'error' ? 'danger' : 'success'}>{state.message}</Alert>
-      )}
-
       <Group title="Negocio">
         <Field errors={errors.name}>
           <Label>Nombre del negocio</Label>

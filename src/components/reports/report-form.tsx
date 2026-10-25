@@ -6,6 +6,7 @@ import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, Hint, Input, Label, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import {
   energyLabels,
   foodIntakeLabels,
@@ -100,14 +101,11 @@ export function ReportForm({
     saveDailyReport.bind(null, stayId),
     idleState
   )
+  useActionToast(state)
   const errors = state.fieldErrors ?? {}
 
   return (
     <form action={formAction} className="space-y-5" noValidate>
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
-
       {registered && (
         <Alert tone="info">
           Ya registrado hoy: {registered} Los paseos y el descanso vienen precargados con

@@ -2,10 +2,10 @@
 
 import { useActionState } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox, Field, Hint, Input, Label, Select, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { petSexLabels, petSizeLabels } from '@/lib/constants/labels'
 import { idleState, type ActionState } from '@/server/actions/types'
 
@@ -48,14 +48,11 @@ export function PetForm({
   submitLabel: string
 }) {
   const [state, formAction, pending] = useActionState(action, idleState)
+  useActionToast(state)
   const errors = state.fieldErrors ?? {}
 
   return (
     <form action={formAction} className="space-y-5" noValidate>
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
-
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <Card>
           <CardHeader>

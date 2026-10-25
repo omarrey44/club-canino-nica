@@ -6,6 +6,7 @@ import { useActionState, useState, useTransition } from 'react'
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Input, Label, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { checkOut, markReadyForPickup, setStayLocation } from '@/server/actions/stays'
 import { idleState } from '@/server/actions/types'
 
@@ -18,6 +19,7 @@ export function StayLocationForm({
   currentLocation: string | null
 }) {
   const [state, formAction, pending] = useActionState(setStayLocation, idleState)
+  useActionToast(state)
 
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-2">
@@ -72,6 +74,7 @@ export function ReadyForPickupButton({ stayId }: { stayId: string }) {
 export function CheckOutForm({ stayId, petName }: { stayId: string; petName: string }) {
   const [confirming, setConfirming] = useState(false)
   const [state, formAction, pending] = useActionState(checkOut, idleState)
+  useActionToast(state)
 
   if (!confirming) {
     return (
@@ -85,10 +88,6 @@ export function CheckOutForm({ stayId, petName }: { stayId: string; petName: str
   return (
     <form action={formAction} className="space-y-3 rounded-card border border-line bg-canvas p-4">
       <input type="hidden" name="stayId" value={stayId} />
-
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
 
       <p className="text-sm font-semibold text-ink">
         Se cierra la estancia de {petName} y el propietario deja de ver las cámaras.

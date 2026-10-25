@@ -3,8 +3,8 @@
 import { Camera } from 'lucide-react'
 import { useActionState, useRef } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { PetAvatar } from '@/components/ui/pet-avatar'
+import { useActionToast } from '@/components/ui/toaster'
 import { idleState, type ActionState } from '@/server/actions/types'
 
 /**
@@ -22,6 +22,7 @@ export function PhotoUploader({
   photoUrl: string | null
 }) {
   const [state, formAction, pending] = useActionState(action, idleState)
+  useActionToast(state)
   const formRef = useRef<HTMLFormElement>(null)
 
   return (
@@ -53,9 +54,6 @@ export function PhotoUploader({
       </form>
 
       {pending && <p className="text-sm text-ink-muted">Subiendo foto…</p>}
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
     </div>
   )
 }

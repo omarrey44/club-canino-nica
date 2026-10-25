@@ -117,7 +117,7 @@ function WelcomeBanner() {
 
 function MetricsGrid({ stats }: { stats: AdminDashboardStats }) {
   return (
-    <section aria-label="Indicadores de hoy" className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+    <section aria-label="Indicadores de hoy" className="stagger-enter grid grid-cols-2 gap-3 lg:grid-cols-3">
       <MetricCard
         label="Mascotas presentes"
         value={stats.petsPresent}
@@ -281,9 +281,7 @@ function CurrentStays({ stays }: { stays: ActiveStayRow[] }) {
         </div>
         <LinkButton size="sm" href="/admin/check-in">
           <LogIn aria-hidden />
-          {/* En movil solo cabe el icono, pero el nombre accesible no puede
-              desaparecer con la etiqueta: `sr-only` en vez de `hidden`. */}
-          <span className="sr-only sm:not-sr-only">Check-in</span>
+          Check-in
         </LinkButton>
       </header>
 

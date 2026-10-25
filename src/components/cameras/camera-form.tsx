@@ -2,9 +2,9 @@
 
 import { useActionState } from 'react'
 
-import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox, Field, Hint, Input, Label, Select, Textarea } from '@/components/ui/field'
+import { useActionToast } from '@/components/ui/toaster'
 import { saveCamera } from '@/server/actions/cameras'
 import { idleState } from '@/server/actions/types'
 
@@ -31,17 +31,11 @@ export function CameraForm({
     saveCamera.bind(null, defaults.id ?? null),
     idleState
   )
+  useActionToast(state)
   const errors = state.fieldErrors ?? {}
 
   return (
     <form action={formAction} className="space-y-4 rounded-card bg-canvas p-4" noValidate>
-      {state.status === 'error' && state.message && (
-        <Alert tone="danger">{state.message}</Alert>
-      )}
-      {state.status === 'success' && state.message && (
-        <Alert tone="success">{state.message}</Alert>
-      )}
-
       <div className="grid gap-4 sm:grid-cols-2">
         <Field errors={errors.name}>
           <Label>Nombre</Label>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Nunito_Sans, Varela_Round } from 'next/font/google'
 
+import { Toaster } from '@/components/ui/toaster'
 import { business } from '@/config/business'
 import './globals.css'
 
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido
         </a>
         {children}
+        <Toaster />
       </body>
     </html>
   )

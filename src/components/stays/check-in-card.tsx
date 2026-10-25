@@ -7,6 +7,7 @@ import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Field, Input, Label, Textarea } from '@/components/ui/field'
 import { PetAvatar } from '@/components/ui/pet-avatar'
+import { useActionToast } from '@/components/ui/toaster'
 import { checkIn } from '@/server/actions/stays'
 import { idleState } from '@/server/actions/types'
 
@@ -31,6 +32,7 @@ export type CheckInCardData = {
 export function CheckInCard({ data }: { data: CheckInCardData }) {
   const [open, setOpen] = useState(false)
   const [state, formAction, pending] = useActionState(checkIn, idleState)
+  useActionToast(state)
 
   return (
     <article className="rounded-card border border-line bg-surface p-4 shadow-card">
@@ -75,10 +77,6 @@ export function CheckInCard({ data }: { data: CheckInCardData }) {
       {open && (
         <form action={formAction} className="mt-4 space-y-3 rounded-field bg-canvas p-4">
           <input type="hidden" name="reservationId" value={data.reservationId} />
-
-          {state.status === 'error' && state.message && (
-            <Alert tone="danger">{state.message}</Alert>
-          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <Field errors={state.fieldErrors?.currentLocation}>
