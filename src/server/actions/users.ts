@@ -1,15 +1,19 @@
 'use server'
 
-import { randomBytes } from 'node:crypto'
 import { revalidatePath } from 'next/cache'
 
 import type { Role } from '@/generated/prisma/client'
 import { roleLabels } from '@/lib/constants/labels'
 import { prisma } from '@/lib/prisma'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createAccount } from '@/server/accounts'
 import { recordAudit } from '@/server/audit'
-import { requireRole, type SessionUser } from '@/server/auth/session'
-import { activeChangeSchema, roleChangeSchema, staffMemberSchema } from '@/validations/users'
+import { requireRole, requireStaff, type SessionUser } from '@/server/auth/session'
+import {
+  activeChangeSchema,
+  clientAccountSchema,
+  roleChangeSchema,
+  staffMemberSchema,
+} from '@/validations/users'
 import { errorState, successState, type ActionState } from './types'
 
 /** La contrasena temporal viaja una sola vez, en la respuesta, y no se guarda. */
@@ -59,50 +63,69 @@ export async function addStaffMember(
     )
   }
 
-  // 18 caracteres base64url: sin '$' ni '#', que ya dieron problemas en .env.
-  const tempPassword = randomBytes(14).toString('base64url')
-  const admin = createAdminClient()
-  const { data, error } = await admin.auth.admin.createUser({
-    email,
-    password: tempPassword,
-    email_confirm: true,
-    user_metadata: { full_name: fullName },
+  const account = await createAccount({ organizationId: actor.organizationId, email, fullName, role })
+  if ('error' in account) return errorState(account.error)
+
+  await recordAudit(actor, {
+    action: 'STAFF_CREATED',
+    entityType: 'User',
+    entityId: account.userId,
+    changes: { role },
   })
 
-  if (error || !data.user) {
-    console.error('[users.addStaffMember] createUser fallo:', error)
-    return errorState(
-      error?.message.toLowerCase().includes('already')
-        ? 'Ese correo ya tiene acceso pero no tiene perfil en el club. Revísalo en Supabase.'
-        : 'No pudimos crear la cuenta. Intenta de nuevo.'
-    )
+  revalidateUsers()
+  return {
+    ...successState(`Cuenta creada para ${fullName}.`),
+    tempPassword: account.tempPassword,
+    email,
+  }
+}
+
+export type ClientAccountState = StaffMemberState & { clientId?: string }
+
+/**
+ * Alta de cliente en mostrador, para quien llega sin cuenta. Cualquier miembro
+ * del personal puede hacerla: es trabajo de recepcion.
+ */
+export async function createClientAccount(
+  _prev: ClientAccountState,
+  formData: FormData
+): Promise<ClientAccountState> {
+  const actor = await requireStaff()
+
+  const parsed = clientAccountSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) {
+    return errorState('Revisa los datos.', parsed.error.flatten().fieldErrors)
+  }
+  const { email, fullName, phone } = parsed.data
+
+  const existing = await prisma.user.findUnique({ where: { email }, select: { id: true } })
+  if (existing) {
+    return errorState('Ya existe una cuenta con ese correo. Búscala en Clientes.')
   }
 
-  try {
-    const created = await prisma.user.create({
-      data: {
-        authUserId: data.user.id,
-        organizationId: actor.organizationId,
-        email,
-        fullName,
-        role,
-      },
-    })
-    await recordAudit(actor, {
-      action: 'STAFF_CREATED',
-      entityType: 'User',
-      entityId: created.id,
-      changes: { role },
-    })
-  } catch (dbError) {
-    // Sin la fila en `users` la cuenta de acceso quedaria huerfana: se deshace.
-    console.error('[users.addStaffMember] alta en base fallo:', dbError)
-    await admin.auth.admin.deleteUser(data.user.id)
-    return errorState('No pudimos crear la cuenta. Intenta de nuevo.')
-  }
+  const account = await createAccount({
+    organizationId: actor.organizationId,
+    email,
+    fullName,
+    phone,
+    role: 'CLIENT',
+  })
+  if ('error' in account) return errorState(account.error)
+
+  await recordAudit(actor, {
+    action: 'CLIENT_CREATED_AT_COUNTER',
+    entityType: 'User',
+    entityId: account.userId,
+  })
 
   revalidateUsers()
-  return { ...successState(`Cuenta creada para ${fullName}.`), tempPassword, email }
+  return {
+    ...successState(`Cuenta creada para ${fullName}.`),
+    tempPassword: account.tempPassword,
+    email,
+    clientId: account.userId,
+  }
 }
 
 /** Busca al usuario afectado y aplica las reglas comunes a rol y activacion. */

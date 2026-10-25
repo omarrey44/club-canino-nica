@@ -1,11 +1,12 @@
 'use client'
 
-import { Copy, KeyRound, UserPlus } from 'lucide-react'
+import { UserPlus } from 'lucide-react'
 import { useActionState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Field, Hint, Input, Label, Select } from '@/components/ui/field'
-import { toast, useActionToast } from '@/components/ui/toaster'
+import { useActionToast } from '@/components/ui/toaster'
+import { TempPasswordNotice } from '@/components/users/temp-password-notice'
 import { roleLabels } from '@/lib/constants/labels'
 import { addStaffMember, type StaffMemberState } from '@/server/actions/users'
 import { ASSIGNABLE_STAFF_ROLES } from '@/validations/users'
@@ -47,37 +48,8 @@ export function StaffForm() {
         </div>
       </form>
 
-      {/* Fuera del toast a proposito: hay que poder copiarla, y no se vuelve a mostrar. */}
-      {state.tempPassword && (
-        <div className="space-y-2 rounded-field border border-warning/30 bg-warning-soft p-4 text-sm text-navy-900">
-          <p className="flex items-center gap-2 font-extrabold">
-            <KeyRound className="size-4 text-warning" aria-hidden />
-            Contraseña temporal de {state.email}
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <code className="rounded-[0.5rem] bg-surface px-3 py-2 font-mono text-base tracking-wide select-all">
-              {state.tempPassword}
-            </code>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                navigator.clipboard
-                  .writeText(state.tempPassword!)
-                  .then(() => toast('Contraseña copiada.'))
-                  .catch(() => toast('No se pudo copiar. Selecciónala a mano.', 'danger'))
-              }
-            >
-              <Copy aria-hidden />
-              Copiar
-            </Button>
-          </div>
-          <p className="text-ink-muted">
-            Entrégasela en persona. No se vuelve a mostrar. Al entrar, que la cambie en Mi perfil →
-            Contraseña.
-          </p>
-        </div>
+      {state.tempPassword && state.email && (
+        <TempPasswordNotice email={state.email} password={state.tempPassword} />
       )}
     </div>
   )

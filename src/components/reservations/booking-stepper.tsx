@@ -34,11 +34,14 @@ export function BookingStepper({
   services,
   addons,
   defaults,
+  clientId,
 }: {
   pets: BookingPet[]
   services: BookingService[]
   addons: BookingService[]
   defaults: BookingDefaults
+  /** Solo en mostrador: reserva el personal a nombre de este cliente. */
+  clientId?: string
 }) {
   const today = clubDateInput()
 
@@ -159,6 +162,7 @@ export function BookingStepper({
     setError(null)
     startSubmitting(async () => {
       const result = await createReservation({
+        clientId,
         petId,
         serviceId,
         startDate,

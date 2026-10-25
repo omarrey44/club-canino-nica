@@ -1,8 +1,8 @@
-import { ChevronRight, Search, Users } from 'lucide-react'
+import { ChevronRight, Search, UserPlus, Users } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
-import { Button } from '@/components/ui/button'
+import { Button, LinkButton } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { PageHeader } from '@/components/ui/page-header'
 import { PetAvatar } from '@/components/ui/pet-avatar'
@@ -36,6 +36,12 @@ export default async function AdminClientsPage({
         icon={Users}
         title="Clientes"
         description={`${clients.length} ${clients.length === 1 ? 'cliente' : 'clientes'} en esta vista.`}
+        action={
+          <LinkButton href="/admin/clientes/nuevo" size="sm">
+            <UserPlus aria-hidden />
+            Registrar cliente
+          </LinkButton>
+        }
       />
 
       {/* Formulario GET, igual que en Mascotas: la busqueda queda en la URL. */}

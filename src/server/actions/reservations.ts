@@ -10,7 +10,7 @@ import { prisma } from '@/lib/prisma'
 import { notify } from '@/server/notifications'
 import { reservationStatusLabels } from '@/lib/constants/labels'
 import { recordAudit } from '@/server/audit'
-import { requireStaff, requireUser } from '@/server/auth/session'
+import { isStaff, requireStaff, requireUser } from '@/server/auth/session'
 import { findFullDays } from '@/server/queries/availability'
 import { getBusinessSettings } from '@/server/organization'
 import {
@@ -45,10 +45,29 @@ export async function createReservation(input: unknown): Promise<ActionState> {
   const { petId, serviceId, startDate, startTime, endDate, endTime, extras, clientNotes } =
     parsed.data
 
+  // En mostrador el personal reserva por un cliente. Ese id viene del navegador,
+  // asi que solo se acepta de personal y para un cliente de su organizacion.
+  let clientId = user.id
+  if (parsed.data.clientId) {
+    if (!isStaff(user.role)) return errorState('No encontramos esa mascota.')
+    const client = await prisma.user.findFirst({
+      where: {
+        id: parsed.data.clientId,
+        organizationId: user.organizationId,
+        role: 'CLIENT',
+        isActive: true,
+      },
+      select: { id: true },
+    })
+    if (!client) return errorState('No encontramos a ese cliente.')
+    clientId = client.id
+  }
+  const atCounter = clientId !== user.id
+
   // La mascota tiene que ser suya. El id viene del navegador, asi que el
   // filtro de propiedad va en la misma consulta.
   const pet = await prisma.pet.findFirst({
-    where: { id: petId, ownerId: user.id, organizationId: user.organizationId, isActive: true },
+    where: { id: petId, ownerId: clientId, organizationId: user.organizationId, isActive: true },
     select: { id: true, name: true },
   })
   if (!pet) return errorState('No encontramos esa mascota.')
@@ -134,12 +153,13 @@ export async function createReservation(input: unknown): Promise<ActionState> {
         data: {
           code,
           organizationId: user.organizationId,
-          clientId: user.id,
+          clientId,
           petId: pet.id,
           serviceId: service.id,
           startAt,
           endAt,
-          status: 'PENDING',
+          // Hecha en persona por el personal: no hay nada que confirmar despues.
+          status: atCounter ? 'CONFIRMED' : 'PENDING',
           subtotal: fromCents(cotizacion.subtotalCents),
           taxes: fromCents(cotizacion.taxesCents),
           total: fromCents(cotizacion.totalCents),
@@ -182,11 +202,13 @@ export async function createReservation(input: unknown): Promise<ActionState> {
 
   await notify({
       organizationId: user.organizationId,
-      userId: user.id,
+      userId: clientId,
       petId: pet.id,
       type: 'RESERVATION_CONFIRMED',
-      title: 'Recibimos tu reservación',
-      body: `${pet.name} tiene lugar apartado para el ${formatDate(startAt)}. Te confirmamos en breve.`,
+      title: atCounter ? 'Tu reservación está confirmada' : 'Recibimos tu reservación',
+      body: atCounter
+        ? `${pet.name} tiene lugar para el ${formatDate(startAt)}. La registramos en el club.`
+        : `${pet.name} tiene lugar apartado para el ${formatDate(startAt)}. Te confirmamos en breve.`,
       linkUrl: `/reservas/${created.id}`,
     })
 
@@ -194,11 +216,16 @@ export async function createReservation(input: unknown): Promise<ActionState> {
     action: 'RESERVATION_CREATED',
     entityType: 'Reservation',
     entityId: created.id,
-    changes: { code: created.code, serviceId: service.id, petId: pet.id },
+    changes: { code: created.code, serviceId: service.id, petId: pet.id, atCounter },
   })
 
   revalidatePath('/reservas')
   revalidatePath('/inicio')
+  if (atCounter) {
+    revalidatePath('/admin/reservaciones')
+    revalidatePath(`/admin/clientes/${clientId}`)
+    redirect(`/admin/clientes/${clientId}`)
+  }
   redirect(`/reservas/${created.id}?nueva=1`)
 }
 

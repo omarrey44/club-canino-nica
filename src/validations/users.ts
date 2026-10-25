@@ -9,6 +9,18 @@ export const staffMemberSchema = z.object({
   role: z.enum(ASSIGNABLE_STAFF_ROLES, { message: 'Elige un rol.' }),
 })
 
+export const clientAccountSchema = z.object({
+  email: z.string().trim().toLowerCase().email('Ese correo no parece válido.'),
+  fullName: z.string().trim().min(2, 'Escribe el nombre completo.').max(120),
+  phone: z
+    .string()
+    .trim()
+    .min(8, 'El teléfono necesita al menos 8 dígitos.')
+    .max(20)
+    .optional()
+    .or(z.literal('')),
+})
+
 export const roleChangeSchema = z.object({
   userId: z.string().min(1),
   // CLIENT incluido: es como se saca a alguien del equipo sin borrar su cuenta.

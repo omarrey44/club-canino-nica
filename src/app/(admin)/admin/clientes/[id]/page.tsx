@@ -1,8 +1,9 @@
-import { ArrowLeft, CalendarDays, Mail, PawPrint, Phone, UserRound } from 'lucide-react'
+import { ArrowLeft, CalendarDays, CalendarPlus, Mail, PawPrint, Phone, Plus, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
+import { LinkButton } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { PageHeader } from '@/components/ui/page-header'
@@ -46,7 +47,20 @@ export default async function AdminClientPage({ params }: { params: Promise<{ id
         title={client.fullName}
         description={`Cliente desde ${formatDate(client.createdAt)}.`}
         action={
-          !client.isActive ? <StatusBadge tone="danger">Desactivado</StatusBadge> : undefined
+          client.isActive ? (
+            <div className="flex flex-wrap gap-2">
+              <LinkButton href={`/admin/clientes/${client.id}/reservar`} size="sm">
+                <CalendarPlus aria-hidden />
+                Nueva reserva
+              </LinkButton>
+              <LinkButton href={`/admin/clientes/${client.id}/mascota`} size="sm" variant="outline">
+                <Plus aria-hidden />
+                Agregar mascota
+              </LinkButton>
+            </div>
+          ) : (
+            <StatusBadge tone="danger">Desactivado</StatusBadge>
+          )
         }
       />
 
@@ -137,7 +151,7 @@ export default async function AdminClientPage({ params }: { params: Promise<{ id
                       </StatusBadge>
                       {reservation.payment && (
                         <StatusBadge tone={paymentStatusTones[reservation.payment.status]}>
-                          {paymentStatusLabels[reservation.payment.status]}
+                          Pago {paymentStatusLabels[reservation.payment.status].toLowerCase()}
                         </StatusBadge>
                       )}
                       <span className="text-sm font-bold text-navy-900 tabular-nums">

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { prisma } from '@/lib/prisma'
 import { recordAudit } from '@/server/audit'
-import { requireUser } from '@/server/auth/session'
+import { requireStaff, requireUser, type SessionUser } from '@/server/auth/session'
 import { assertPetAccess } from '@/server/queries/pets'
 import {
   deleteFile,
@@ -24,12 +24,51 @@ import { errorState, successState, type ActionState } from './types'
 export async function createPet(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const user = await requireUser()
 
+  const result = await insertPet(user, user.id, formData)
+  if ('status' in result) return result
+
+  revalidatePath('/mascotas')
+  revalidatePath('/inicio')
+  redirect(`/mascotas/${result.id}`)
+}
+
+/**
+ * Alta en mostrador: el personal registra la mascota de un cliente. El cliente
+ * va atado con `.bind` en el servidor y aun asi se comprueba que sea de la
+ * organizacion de quien llama.
+ */
+export async function createPetForClient(
+  clientId: string,
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const user = await requireStaff()
+
+  const client = await prisma.user.findFirst({
+    where: { id: clientId, organizationId: user.organizationId, role: 'CLIENT' },
+    select: { id: true },
+  })
+  if (!client) return errorState('No encontramos a ese cliente.')
+
+  const result = await insertPet(user, client.id, formData)
+  if ('status' in result) return result
+
+  revalidatePath(`/admin/clientes/${client.id}`)
+  revalidatePath('/admin/mascotas')
+  redirect(`/admin/clientes/${client.id}`)
+}
+
+async function insertPet(
+  actor: SessionUser,
+  ownerId: string,
+  formData: FormData
+): Promise<ActionState | { id: string }> {
   const raw = Object.fromEntries(formData)
   const parsedPet = petSchema.safeParse(raw)
   const parsedMedical = petMedicalSchema.safeParse(raw)
 
   if (!parsedPet.success) {
-    return errorState('Revisa los datos de tu mascota.', parsedPet.error.flatten().fieldErrors)
+    return errorState('Revisa los datos de la mascota.', parsedPet.error.flatten().fieldErrors)
   }
   if (!parsedMedical.success) {
     return errorState(
@@ -41,23 +80,21 @@ export async function createPet(_prev: ActionState, formData: FormData): Promise
   const pet = await prisma.pet.create({
     data: {
       ...parsedPet.data,
-      organizationId: user.organizationId,
-      ownerId: user.id,
+      organizationId: actor.organizationId,
+      ownerId,
       medicalInfo: { create: parsedMedical.data },
     },
     select: { id: true, name: true },
   })
 
-  await recordAudit(user, {
+  await recordAudit(actor, {
     action: 'PET_CREATED',
     entityType: 'Pet',
     entityId: pet.id,
-    changes: { name: pet.name },
+    changes: { name: pet.name, ownerId },
   })
 
-  revalidatePath('/mascotas')
-  revalidatePath('/inicio')
-  redirect(`/mascotas/${pet.id}`)
+  return { id: pet.id }
 }
 
 export async function updatePet(

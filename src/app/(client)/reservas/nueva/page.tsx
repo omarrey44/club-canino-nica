@@ -6,19 +6,17 @@ import { BookingStepper } from '@/components/reservations/booking-stepper'
 import { EmptyState } from '@/components/ui/empty-state'
 import { LinkButton } from '@/components/ui/button'
 import { PageHeader } from '@/components/ui/page-header'
-import { getBookableServices } from '@/server/queries/services'
+import { getBookingOptions } from '@/server/queries/services'
 import { getMyPets } from '@/server/queries/pets'
 import { requireUser } from '@/server/auth/session'
-import { getBusinessSettings } from '@/server/organization'
 
 export const metadata: Metadata = { title: 'Reservar estancia' }
 
 export default async function NewReservationPage() {
   const user = await requireUser()
-  const [pets, catalog, { hours, billing }] = await Promise.all([
+  const [pets, booking] = await Promise.all([
     getMyPets(user),
-    getBookableServices(user.organizationId),
-    getBusinessSettings(),
+    getBookingOptions(user.organizationId),
   ])
 
   return (
@@ -49,7 +47,7 @@ export default async function NewReservationPage() {
             </LinkButton>
           }
         />
-      ) : catalog.main.length === 0 ? (
+      ) : booking.services.length === 0 ? (
         <EmptyState
           icon={PawPrint}
           title="No hay servicios disponibles"
@@ -63,33 +61,9 @@ export default async function NewReservationPage() {
             breed: pet.breed,
             photoUrl: pet.photoUrl,
           }))}
-          services={catalog.main.map((service) => ({
-            id: service.id,
-            name: service.name,
-            description: service.description,
-            kind: service.kind,
-            basePrice: String(service.basePrice),
-            priceUnit: service.priceUnit,
-            dailyCapacity: service.dailyCapacity,
-          }))}
-          addons={catalog.addons.map((service) => ({
-            id: service.id,
-            name: service.name,
-            description: service.description,
-            kind: service.kind,
-            basePrice: String(service.basePrice),
-            priceUnit: service.priceUnit,
-            dailyCapacity: service.dailyCapacity,
-          }))}
-          defaults={{
-            daycareOpen: hours.daycareOpen,
-            daycareClose: hours.daycareClose,
-            boardingCheckIn: hours.boardingCheckIn,
-            boardingCheckOut: hours.boardingCheckOut,
-            hoursAreDemo: hours.isDemo,
-            taxRate: billing.taxRate,
-            taxLabel: billing.taxLabel,
-          }}
+          services={booking.services}
+          addons={booking.addons}
+          defaults={booking.defaults}
         />
       )}
     </div>

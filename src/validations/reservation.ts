@@ -17,6 +17,8 @@ const timeInput = z
  * vigentes: si viniera del formulario, cualquiera podria reservar por un peso.
  */
 export const createReservationSchema = z.object({
+  /** Solo en mostrador: el cliente por quien reserva el personal. */
+  clientId: z.string().min(1).optional(),
   petId: z.string().min(1, 'Elige una mascota.'),
   serviceId: z.string().min(1, 'Elige un servicio.'),
   startDate: dateInput,
@@ -35,7 +37,7 @@ export const createReservationSchema = z.object({
   clientNotes: z
     .string()
     .trim()
-    .max(400, 'Maximo 400 caracteres.')
+    .max(400, 'Máximo 400 caracteres.')
     .optional()
     .or(z.literal(''))
     .transform((value) => (value ? value : null)),
