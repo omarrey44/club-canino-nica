@@ -40,6 +40,16 @@ export async function login(_prev: ActionState, formData: FormData): Promise<Act
   })
 
   if (error || !data.user) {
+    // Supabase solo responde esto con la contraseña correcta, asi que no le
+    // revela nada a quien no la sabe. Sin este caso, el error parecia una
+    // contraseña mal escrita y no habia forma de saber que faltaba.
+    if (error?.code === 'email_not_confirmed') {
+      return errorState(
+        authEmailsEnabled()
+          ? 'Falta confirmar tu cuenta: abre el enlace que te enviamos por correo.'
+          : 'Tu cuenta todavía no está confirmada. Pide ayuda al club.'
+      )
+    }
     // Mensaje deliberadamente ambiguo: no revelar si el correo existe.
     return errorState('Correo o contraseña incorrectos.')
   }
