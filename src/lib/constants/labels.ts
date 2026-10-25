@@ -153,3 +153,9 @@ export const activeReservationStatuses = [
   'IN_PROGRESS',
   'READY_FOR_PICKUP',
 ] as const
+
+/** Unidad del precio de un servicio, para mostrar junto al monto. */
+export function priceUnitLabel(kind: string, priceUnit: string): string {
+  if (priceUnit === 'UNIT') return 'por servicio'
+  return kind === 'BOARDING' ? 'por noche' : 'por día'
+}

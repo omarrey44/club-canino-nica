@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 const PUBLIC_ROUTES = [
+  // Solo la raiz exacta: `startsWith('//')` nunca coincide con una ruta real.
+  '/',
   '/login',
   '/registro',
   '/recuperar',

@@ -41,6 +41,14 @@ usarse de pie, con el celular en la mano.
 | Cobro en linea con proveedor demo, webhook firmado y reembolsos | Listo |
 | Notificaciones in-app, con contador de no leidas | Listo |
 | Responsive y accesibilidad AA verificados con auditoria automatica | Listo |
+| Pagina publica con servicios, precios y contacto | Listo |
+| Datos del negocio (contacto, horarios, IVA) editables desde Configuracion | Listo |
+| Clientes: busqueda, ficha, activar y desactivar cuentas | Listo |
+| Personal: alta con contrasena temporal, roles y acceso | Listo |
+| Mostrador: el personal registra clientes, mascotas y reservas | Listo |
+| Avisos al personal (reservas, cancelaciones, pagos) con campana | Listo |
+| Perfil editable y cambio de contrasena dentro de la app | Listo |
+| Salidas atrasadas marcadas en el panel | Listo |
 
 ---
 

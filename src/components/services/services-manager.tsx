@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
 import { ServiceForm } from './service-form'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { priceUnitLabel } from '@/lib/constants/labels'
 import { Sparkles } from 'lucide-react'
 import { formatCurrency } from '@/config/business'
 import { toggleService } from '@/server/actions/services'
@@ -28,11 +29,6 @@ const kindLabels: Record<string, string> = {
   DAYCARE: 'Guardería',
   BOARDING: 'Hospedaje',
   ADDON: 'Adicional',
-}
-
-function unitLabel(kind: string, priceUnit: string): string {
-  if (priceUnit === 'UNIT') return 'por servicio'
-  return kind === 'BOARDING' ? 'por noche' : 'por día'
 }
 
 /**
@@ -109,7 +105,7 @@ export function ServicesManager({ services }: { services: ManagedService[] }) {
                     {formatCurrency(service.basePrice)}
                   </p>
                   <p className="text-2xs text-ink-subtle">
-                    {unitLabel(service.kind, service.priceUnit)}
+                    {priceUnitLabel(service.kind, service.priceUnit)}
                   </p>
                 </div>
 
